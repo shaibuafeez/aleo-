@@ -1,26 +1,70 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Sui Official Color Palette */
+  --sui-ocean: #6FBCF0;
+  --sui-ocean-dark: #4DA2D9;
+  --sui-sea: #4CA3D9;
+  --sui-navy: #0A2540;
+  --sui-midnight: #0D1B2A;
+  --sui-sky: #E5F3FF;
+  --sui-mist: #F7FBFF;
+
+  /* Neutrals */
+  --sui-white: #FFFFFF;
+  --sui-gray-50: #F8FAFC;
+  --sui-gray-100: #F1F5F9;
+  --sui-gray-200: #E2E8F0;
+  --sui-gray-300: #CBD5E1;
+  --sui-gray-400: #94A3B8;
+  --sui-gray-500: #64748B;
+  --sui-gray-600: #475569;
+  --sui-gray-700: #334155;
+  --sui-gray-800: #1E293B;
+  --sui-gray-900: #0F172A;
+
+  /* Background */
+  --background: var(--sui-white);
+  --foreground: var(--sui-navy);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* Sui Colors */
+  --color-sui-ocean: var(--sui-ocean);
+  --color-sui-ocean-dark: var(--sui-ocean-dark);
+  --color-sui-sea: var(--sui-sea);
+  --color-sui-navy: var(--sui-navy);
+  --color-sui-midnight: var(--sui-midnight);
+  --color-sui-sky: var(--sui-sky);
+  --color-sui-mist: var(--sui-mist);
+
+  /* Font Family */
+  --font-sans: 'Cabinet Grotesk', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Disable dark mode - keep light theme always */
+/* @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--sui-midnight);
+    --foreground: var(--sui-white);
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Cabinet Grotesk', system-ui, -apple-system, sans-serif;
+  font-feature-settings: 'ss01' on, 'ss02' on;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
