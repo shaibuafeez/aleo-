@@ -57,6 +57,16 @@ const lessons = [
     topics: ['Vectors', 'Search', 'Borrow'],
     isLocked: false,
   },
+  {
+    id: 6,
+    title: 'References & Borrowing Deep Dive',
+    description: 'Master ownership, the borrow checker, and when to use & vs &mut.',
+    duration: '35 min',
+    xp: 200,
+    difficulty: 'Intermediate',
+    topics: ['Ownership', 'References', 'Borrowing'],
+    isLocked: false,
+  },
 ];
 
 export default function LessonsHub() {

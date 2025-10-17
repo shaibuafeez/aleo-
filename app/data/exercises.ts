@@ -12,6 +12,63 @@ import {
 
 const codeCompletionExercises: CodeCompletionExercise[] = [
   {
+    id: 'cc-new-017',
+    type: 'code_completion',
+    difficulty: 'intermediate',
+    topic: 'references',
+    title: 'Using Mutable References Correctly',
+    description: 'Fill in the blanks to use mutable references to modify values in place.',
+    learningObjective: 'Learn when to use &mut for modifying values.',
+    estimatedTime: 4,
+    baseXP: 50,
+    perfectScoreXP: 20,
+    hints: [
+      'Modifying a value requires &mut (mutable reference).',
+      'Reading a value only requires & (immutable reference).',
+      'Use * to dereference when assigning to primitives.'
+    ],
+    explanation: 'In Move, &mut T allows you to modify the value while & T only allows reading. When modifying primitives through references, you need to dereference with * on the left side of assignment.',
+    codeTemplate: `struct Account has store {
+    balance: u64,
+    owner: address
+}
+
+fun deposit(account: {blank:ref_type1} Account, amount: u64) {
+    account.balance = account.balance + amount;
+}
+
+fun check_balance(account: {blank:ref_type2} Account): u64 {
+    account.balance
+}
+
+fun double_value(num: &mut u64) {
+    {blank:deref_op}num = *num * 2;
+}`,
+    blanks: [
+      {
+        id: 'ref_type1',
+        placeholder: '___',
+        correctAnswer: '&mut',
+        hint: 'We are modifying the balance - need mutable reference'
+      },
+      {
+        id: 'ref_type2',
+        placeholder: '___',
+        correctAnswer: '&',
+        hint: 'We are only reading the balance - immutable reference is enough'
+      },
+      {
+        id: 'deref_op',
+        placeholder: '___',
+        correctAnswer: '*',
+        hint: 'Need to dereference the mutable reference to assign a new value'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: false,
+    language: 'move'
+  },
+  {
     id: 'cc-new-013',
     type: 'code_completion',
     difficulty: 'beginner',
@@ -740,6 +797,54 @@ public fun get_first(v: &vector<u64>): u64 {
 
 const multipleChoiceExercises: MultipleChoiceExercise[] = [
   {
+    id: 'mc-new-016',
+    type: 'multiple_choice',
+    difficulty: 'intermediate',
+    topic: 'references',
+    title: 'Valid Borrow Scenarios',
+    description: 'Understanding which borrowing patterns are allowed in Move.',
+    learningObjective: 'Master the borrow checker rules for references.',
+    estimatedTime: 4,
+    baseXP: 50,
+    perfectScoreXP: 20,
+    hints: [
+      'You can have multiple immutable references (&) at once.',
+      'You can have ONE mutable reference (&mut) at a time.',
+      'You cannot mix & and &mut - it\'s one or the other.'
+    ],
+    explanation: 'Move\'s borrow checker enforces safety rules: (1) Multiple immutable references are OK - many readers, no writers. (2) ONE mutable reference at a time - exclusive write access. (3) Cannot have both & and &mut active simultaneously - prevents reading while someone is writing.',
+    question: 'Which of these borrowing scenarios is VALID in Move?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'let ref1 = &x; let ref2 = &x; let ref3 = &x;',
+        isCorrect: true,
+        explanation: 'Correct! Multiple immutable references are allowed. All readers, no writers - perfectly safe.'
+      },
+      {
+        id: 'opt2',
+        text: 'let ref1 = &mut x; let ref2 = &mut x;',
+        isCorrect: false,
+        explanation: 'Invalid! You can only have ONE mutable reference at a time. Two would allow conflicting modifications.'
+      },
+      {
+        id: 'opt3',
+        text: 'let ref1 = &x; let ref2 = &mut x;',
+        isCorrect: false,
+        explanation: 'Invalid! Cannot mix immutable and mutable references. Someone is reading while someone else is writing - data race!'
+      },
+      {
+        id: 'opt4',
+        text: 'let ref1 = &mut x; let ref2 = &x;',
+        isCorrect: false,
+        explanation: 'Invalid! Cannot have a mutable reference alongside an immutable one. Value is being modified while being read.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
     id: 'mc-new-014',
     type: 'multiple_choice',
     difficulty: 'beginner',
@@ -1234,6 +1339,72 @@ const multipleChoiceExercises: MultipleChoiceExercise[] = [
 // ============================================================================
 
 const outputPredictionExercises: OutputPredictionExercise[] = [
+  {
+    id: 'op-new-018',
+    type: 'output_prediction',
+    difficulty: 'intermediate',
+    topic: 'references',
+    title: 'Complex Borrow and Modify',
+    description: 'Predict the final value after multiple borrow and modify operations.',
+    learningObjective: 'Understand how references work with sequential modifications.',
+    estimatedTime: 4,
+    baseXP: 55,
+    perfectScoreXP: 20,
+    hints: [
+      'Follow each step carefully.',
+      'Immutable borrows return the current value.',
+      'Mutable borrows allow changing the value.',
+      'All operations affect the same underlying variable.'
+    ],
+    explanation: 'References in Move allow you to access and modify values without transferring ownership. Immutable references (&) let you read, mutable references (&mut) let you modify. Multiple operations through different references all affect the same underlying value.',
+    code: `fun test_references(): u64 {
+    let mut balance = 100;
+
+    let read_ref = &balance;
+    let initial = *read_ref;  // Read: 100
+
+    let mut_ref = &mut balance;
+    *mut_ref = *mut_ref + 50;  // Modify: 100 + 50 = 150
+
+    let read_ref2 = &balance;
+    let current = *read_ref2;  // Read: 150
+
+    current
+}`,
+    language: 'move',
+    correctOutput: '150',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['100', '150', '200', '250'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Initialize balance = 100',
+        variables: { balance: 100 }
+      },
+      {
+        step: 2,
+        description: 'Create immutable reference, read value: 100',
+        variables: { initial: 100 }
+      },
+      {
+        step: 3,
+        description: 'Create mutable reference, modify: 100 + 50 = 150',
+        variables: { balance: 150 }
+      },
+      {
+        step: 4,
+        description: 'Create new immutable reference, read new value: 150',
+        variables: { current: 150 }
+      },
+      {
+        step: 5,
+        description: 'Return current value',
+        variables: { result: 150 }
+      }
+    ]
+  },
   {
     id: 'op-new-015',
     type: 'output_prediction',
