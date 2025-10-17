@@ -12,6 +12,218 @@ import {
 
 const codeCompletionExercises: CodeCompletionExercise[] = [
   {
+    id: 'cc-new-013',
+    type: 'code_completion',
+    difficulty: 'beginner',
+    topic: 'vectors',
+    title: 'Creating and Adding to Vectors',
+    description: 'Fill in the blanks to create a vector and add elements to it.',
+    learningObjective: 'Learn how to create vectors and use push_back to add elements.',
+    estimatedTime: 4,
+    baseXP: 45,
+    perfectScoreXP: 20,
+    hints: [
+      'Use vector::empty<T>() to create an empty vector.',
+      'Type parameter goes in angle brackets <T>.',
+      'Use vector::push_back() to add elements to the end.'
+    ],
+    explanation: 'Vectors are dynamic arrays in Move. Create them with vector::empty<Type>(), and add elements with vector::push_back(vector_ref, value). The vector grows automatically as you add elements.',
+    codeTemplate: `use std::vector;
+
+fun create_score_list(): vector<u64> {
+    let mut scores = vector::{blank:create_function}<{blank:type}>();
+    vector::{blank:add_function}(&mut scores, 100);
+    vector::push_back(&mut scores, 200);
+    scores
+}`,
+    blanks: [
+      {
+        id: 'create_function',
+        placeholder: '___',
+        correctAnswer: 'empty',
+        hint: 'Which function creates an empty vector?'
+      },
+      {
+        id: 'type',
+        placeholder: '___',
+        correctAnswer: 'u64',
+        hint: 'What type are we storing in the vector? (look at return type)'
+      },
+      {
+        id: 'add_function',
+        placeholder: '___',
+        correctAnswer: 'push_back',
+        hint: 'Which function adds an element to the end of a vector?'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: false,
+    language: 'move'
+  },
+  {
+    id: 'cc-new-010',
+    type: 'code_completion',
+    difficulty: 'beginner',
+    topic: 'structs',
+    title: 'Define and Create a Struct',
+    description: 'Fill in the blanks to define a struct and create an instance of it.',
+    learningObjective: 'Learn how to define structs and instantiate them with values.',
+    estimatedTime: 4,
+    baseXP: 45,
+    perfectScoreXP: 20,
+    hints: [
+      'Structs are defined with the "struct" keyword.',
+      'Abilities come after "has".',
+      'Create instances with struct_name { field: value }.'
+    ],
+    explanation: 'Structs in Move define custom types by grouping related data. After defining the struct, you create instances by providing values for all fields.',
+    codeTemplate: `module lesson4::player {
+    public {blank:keyword1} Player {blank:abilities_keyword} key, store {
+        id: u64,
+        level: u8,
+        score: u64
+    }
+
+    fun create_player(id: u64): Player {
+        {blank:struct_name} {
+            {blank:field1}: id,
+            level: 1,
+            score: 0
+        }
+    }
+}`,
+    blanks: [
+      {
+        id: 'keyword1',
+        placeholder: '___',
+        correctAnswer: 'struct',
+        hint: 'What keyword defines a custom type?'
+      },
+      {
+        id: 'abilities_keyword',
+        placeholder: '___',
+        correctAnswer: 'has',
+        hint: 'Which keyword comes before listing abilities?'
+      },
+      {
+        id: 'struct_name',
+        placeholder: '___',
+        correctAnswer: 'Player',
+        hint: 'What is the name of the struct we are creating?'
+      },
+      {
+        id: 'field1',
+        placeholder: '___',
+        correctAnswer: 'id',
+        hint: 'What is the name of the first field in Player?'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: true,
+    language: 'move'
+  },
+  {
+    id: 'cc-new-008',
+    type: 'code_completion',
+    difficulty: 'beginner',
+    topic: 'control_flow',
+    title: 'Loop with Break and Continue',
+    description: 'Fill in the blanks to create a loop that skips odd numbers and stops at a target.',
+    learningObjective: 'Learn how to use break and continue statements in loops.',
+    estimatedTime: 4,
+    baseXP: 45,
+    perfectScoreXP: 20,
+    hints: [
+      'Use "continue" to skip the rest of the current iteration.',
+      'Use "break" to exit the loop completely.',
+      'The modulo operator % can check if a number is even or odd.'
+    ],
+    explanation: 'In Move, "continue" skips to the next iteration of a loop, while "break" exits the loop entirely. These control flow statements are essential for implementing complex iteration logic.',
+    codeTemplate: `module lesson3::loop_demo {
+    fun count_even_numbers(target: u64): u64 {
+        let mut count = 0;
+        let mut i = 0;
+        loop {
+            if (i >= target) {
+                {blank:exit_keyword};  // Exit when we reach the target
+            };
+            if (i % 2 != 0) {
+                i = i + 1;
+                {blank:skip_keyword};  // Skip odd numbers
+            };
+            count = count + 1;
+            i = i + 1;
+        };
+        count
+    }
+}`,
+    blanks: [
+      {
+        id: 'exit_keyword',
+        placeholder: '___',
+        correctAnswer: 'break',
+        hint: 'Which keyword exits the loop completely?'
+      },
+      {
+        id: 'skip_keyword',
+        placeholder: '___',
+        correctAnswer: 'continue',
+        hint: 'Which keyword skips to the next iteration?'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: false,
+    language: 'move'
+  },
+  {
+    id: 'cc-new-005',
+    type: 'code_completion',
+    difficulty: 'beginner',
+    topic: 'primitives',
+    title: 'Working with Addresses',
+    description: 'Fill in the blanks to correctly declare and use address types.',
+    learningObjective: 'Learn how to declare and work with address types in Move.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'Addresses in Move start with 0x followed by hex digits.',
+      'The address type is called "address".',
+      'Use == to compare addresses.'
+    ],
+    explanation: 'In Move, addresses represent account identifiers on the blockchain. They are written with 0x prefix followed by hexadecimal digits. The address type is used to identify accounts and modules.',
+    codeTemplate: `module lesson2::address_demo {
+    fun check_sender(user: {blank:type1}): bool {
+        let admin: address = {blank:address_value};
+        user {blank:operator} admin
+    }
+}`,
+    blanks: [
+      {
+        id: 'type1',
+        placeholder: '___',
+        correctAnswer: 'address',
+        hint: 'What type is used for blockchain account identifiers?'
+      },
+      {
+        id: 'address_value',
+        placeholder: '___',
+        correctAnswer: '0x1',
+        acceptableAnswers: ['0x01', '0x0001'],
+        hint: 'Addresses start with 0x. The simplest address is 0x1.'
+      },
+      {
+        id: 'operator',
+        placeholder: '___',
+        correctAnswer: '==',
+        hint: 'Which operator compares if two values are equal?'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: false,
+    language: 'move'
+  },
+  {
     id: 'cc-new-002',
     type: 'code_completion',
     difficulty: 'beginner',
@@ -528,6 +740,198 @@ public fun get_first(v: &vector<u64>): u64 {
 
 const multipleChoiceExercises: MultipleChoiceExercise[] = [
   {
+    id: 'mc-new-014',
+    type: 'multiple_choice',
+    difficulty: 'beginner',
+    topic: 'vectors',
+    title: 'Vector Safety and Bounds Checking',
+    description: 'Understanding what happens when accessing vector elements.',
+    learningObjective: 'Learn about vector bounds checking and safe access patterns.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'Vectors have a length - number of elements.',
+      'Valid indices are 0 to length-1.',
+      'What happens if you try to access index 5 in a vector with length 3?'
+    ],
+    explanation: 'In Move, accessing a vector index that doesn\'t exist causes an ABORT (runtime error). This prevents silent bugs. Always check the vector length before accessing an index, or use vector::contains() to check if an element exists.',
+    question: 'What happens if you try to access index 10 in a vector with length 5?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'The program aborts with an error',
+        isCorrect: true,
+        explanation: 'Correct! Out-of-bounds access causes an abort. Valid indices for length 5 are 0-4. Always check vector::length() first!'
+      },
+      {
+        id: 'opt2',
+        text: 'It returns a default value (like 0)',
+        isCorrect: false,
+        explanation: 'Incorrect. Move never returns default values silently - that would hide bugs! It aborts instead.'
+      },
+      {
+        id: 'opt3',
+        text: 'The vector automatically grows to size 11',
+        isCorrect: false,
+        explanation: 'Incorrect. Vectors only grow when you explicitly push_back(). Reading doesn\'t auto-grow.'
+      },
+      {
+        id: 'opt4',
+        text: 'It wraps around and returns index 0',
+        isCorrect: false,
+        explanation: 'Incorrect. Move doesn\'t do wraparound - that would be unpredictable and dangerous!'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
+    id: 'mc-new-011',
+    type: 'multiple_choice',
+    difficulty: 'beginner',
+    topic: 'structs',
+    title: 'Choosing Abilities for Digital Assets',
+    description: 'Understanding which abilities should be used for different types of structs.',
+    learningObjective: 'Learn which abilities are appropriate for digital assets vs regular data.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'Digital assets like money or NFTs should not be copyable.',
+      'Being able to drop something means it can be discarded.',
+      'What happens if you can duplicate money?'
+    ],
+    explanation: 'Digital assets representing value (coins, NFTs, game items) should NEVER have the "copy" or "drop" abilities. This prevents bugs where assets could be duplicated or accidentally destroyed. Use "key" and "store" for assets that need to be owned and transferred.',
+    question: 'Which abilities should a Coin struct (representing money) have?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'key, store',
+        isCorrect: true,
+        explanation: 'Correct! Assets need "key" (can be owned) and "store" (can be stored), but NOT copy/drop (would allow duplication/destruction of money).'
+      },
+      {
+        id: 'opt2',
+        text: 'key, store, copy, drop',
+        isCorrect: false,
+        explanation: 'Dangerous! With "copy", you could duplicate money. With "drop", coins could be accidentally destroyed. Never give assets these abilities.'
+      },
+      {
+        id: 'opt3',
+        text: 'copy, drop',
+        isCorrect: false,
+        explanation: 'Very wrong! This would let you duplicate money (copy) and destroy it accidentally (drop). Assets must never have these.'
+      },
+      {
+        id: 'opt4',
+        text: 'Only key',
+        isCorrect: false,
+        explanation: 'Incomplete. While "key" is needed, you also need "store" to allow the asset to be stored in other structures or transferred.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
+    id: 'mc-new-007',
+    type: 'multiple_choice',
+    difficulty: 'beginner',
+    topic: 'control_flow',
+    title: 'If Expression Rules',
+    description: 'Understanding how if expressions return values in Move.',
+    learningObjective: 'Learn the rules for using if as an expression that returns a value.',
+    estimatedTime: 3,
+    baseXP: 35,
+    perfectScoreXP: 15,
+    hints: [
+      'If expressions can return values in Move.',
+      'Both branches must be consistent.',
+      'What happens if the types differ?'
+    ],
+    explanation: 'In Move, if is an expression that can return values. When used this way, both the if and else branches must return the same type. This ensures type safety and predictable behavior.',
+    question: 'What must be true when using an if-else expression to assign a value?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'Both branches must return the same type',
+        isCorrect: true,
+        explanation: 'Correct! For type safety, both the if and else branches must return the same type when the result is used.'
+      },
+      {
+        id: 'opt2',
+        text: 'The else branch is optional',
+        isCorrect: false,
+        explanation: 'Incorrect. When returning a value, the else branch is required - otherwise what value would be returned if the condition is false?'
+      },
+      {
+        id: 'opt3',
+        text: 'Only the if branch needs to return a value',
+        isCorrect: false,
+        explanation: 'Incorrect. Both branches must return a value of the same type.'
+      },
+      {
+        id: 'opt4',
+        text: 'If expressions cannot return values',
+        isCorrect: false,
+        explanation: 'Incorrect. If expressions absolutely can return values - this is a key feature of Move!'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
+    id: 'mc-new-004',
+    type: 'multiple_choice',
+    difficulty: 'beginner',
+    topic: 'primitives',
+    title: 'Integer Overflow',
+    description: 'Understanding what happens when integers exceed their maximum values.',
+    learningObjective: 'Learn about integer overflow behavior in Move.',
+    estimatedTime: 3,
+    baseXP: 35,
+    perfectScoreXP: 15,
+    hints: [
+      'u8 can only hold values 0-255.',
+      'What happens when you add 1 to the maximum value?',
+      'Move protects you from silent errors.'
+    ],
+    explanation: 'In Move, integer overflow causes an abort (runtime error) rather than wrapping around. This prevents silent bugs that could lead to security vulnerabilities in smart contracts. For example, adding 1 to a u8 value of 255 will abort the program.',
+    question: 'What happens when you try to store 256 in a u8 variable?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'The program aborts with an error',
+        isCorrect: true,
+        explanation: 'Correct! Move prevents overflow by aborting the program. u8 max is 255, so 256 causes an abort.'
+      },
+      {
+        id: 'opt2',
+        text: 'The value wraps around to 0',
+        isCorrect: false,
+        explanation: 'Incorrect. Unlike some languages, Move does not wrap around. It aborts to prevent bugs.'
+      },
+      {
+        id: 'opt3',
+        text: 'It automatically converts to u16',
+        isCorrect: false,
+        explanation: 'Incorrect. Move is strongly typed and does not automatically convert types.'
+      },
+      {
+        id: 'opt4',
+        text: 'The value is silently truncated',
+        isCorrect: false,
+        explanation: 'Incorrect. Move never silently truncates values, as this could cause security bugs.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
     id: 'mc-new-001',
     type: 'multiple_choice',
     difficulty: 'beginner',
@@ -830,6 +1234,223 @@ const multipleChoiceExercises: MultipleChoiceExercise[] = [
 // ============================================================================
 
 const outputPredictionExercises: OutputPredictionExercise[] = [
+  {
+    id: 'op-new-015',
+    type: 'output_prediction',
+    difficulty: 'beginner',
+    topic: 'vectors',
+    title: 'Vector Length After Operations',
+    description: 'Predict the vector length after push and pop operations.',
+    learningObjective: 'Understand how push_back and pop_back affect vector length.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'push_back adds one element (length increases by 1)',
+      'pop_back removes one element (length decreases by 1)',
+      'Count the operations carefully'
+    ],
+    explanation: 'vector::push_back() adds an element to the end and increases length by 1. vector::pop_back() removes the last element and decreases length by 1. vector::length() returns the current number of elements.',
+    code: `use std::vector;
+
+fun test_vector(): u64 {
+    let mut v = vector::empty<u64>();
+    vector::push_back(&mut v, 10);
+    vector::push_back(&mut v, 20);
+    vector::push_back(&mut v, 30);
+    vector::pop_back(&mut v);
+    vector::length(&v)
+}`,
+    language: 'move',
+    correctOutput: '2',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['0', '1', '2', '3'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Create empty vector',
+        variables: { 'length': 0 }
+      },
+      {
+        step: 2,
+        description: 'push_back(10) - length is now 1',
+        variables: { 'length': 1 }
+      },
+      {
+        step: 3,
+        description: 'push_back(20) - length is now 2',
+        variables: { 'length': 2 }
+      },
+      {
+        step: 4,
+        description: 'push_back(30) - length is now 3',
+        variables: { 'length': 3 }
+      },
+      {
+        step: 5,
+        description: 'pop_back() - length is now 2',
+        variables: { 'length': 2 }
+      }
+    ]
+  },
+  {
+    id: 'op-new-012',
+    type: 'output_prediction',
+    difficulty: 'beginner',
+    topic: 'structs',
+    title: 'Struct Field Access',
+    description: 'Predict the output after accessing and modifying struct fields.',
+    learningObjective: 'Understand how to access struct fields and destructure structs.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'Use dot notation to access fields: player.score',
+      'Mutable references (&mut) allow modifying fields.',
+      'After incrementing level by 1, what is the new level?'
+    ],
+    explanation: 'Struct fields are accessed with dot notation (struct.field). You can read fields from immutable references (&), and modify them with mutable references (&mut). Destructuring unpacks all fields at once.',
+    code: `struct Player has drop {
+    id: u64,
+    level: u8,
+    score: u64
+}
+
+fun level_up(player: &mut Player) {
+    player.level = player.level + 1;
+}
+
+fun test(): u8 {
+    let mut p = Player { id: 1, level: 5, score: 100 };
+    level_up(&mut p);
+    p.level
+}`,
+    language: 'move',
+    correctOutput: '6',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['5', '6', '7', '100'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Create Player with id=1, level=5, score=100',
+        variables: { 'p.level': 5 }
+      },
+      {
+        step: 2,
+        description: 'Call level_up with mutable reference to p',
+        variables: { 'p.level': 5 }
+      },
+      {
+        step: 3,
+        description: 'Increment level: 5 + 1 = 6',
+        variables: { 'p.level': 6 }
+      },
+      {
+        step: 4,
+        description: 'Return p.level which is now 6',
+        variables: { result: 6 }
+      }
+    ]
+  },
+  {
+    id: 'op-new-009',
+    type: 'output_prediction',
+    difficulty: 'beginner',
+    topic: 'control_flow',
+    title: 'Assert Behavior',
+    description: 'Predict what happens when an assert condition fails.',
+    learningObjective: 'Understand how assert! checks preconditions and aborts on failure.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'assert! checks if a condition is true.',
+      'If the condition is false, it aborts with an error code.',
+      'What is 5 compared to 10?'
+    ],
+    explanation: 'The assert! macro checks a condition. If true, execution continues. If false, the program aborts with the specified error code. This is essential for validating preconditions in smart contracts.',
+    code: `fun withdraw(balance: u64, amount: u64): u64 {
+    assert!(balance >= amount, 1);  // Error code 1
+    balance - amount
+}
+
+fun test(): u64 {
+    withdraw(5, 10)  // Try to withdraw 10 from balance of 5
+}`,
+    language: 'move',
+    correctOutput: 'abort',
+    outputType: 'error',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['0', '5', '10', 'abort with error code 1'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Call withdraw with balance=5, amount=10',
+        variables: { balance: 5, amount: 10 }
+      },
+      {
+        step: 2,
+        description: 'Check: balance >= amount? (5 >= 10? false)',
+        variables: { 'balance >= amount': false }
+      },
+      {
+        step: 3,
+        description: 'Condition false → abort with error code 1',
+        variables: { error: 'abort(1)' }
+      }
+    ]
+  },
+  {
+    id: 'op-new-006',
+    type: 'output_prediction',
+    difficulty: 'beginner',
+    topic: 'primitives',
+    title: 'Type Casting Result',
+    description: 'Predict the output after type casting operations.',
+    learningObjective: 'Understand how type casting works with the "as" keyword.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'Start with a u8 value of 100.',
+      'Cast it to u64 using "as".',
+      'Then add 1000 to the result.'
+    ],
+    explanation: 'In Move, the "as" keyword is used for type casting between compatible types. When casting from a smaller type (u8) to a larger type (u64), the value is preserved. You can then perform operations with the new type.',
+    code: `fun convert_and_add(): u64 {
+    let small: u8 = 100;
+    let big = (small as u64) + 1000;
+    big
+}`,
+    language: 'move',
+    correctOutput: '1100',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['100', '1000', '1100', '10000'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Initialize small with u8 value 100',
+        variables: { small: 100 }
+      },
+      {
+        step: 2,
+        description: 'Cast small from u8 to u64',
+        variables: { 'small as u64': 100 }
+      },
+      {
+        step: 3,
+        description: 'Add 1000: 100 + 1000 = 1100',
+        variables: { big: 1100 }
+      }
+    ]
+  },
   {
     id: 'op-new-003',
     type: 'output_prediction',

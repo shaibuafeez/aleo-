@@ -1,5 +1,9 @@
 import LessonView from '@/app/components/lessons/LessonView';
 import { lesson1 } from '@/app/lib/lessons/lesson1';
+import { lesson2 } from '@/app/lib/lessons/lesson2';
+import { lesson3 } from '@/app/lib/lessons/lesson3';
+import { lesson4 } from '@/app/lib/lessons/lesson4';
+import { lesson5 } from '@/app/lib/lessons/lesson5';
 
 export default async function LessonPage({
   params,
@@ -8,10 +12,13 @@ export default async function LessonPage({
 }) {
   const { id } = await params;
 
-  // For now, we only have lesson 1
-  // Later, we'll fetch from a lessons database
+  // Lesson map - add new lessons here
   const lessonMap: Record<string, any> = {
     '1': lesson1,
+    '2': lesson2,
+    '3': lesson3,
+    '4': lesson4,
+    '5': lesson5,
   };
 
   const lesson = lessonMap[id];
