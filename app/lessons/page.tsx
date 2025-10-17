@@ -142,7 +142,7 @@ export default function LessonsHub() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {lessons.map((lesson, index) => {
-              const isCompleted = completedLessons.includes(lesson.id);
+              const isCompleted = completedLessons.includes(lesson.id.toString());
 
               return (
                 <motion.div
