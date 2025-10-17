@@ -67,6 +67,16 @@ const lessons = [
     topics: ['Ownership', 'References', 'Borrowing'],
     isLocked: false,
   },
+  {
+    id: 7,
+    title: 'Generics & Type Parameters',
+    description: 'Master generic programming: write reusable code that works with any type.',
+    duration: '40 min',
+    xp: 250,
+    difficulty: 'Advanced',
+    topics: ['Generics', 'Type Parameters', 'Constraints'],
+    isLocked: false,
+  },
 ];
 
 export default function LessonsHub() {

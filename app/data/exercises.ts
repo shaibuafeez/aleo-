@@ -12,6 +12,65 @@ import {
 
 const codeCompletionExercises: CodeCompletionExercise[] = [
   {
+    id: 'cc-new-019',
+    type: 'code_completion',
+    difficulty: 'intermediate',
+    topic: 'generics',
+    title: 'Generic Function with Type Parameters',
+    description: 'Fill in the blanks to create a generic function that works with any type.',
+    learningObjective: 'Learn how to define and use generic type parameters in functions.',
+    estimatedTime: 5,
+    baseXP: 60,
+    perfectScoreXP: 25,
+    hints: [
+      'Type parameters are declared in angle brackets <T>.',
+      'Use the type parameter name in the function signature.',
+      'Return type uses the same type parameter.'
+    ],
+    explanation: 'Generic functions use type parameters (like <T>) to work with any type. The type parameter is declared after the function name and can be used throughout the function signature and body.',
+    codeTemplate: `public struct Box<T> has store, drop {
+    value: T
+}
+
+public fun create_box{blank:type_param}(val: {blank:param_type}): Box<{blank:return_type}> {
+    Box { value: val }
+}
+
+public fun unwrap{blank:type_param2}(box: Box<T>): T {
+    let Box { value } = box;
+    value
+}`,
+    blanks: [
+      {
+        id: 'type_param',
+        placeholder: '___',
+        correctAnswer: '<T>',
+        hint: 'Declare a type parameter using angle brackets.'
+      },
+      {
+        id: 'param_type',
+        placeholder: '___',
+        correctAnswer: 'T',
+        hint: 'Use the type parameter name you declared.'
+      },
+      {
+        id: 'return_type',
+        placeholder: '___',
+        correctAnswer: 'T',
+        hint: 'Box is generic over T.'
+      },
+      {
+        id: 'type_param2',
+        placeholder: '___',
+        correctAnswer: '<T>',
+        hint: 'Generic functions need type parameters declared after the function name.'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: true,
+    language: 'move'
+  },
+  {
     id: 'cc-new-017',
     type: 'code_completion',
     difficulty: 'intermediate',
@@ -797,6 +856,59 @@ public fun get_first(v: &vector<u64>): u64 {
 
 const multipleChoiceExercises: MultipleChoiceExercise[] = [
   {
+    id: 'mc-new-020',
+    type: 'multiple_choice',
+    difficulty: 'intermediate',
+    topic: 'generics',
+    title: 'Type Constraints and Abilities',
+    description: 'Understanding which type constraints are required for generic operations.',
+    learningObjective: 'Master when and how to use ability constraints on generic type parameters.',
+    estimatedTime: 4,
+    baseXP: 55,
+    perfectScoreXP: 20,
+    hints: [
+      'Think about what operations you need to perform on the type.',
+      'The "drop" ability allows a value to be discarded.',
+      'Without "drop", you must explicitly unpack or transfer ownership.',
+      'Type constraints come after the type parameter with a colon.'
+    ],
+    explanation: 'Type constraints specify which abilities a generic type must have. The "drop" ability is needed when you want to discard a value without explicitly handling it. Without drop, the compiler requires you to manually unpack or transfer the value.',
+    question: 'You have a function that creates a Box<T> but doesn\'t return it. Which constraint is REQUIRED on T?',
+    codeSnippet: `public fun drop_box<T>(box: Box<T>) {
+    // Box is created but not returned - it goes out of scope
+    let Box { value: _ } = box;
+}`,
+    options: [
+      {
+        id: 'opt1',
+        text: 'T: drop',
+        isCorrect: true,
+        explanation: 'Correct! Since the Box (and its inner value) is discarded without being used, T must have the "drop" ability. The underscore (_) pattern discards the value.'
+      },
+      {
+        id: 'opt2',
+        text: 'T: copy',
+        isCorrect: false,
+        explanation: 'Incorrect. "copy" allows duplicating values, but that\'s not needed here - we\'re discarding, not copying.'
+      },
+      {
+        id: 'opt3',
+        text: 'T: store',
+        isCorrect: false,
+        explanation: 'Incorrect. "store" allows storing in other structs, but we\'re not storing anything here - just unpacking and discarding.'
+      },
+      {
+        id: 'opt4',
+        text: 'No constraint needed',
+        isCorrect: false,
+        explanation: 'Incorrect! Without the "drop" ability, Move requires you to explicitly handle the value. You can\'t just discard it.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
     id: 'mc-new-016',
     type: 'multiple_choice',
     difficulty: 'intermediate',
@@ -1339,6 +1451,75 @@ const multipleChoiceExercises: MultipleChoiceExercise[] = [
 // ============================================================================
 
 const outputPredictionExercises: OutputPredictionExercise[] = [
+  {
+    id: 'op-new-021',
+    type: 'output_prediction',
+    difficulty: 'intermediate',
+    topic: 'generics',
+    title: 'Generic Type Inference',
+    description: 'Predict how Move infers types for generic functions.',
+    learningObjective: 'Understand how the compiler infers generic type parameters from usage.',
+    estimatedTime: 4,
+    baseXP: 55,
+    perfectScoreXP: 20,
+    hints: [
+      'Look at what type is passed to create_box.',
+      'The type parameter T is inferred from the argument.',
+      'unwrap returns the same type that was stored.',
+      'Follow the value through the generic functions.'
+    ],
+    explanation: 'Move can infer generic type parameters from how you use the function. When you pass a u64 to create_box<T>, the compiler knows T = u64. The Box<u64> then requires unwrap to return u64. Type inference makes generics convenient without explicit type annotations.',
+    code: `public struct Box<T> has store, drop {
+    value: T
+}
+
+public fun create_box<T>(val: T): Box<T> {
+    Box { value: val }
+}
+
+public fun unwrap<T>(box: Box<T>): T {
+    let Box { value } = box;
+    value
+}
+
+fun test(): u64 {
+    let box = create_box(42);  // T inferred as u64
+    unwrap(box)
+}`,
+    language: 'move',
+    correctOutput: '42',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['0', '42', 'Box(42)', 'Type error'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Call create_box(42) - compiler infers T = u64',
+        variables: { 'T': 'u64', val: 42 }
+      },
+      {
+        step: 2,
+        description: 'Create Box<u64> with value 42',
+        variables: { 'box.value': 42 }
+      },
+      {
+        step: 3,
+        description: 'Call unwrap(box) - T is u64, returns u64',
+        variables: { 'return type': 'u64' }
+      },
+      {
+        step: 4,
+        description: 'Destructure box, extract value: 42',
+        variables: { value: 42 }
+      },
+      {
+        step: 5,
+        description: 'Return value: 42',
+        variables: { result: 42 }
+      }
+    ]
+  },
   {
     id: 'op-new-018',
     type: 'output_prediction',

@@ -5,6 +5,7 @@ import { lesson3 } from '@/app/lib/lessons/lesson3';
 import { lesson4 } from '@/app/lib/lessons/lesson4';
 import { lesson5 } from '@/app/lib/lessons/lesson5';
 import { lesson6 } from '@/app/lib/lessons/lesson6';
+import { lesson7 } from '@/app/lib/lessons/lesson7';
 
 export default async function LessonPage({
   params,
@@ -21,6 +22,7 @@ export default async function LessonPage({
     '4': lesson4,
     '5': lesson5,
     '6': lesson6,
+    '7': lesson7,
   };
 
   const lesson = lessonMap[id];
