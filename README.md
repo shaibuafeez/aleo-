@@ -1,4 +1,4 @@
-# Move By Practice 🌊
+ # Move By Practice 🌊
 
 > Learn Sui Move by building real projects - completely in your browser!
 
@@ -15,13 +15,6 @@
 - 📱 **Responsive** - Works on desktop, tablet, and mobile
 - 🔗 **Sui Integration** - Deploy contracts directly to testnet
 
-## 🛠️ Tech Stack
-
-### Frontend
-- **Next.js 15** - React framework with App Router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first styling
-- **Framer Motion** - Smooth animations
 
 ### Editor & Compiler
 - **Monaco Editor** - VS Code-like editing experience
@@ -33,30 +26,6 @@
 - **@mysten/dapp-kit** - Sui wallet integration
 - **IndexedDB** - Persistent local storage
 
-## 🎯 Current Progress
-
-### ✅ Completed (MVP Phase 1)
-- [x] Next.js 15 setup with TypeScript
-- [x] Monaco Editor with Move syntax highlighting
-- [x] Zustand state management for XP/progress
-- [x] Sui blockchain integration
-- [x] Split-screen lesson layout
-- [x] Gamification UI (XP bar, confetti, level-up)
-- [x] First lesson: "Your First Sui Object"
-- [x] Framer Motion animations
-- [x] Beautiful homepage with gradient design
-
-### 🔄 In Progress
-- [ ] Move WASM compiler integration
-- [ ] Additional lessons (2-14)
-- [ ] Achievement system
-- [ ] Leaderboard
-
-### 📋 Upcoming
-- [ ] Real-time multiplayer challenges
-- [ ] NFT certificates on Sui
-- [ ] Code playground with sharing
-- [ ] AI debugging assistant
 
 ## 🚦 Getting Started
 
@@ -167,18 +136,7 @@ export const lesson2: LessonContent = {
 
 2. Add to lesson map in `app/lessons/[id]/page.tsx`
 
-## 🌐 Deployment
 
-### Vercel (Recommended)
-```bash
-vercel deploy
-```
-
-### Other Platforms
-```bash
-npm run build
-npm run start
-```
 
 ## 🤝 Contributing
 
