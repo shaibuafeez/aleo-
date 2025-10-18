@@ -170,6 +170,7 @@ export default function LessonsHub() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="w-full"
                 >
                   <Link
                     href={lesson.isLocked ? '#' : `/lessons/${lesson.id}`}
@@ -178,7 +179,7 @@ export default function LessonsHub() {
                     }`}
                   >
                     <div
-                      className={`relative p-8 rounded-3xl border-2 transition-all duration-300 ${
+                      className={`relative p-8 rounded-3xl border-2 transition-all duration-300 h-full min-h-[380px] flex flex-col ${
                         lesson.isLocked
                           ? 'bg-sui-gray-100 border-sui-gray-300 opacity-60'
                           : 'bg-white border-sui-navy hover:border-sui-ocean hover:shadow-2xl hover:-translate-y-2'
@@ -231,12 +232,12 @@ export default function LessonsHub() {
                         Lesson {lesson.id}: {lesson.title}
                       </h3>
 
-                      <p className="text-sui-gray-600 mb-4 leading-relaxed">
+                      <p className="text-sui-gray-600 mb-6 leading-relaxed">
                         {lesson.description}
                       </p>
 
                       {/* Topics */}
-                      <div className="flex flex-wrap gap-2 mb-4">
+                      <div className="flex flex-wrap gap-2 mb-4 mt-auto">
                         {lesson.topics.map((topic) => (
                           <span
                             key={topic}
