@@ -21,7 +21,7 @@ export default function Home() {
             className="inline-flex items-center gap-2 px-4 py-2 bg-sui-sky/50 rounded-full text-sm text-sui-navy font-medium mb-8 backdrop-blur-sm border border-sui-ocean/20"
           >
             <span className="w-2 h-2 bg-sui-ocean rounded-full animate-pulse"></span>
-            Powered by Sui Blockchain
+            Powered by Sui
           </motion.div>
 
           {/* Headline */}

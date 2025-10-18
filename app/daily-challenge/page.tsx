@@ -147,7 +147,7 @@ export default function DailyChallengePage() {
           </div>
 
           <div className="bg-white rounded-xl sm:rounded-2xl border-2 border-sui-gray-200 p-4 sm:p-6 text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-purple-600 mb-2">
+            <div className="text-3xl sm:text-4xl font-bold text-sui-ocean mb-2">
               {userStreak.longestStreak}
             </div>
             <div className="text-xs sm:text-sm text-sui-gray-600 font-medium">
@@ -156,7 +156,7 @@ export default function DailyChallengePage() {
           </div>
 
           <div className="bg-white rounded-xl sm:rounded-2xl border-2 border-sui-gray-200 p-4 sm:p-6 text-center col-span-2 sm:col-span-1">
-            <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-2">
+            <div className="text-3xl sm:text-4xl font-bold text-sui-ocean mb-2">
               {userStreak.totalChallengesCompleted}
             </div>
             <div className="text-xs sm:text-sm text-sui-gray-600 font-medium">
@@ -194,8 +194,8 @@ export default function DailyChallengePage() {
             </div>
 
             <div className="flex items-start gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
@@ -210,8 +210,8 @@ export default function DailyChallengePage() {
             </div>
 
             <div className="flex items-start gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sui-sky/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-sui-ocean" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
@@ -226,8 +226,8 @@ export default function DailyChallengePage() {
             </div>
 
             <div className="flex items-start gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sui-sky/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-sui-ocean" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
               </div>

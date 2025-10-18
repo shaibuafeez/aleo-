@@ -27,7 +27,7 @@ export const lesson1: LessonContent = {
         {
           title: "What is Move?",
           content: "Move is a programming language for blockchains. It's designed for digital assets and safety. Used by Sui blockchain. We'll start with basic syntax, just like learning any programming language!",
-          emoji: "🚀",
+          emoji: "🚗",
         },
         {
           title: "Your First Module",

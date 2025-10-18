@@ -43,9 +43,9 @@ export default function DailyChallengeCard({
   }, []);
 
   const difficultyColors = {
-    easy: 'bg-green-100 text-green-700 border-green-300',
-    medium: 'bg-yellow-100 text-yellow-700 border-yellow-300',
-    hard: 'bg-red-100 text-red-700 border-red-300'
+    easy: 'bg-green-50 text-green-600 border-green-200',
+    medium: 'bg-yellow-50 text-yellow-600 border-yellow-200',
+    hard: 'bg-red-50 text-red-600 border-red-200'
   };
 
   const typeIcons = {
@@ -92,7 +92,7 @@ export default function DailyChallengeCard({
         {/* Streak Counter */}
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="flex flex-col items-center bg-gradient-to-br from-orange-400 to-orange-600 text-white rounded-xl p-3 sm:p-4 shadow-lg ml-3"
+          className="flex flex-col items-center bg-gradient-to-br from-green-400 to-green-600 text-white rounded-xl p-3 sm:p-4 shadow-lg ml-3"
         >
           <div className="text-2xl sm:text-3xl font-bold">{userStreak}</div>
           <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide">
@@ -120,8 +120,8 @@ export default function DailyChallengeCard({
           </div>
           <div className="text-[10px] sm:text-xs text-sui-gray-600">Base XP</div>
         </div>
-        <div className="bg-purple-50 rounded-lg p-2 sm:p-3 text-center border border-purple-200">
-          <div className="text-base sm:text-lg font-bold text-purple-600">
+        <div className="bg-sui-sky/20 rounded-lg p-2 sm:p-3 text-center border border-sui-ocean/20">
+          <div className="text-base sm:text-lg font-bold text-sui-ocean">
             +{challenge.timeBonus}
           </div>
           <div className="text-[10px] sm:text-xs text-sui-gray-600">Speed Bonus</div>
