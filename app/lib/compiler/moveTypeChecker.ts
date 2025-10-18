@@ -3,7 +3,7 @@
  * Validates types and semantic rules
  */
 
-import { MoveAST, MoveStruct, MoveFunction, ParseError } from './moveParser';
+import { MoveAST, MoveModule, MoveStruct, MoveFunction, ParseError } from './moveParser';
 
 export class MoveTypeChecker {
   private ast: MoveAST;
@@ -23,14 +23,14 @@ export class MoveTypeChecker {
   check(): ParseError[] {
     this.errors = [];
 
-    for (const module of this.ast.modules) {
-      this.checkModule(module);
+    for (const moveModule of this.ast.modules) {
+      this.checkModule(moveModule);
     }
 
     return this.errors;
   }
 
-  private checkModule(module: any): void {
+  private checkModule(module: MoveModule): void {
     // Build type environment
     const typeEnv = new Map<string, string>();
 

@@ -63,17 +63,17 @@ export class MoveCompiler {
 
       // Step 3: Generate summary
       if (parseResult.ast) {
-        const module = parseResult.ast.modules[0];
+        const moveModule = parseResult.ast.modules[0];
         result.output += '\n📦 Module Summary:\n';
-        result.output += `   Address: ${module.address}\n`;
-        result.output += `   Name: ${module.name}\n`;
-        result.output += `   Structs: ${module.structs.length}\n`;
-        result.output += `   Functions: ${module.functions.length}\n`;
+        result.output += `   Address: ${moveModule.address}\n`;
+        result.output += `   Name: ${moveModule.name}\n`;
+        result.output += `   Structs: ${moveModule.structs.length}\n`;
+        result.output += `   Functions: ${moveModule.functions.length}\n`;
 
         // List structs
-        if (module.structs.length > 0) {
+        if (moveModule.structs.length > 0) {
           result.output += '\n📋 Structs:\n';
-          for (const struct of module.structs) {
+          for (const struct of moveModule.structs) {
             result.output += `   - ${struct.name}`;
             if (struct.abilities.length > 0) {
               result.output += ` (${struct.abilities.join(', ')})`;
@@ -83,9 +83,9 @@ export class MoveCompiler {
         }
 
         // List functions
-        if (module.functions.length > 0) {
+        if (moveModule.functions.length > 0) {
           result.output += '\n⚡ Functions:\n';
-          for (const func of module.functions) {
+          for (const func of moveModule.functions) {
             let funcStr = `   - ${func.visibility}`;
             if (func.isEntry) funcStr += ' entry';
             funcStr += ` fun ${func.name}(`;

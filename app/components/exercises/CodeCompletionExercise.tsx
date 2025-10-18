@@ -60,7 +60,7 @@ export default function CodeCompletionExerciseComponent({
   const validateAnswers = (): ValidationResult => {
     const totalBlanks = exercise.blanks.length;
     let correctBlanks = 0;
-    const errors: any[] = [];
+    const errors: { location: string; message: string; severity: 'error' | 'warning' | 'info'; hint?: string }[] = [];
 
     exercise.blanks.forEach(blank => {
       const userAnswer = answers[blank.id] || '';

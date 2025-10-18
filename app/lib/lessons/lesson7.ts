@@ -1,21 +1,29 @@
 import { LessonContent } from '@/app/types/lesson';
 
 export const lesson7: LessonContent = {
-  id: 'lesson-7',
+  id: '7',
   title: 'Generics & Type Parameters',
   description: 'Master generic programming: write reusable code that works with any type.',
-  duration: '40 min',
-  xp: 250,
-  sections: [
-    // ============================================================
-    // INTRO SECTION
-    // ============================================================
+  difficulty: 'advanced',
+  xpReward: 250,
+  order: 7,
+  prerequisiteLessons: ['6'],
+
+  narrative: {
+    welcomeMessage: "Welcome to Generics & Type Parameters! 🎯 After mastering references and borrowing, you're ready to write reusable code that works with any type!",
+    quizTransition: "Great work with generic programming! Let's test your understanding of type parameters and constraints...",
+    practiceTransition: "Perfect! Now let's build a complete generic container library!",
+    celebrationMessage: "🎉 Excellent! You've mastered generic programming in Move!",
+    nextLessonTease: "You've completed the advanced lessons! Keep practicing to master Move! 🚀",
+  },
+  teachingSections: [
     {
-      title: 'Introduction',
-      content: [
+      sectionTitle: 'Introduction',
+      slides: [
         {
           title: 'Welcome to Generics!',
-          content: `# Welcome to Generics & Type Parameters 🎯
+          emoji: '🎯',
+          content: `# Welcome to Generics & Type Parameters
 
 By now, you've written functions like:
 
@@ -44,9 +52,10 @@ In this lesson, you'll master **generic programming** - writing code once that w
 3. **Type Constraints** - Specify required abilities like \`T: copy + drop\`
 4. **Phantom Types** - Sui-specific pattern for type safety without storage
 
-By the end, you'll write elegant, reusable code that the Rust and Move communities love!`,
-          codeExample: {
-            code: `// ❌ Before: Repetitive code
+By the end, you'll write elegant, reusable code that the Rust and Move communities love!
+
+\`\`\`move
+// ❌ Before: Repetitive code
 fun swap_u64(a: u64, b: u64): (u64, u64) { (b, a) }
 fun swap_bool(a: bool, b: bool): (bool, bool) { (b, a) }
 
@@ -57,22 +66,20 @@ fun swap<T>(a: T, b: T): (T, T) {
 
 // Works with ANY type!
 let (x, y) = swap(10, 20);        // u64
-let (p, q) = swap(true, false);   // bool`,
-            language: 'move'
-          }
+let (p, q) = swap(true, false);   // bool
+\`\`\``,
         }
-      ]
+      ],
+      exerciseId: 'cc-new-013',
     },
 
-    // ============================================================
-    // SECTION 1: GENERIC FUNCTIONS
-    // ============================================================
     {
-      title: 'Generic Functions',
-      content: [
+      sectionTitle: 'Generic Functions',
+      slides: [
         {
           title: 'What Are Generics?',
-          content: `# What Are Generics? 🧩
+          emoji: '🧩',
+          content: `# What Are Generics?
 
 Generics let you write **one function** that works with **multiple types**.
 
@@ -100,9 +107,10 @@ fun get_first<T>(v: &vector<T>): T {
 }
 \`\`\`
 
-**T** is a **type parameter**. When you call the function, T gets replaced with the actual type.`,
-          codeExample: {
-            code: `// Generic function - works with ANY type
+**T** is a **type parameter**. When you call the function, T gets replaced with the actual type.
+
+\`\`\`move
+// Generic function - works with ANY type
 fun get_first<T>(v: &vector<T>): T {
     *vector::borrow(v, 0)
 }
@@ -112,13 +120,13 @@ let nums = vector[10, 20, 30];
 let first = get_first(&nums);  // T = u64
 
 let flags = vector[true, false];
-let first_flag = get_first(&flags);  // T = bool`,
-            language: 'move'
-          }
+let first_flag = get_first(&flags);  // T = bool
+\`\`\``,
         },
         {
           title: 'Type Parameter Syntax',
-          content: `# Type Parameter Syntax 📝
+          emoji: '📝',
+          content: `# Type Parameter Syntax
 
 Type parameters are declared in **angle brackets \`<T>\`** after the function name.
 
@@ -148,9 +156,10 @@ fun identity<T>(value: T): T {
 The type parameter **T** appears in:
 1. Function signature: \`<T>\`
 2. Parameter type: \`value: T\`
-3. Return type: \`: T\``,
-          codeExample: {
-            code: `// Single type parameter
+3. Return type: \`: T\`
+
+\`\`\`move
+// Single type parameter
 fun identity<T>(value: T): T {
     value
 }
@@ -166,13 +175,13 @@ fun map_get<Key, Value>(
     key: Key
 ): Option<Value> {
     // ...
-}`,
-            language: 'move'
-          }
+}
+\`\`\``,
         },
         {
           title: 'Type Inference',
-          content: `# Type Inference - The Compiler is Smart! 🧠
+          emoji: '🧠',
+          content: `# Type Inference - The Compiler is Smart!
 
 You usually **don't need to specify** the type parameter - Move figures it out!
 
@@ -204,9 +213,10 @@ let empty = vector::empty::<u64>();
 
 ## Best Practice
 
-Let the compiler infer when possible - it makes code cleaner!`,
-          codeExample: {
-            code: `fun identity<T>(x: T): T { x }
+Let the compiler infer when possible - it makes code cleaner!
+
+\`\`\`move
+fun identity<T>(x: T): T { x }
 
 // ✅ Type inferred automatically
 let num = identity(100);      // T = u64
@@ -217,13 +227,13 @@ let v: vector<u64> = vector::empty();
 
 // ✅ Turbofish for generic functions
 let v = vector::empty::<u64>();
-let v = vector::singleton::<bool>(true);`,
-            language: 'move'
-          }
+let v = vector::singleton::<bool>(true);
+\`\`\``,
         },
         {
           title: 'Multiple Type Parameters',
-          content: `# Multiple Type Parameters 🔀
+          emoji: '🔀',
+          content: `# Multiple Type Parameters
 
 Functions can have **multiple generic types** for different parameters.
 
@@ -256,9 +266,10 @@ public fun insert<Key, Value>(
 ) {
     // Store key-value pair
 }
-\`\`\``,
-          codeExample: {
-            code: `// Swap values of same type
+\`\`\`
+
+\`\`\`move
+// Swap values of same type
 fun swap<T>(a: T, b: T): (T, T) {
     (b, a)
 }
@@ -271,23 +282,20 @@ fun pair<T, U>(first: T, second: U): (T, U) {
 // Usage examples
 let (x, y) = swap(10, 20);           // T = u64
 let p = pair(100, true);             // T = u64, U = bool
-let coord = pair(5, 10);             // T = u64, U = u64`,
-            language: 'move'
-          }
+let coord = pair(5, 10);             // T = u64, U = u64
+\`\`\``,
         }
       ],
-      practiceExercise: 'cc-new-019'
+      exerciseId: 'cc-new-019'
     },
 
-    // ============================================================
-    // SECTION 2: GENERIC STRUCTS
-    // ============================================================
     {
-      title: 'Generic Structs',
-      content: [
+      sectionTitle: 'Generic Structs',
+      slides: [
         {
           title: 'Generic Struct Definition',
-          content: `# Generic Struct Definition 📦
+          emoji: '📦',
+          content: `# Generic Struct Definition
 
 Just like functions, **structs can be generic** over types.
 
@@ -314,9 +322,10 @@ let addr_box = Box { value: @0x1 };    // Box<address>
 
 ## Why Generic Structs?
 
-Instead of creating \`BoxU64\`, \`BoxBool\`, \`BoxAddress\`... you write **one struct** that works with all types!`,
-          codeExample: {
-            code: `// Generic wrapper for any value
+Instead of creating \`BoxU64\`, \`BoxBool\`, \`BoxAddress\`... you write **one struct** that works with all types!
+
+\`\`\`move
+// Generic wrapper for any value
 public struct Box<T> has store, drop {
     value: T
 }
@@ -331,13 +340,13 @@ public struct Pair<T> has store, drop {
 public struct MixedPair<T, U> has store, drop {
     first: T,
     second: U
-}`,
-            language: 'move'
-          }
+}
+\`\`\``,
         },
         {
           title: 'Working with Generic Structs',
-          content: `# Working with Generic Structs 🛠️
+          emoji: '🛠️',
+          content: `# Working with Generic Structs
 
 Functions that create or use generic structs must also be generic.
 
@@ -366,9 +375,10 @@ public fun unwrap<T>(box: Box<T>): T {
 
 ## The Pattern
 
-**If a struct is generic over T, functions using it must be too!**`,
-          codeExample: {
-            code: `public struct Box<T> has store, drop {
+**If a struct is generic over T, functions using it must be too!**
+
+\`\`\`move
+public struct Box<T> has store, drop {
     value: T
 }
 
@@ -386,13 +396,13 @@ public fun peek<T>(box: &Box<T>): &T {
 public fun unwrap<T>(box: Box<T>): T {
     let Box { value } = box;
     value
-}`,
-            language: 'move'
-          }
+}
+\`\`\``,
         },
         {
           title: 'Multiple Type Parameters in Structs',
-          content: `# Multiple Type Parameters in Structs 🎭
+          emoji: '🎭',
+          content: `# Multiple Type Parameters in Structs
 
 Structs can have **multiple generic types** for different fields.
 
@@ -424,9 +434,10 @@ let p1 = Pair { first: 10, second: 20 };
 // Different types
 let p2 = Pair { first: 10, second: true };
 // Type: Pair<u64, bool>
-\`\`\``,
-          codeExample: {
-            code: `// Generic pair with different types
+\`\`\`
+
+\`\`\`move
+// Generic pair with different types
 public struct Pair<T, U> has store, drop {
     first: T,
     second: U
@@ -444,13 +455,13 @@ public fun swap<T, U>(p: Pair<T, U>): Pair<U, T> {
 
 // Usage
 let p = make_pair(100, true);  // Pair<u64, bool>
-let swapped = swap(p);         // Pair<bool, u64>`,
-            language: 'move'
-          }
+let swapped = swap(p);         // Pair<bool, u64>
+\`\`\``,
         },
         {
           title: 'Generic Collections Pattern',
-          content: `# Generic Collections Pattern 📚
+          emoji: '📚',
+          content: `# Generic Collections Pattern
 
 Generic structs are **perfect for collections** - they work with any element type!
 
@@ -484,9 +495,10 @@ public struct Vector<Element> {
 }
 \`\`\`
 
-These patterns make your code **reusable and type-safe**!`,
-          codeExample: {
-            code: `// Custom Option type (simplified)
+These patterns make your code **reusable and type-safe**!
+
+\`\`\`move
+// Custom Option type (simplified)
 public struct MyOption<T> has store, drop {
     is_some: bool,
     value: T
@@ -506,23 +518,20 @@ public fun is_some<T>(opt: &MyOption<T>): bool {
 
 // Usage
 let x = some(42);        // MyOption<u64>
-let y = none(0);         // MyOption<u64> with default`,
-            language: 'move'
-          }
+let y = none(0);         // MyOption<u64> with default
+\`\`\``,
         }
       ],
-      practiceExercise: 'op-new-021'
+      exerciseId: 'op-new-021'
     },
 
-    // ============================================================
-    // SECTION 3: TYPE CONSTRAINTS & PHANTOM TYPES
-    // ============================================================
     {
-      title: 'Type Constraints & Phantom Types',
-      content: [
+      sectionTitle: 'Type Constraints & Phantom Types',
+      slides: [
         {
           title: 'Type Constraints - Requiring Abilities',
-          content: `# Type Constraints - Requiring Abilities 🔒
+          emoji: '🔒',
+          content: `# Type Constraints - Requiring Abilities
 
 Sometimes your generic code needs the type to have **specific abilities**.
 
@@ -553,9 +562,10 @@ public fun discard<T: drop>(x: T) {
 - \`T: store\` - Type can be stored in structs
 - \`T: key\` - Type can be a top-level object
 
-Remember Lesson 4? Constraints connect to the **abilities system**!`,
-          codeExample: {
-            code: `// Requires drop ability to discard value
+Remember Lesson 4? Constraints connect to the **abilities system**!
+
+\`\`\`move
+// Requires drop ability to discard value
 public fun discard<T: drop>(x: T) {
     // x automatically dropped at end of scope
 }
@@ -569,13 +579,13 @@ public fun duplicate<T: copy>(x: T): (T, T) {
 public fun clone_and_drop<T: copy + drop>(x: T) {
     let y = x;  // copy
     // both x and y dropped
-}`,
-            language: 'move'
-          }
+}
+\`\`\``,
         },
         {
           title: 'Multiple Constraints',
-          content: `# Multiple Constraints - Combining Abilities ➕
+          emoji: '➕',
+          content: `# Multiple Constraints - Combining Abilities
 
 You can require **multiple abilities** using the **\`+\`** operator.
 
@@ -608,9 +618,10 @@ public fun store_twice<T: copy + store>(
     container1.value = value;      // First store
     container2.value = value;      // Copy for second store
 }
-\`\`\``,
-          codeExample: {
-            code: `// Needs both copy and drop
+\`\`\`
+
+\`\`\`move
+// Needs both copy and drop
 public fun safe_duplicate<T: copy + drop>(x: T): T {
     let _temp = x;  // Copy x
     x               // Return original (temp dropped)
@@ -623,13 +634,13 @@ public struct SafeVec<T: copy + drop> has store, drop {
 
 // Can only use with types that have both abilities
 let v1 = SafeVec { items: vector[1, 2, 3] };      // ✅ u64 has copy + drop
-// let v2 = SafeVec { items: vector[coin1, coin2] };  // ❌ Coin has no copy!`,
-            language: 'move'
-          }
+// let v2 = SafeVec { items: vector[coin1, coin2] };  // ❌ Coin has no copy!
+\`\`\``,
         },
         {
           title: 'Phantom Type Parameters (Sui-Specific)',
-          content: `# Phantom Type Parameters 👻
+          emoji: '👻',
+          content: `# Phantom Type Parameters
 
 **Phantom types** are type parameters that **don't appear in struct fields** but provide **compile-time type safety**.
 
@@ -658,9 +669,10 @@ fun mix(sui: Coin<SUI>, usdc: Coin<USDC>) {
 }
 \`\`\`
 
-**Phantom types** give you type safety without storage overhead!`,
-          codeExample: {
-            code: `// Phantom type for type-safe coins
+**Phantom types** give you type safety without storage overhead!
+
+\`\`\`move
+// Phantom type for type-safe coins
 public struct Coin<phantom T> has key, store {
     id: UID,
     balance: u64
@@ -679,112 +691,73 @@ public fun transfer_sui(coin: Coin<SUI>, to: address) {
     // ...
 }
 
-// transfer_sui(usdc_coin, addr);  // ❌ Type error!`,
-            language: 'move'
-          }
+// transfer_sui(usdc_coin, addr);  // ❌ Type error!
+\`\`\``,
         }
       ],
-      practiceExercise: 'mc-new-020'
+      exerciseId: 'mc-new-020'
     }
   ],
-
-  // ============================================================
-  // QUIZ
-  // ============================================================
   quiz: [
     {
-      id: 'quiz-7-1',
-      type: 'multiple_choice',
       question: 'What is the correct syntax to declare a generic function with one type parameter?',
       options: [
-        { text: 'fun my_func(T)(x: T): T', isCorrect: false },
-        { text: 'fun my_func<T>(x: T): T', isCorrect: true },
-        { text: 'fun my_func[T](x: T): T', isCorrect: false },
-        { text: 'fun my_func{T}(x: T): T', isCorrect: false }
+        'fun my_func(T)(x: T): T',
+        'fun my_func<T>(x: T): T',
+        'fun my_func[T](x: T): T',
+        'fun my_func{T}(x: T): T'
       ],
+      correctAnswer: 1,
       explanation: 'Generic type parameters are declared in angle brackets <T> after the function name.',
-      hints: ['Type parameters use angle brackets', 'The syntax is similar to Rust and C++']
     },
     {
-      id: 'quiz-7-2',
-      type: 'multiple_choice',
       question: 'When do you NEED to explicitly specify type parameters?',
       options: [
-        { text: 'Always - the compiler cannot infer types', isCorrect: false },
-        { text: 'Never - type inference always works', isCorrect: false },
-        { text: 'When the compiler cannot infer from context (e.g., vector::empty())', isCorrect: true },
-        { text: 'Only for function calls, not struct instantiation', isCorrect: false }
+        'Always - the compiler cannot infer types',
+        'Never - type inference always works',
+        'When the compiler cannot infer from context (e.g., vector::empty())',
+        'Only for function calls, not struct instantiation'
       ],
+      correctAnswer: 2,
       explanation: 'Usually types are inferred automatically, but for functions like vector::empty() with no arguments, you must specify the type explicitly.',
-      hints: ['Think about vector::empty() - what type should the vector hold?', 'Inference needs context from arguments or usage']
     },
     {
-      id: 'quiz-7-3',
-      type: 'multiple_choice',
       question: 'How do you require that a type parameter T has BOTH copy and drop abilities?',
       options: [
-        { text: 'T: copy, drop', isCorrect: false },
-        { text: 'T: copy + drop', isCorrect: true },
-        { text: 'T: copy & drop', isCorrect: false },
-        { text: 'T: copy | drop', isCorrect: false }
+        'T: copy, drop',
+        'T: copy + drop',
+        'T: copy & drop',
+        'T: copy | drop'
       ],
+      correctAnswer: 1,
       explanation: 'Multiple ability constraints are combined with the + operator: T: copy + drop',
-      hints: ['Use + to combine abilities', 'Not comma, ampersand, or pipe']
     },
     {
-      id: 'quiz-7-4',
-      type: 'multiple_choice',
       question: 'What is a phantom type parameter?',
       options: [
-        { text: 'A type parameter that can be any type', isCorrect: false },
-        { text: 'A type parameter that is never used in the code', isCorrect: false },
-        { text: 'A type parameter that does not appear in struct fields but provides type safety', isCorrect: true },
-        { text: 'A type parameter that is automatically dropped', isCorrect: false }
+        'A type parameter that can be any type',
+        'A type parameter that is never used in the code',
+        'A type parameter that does not appear in struct fields but provides type safety',
+        'A type parameter that is automatically dropped'
       ],
+      correctAnswer: 2,
       explanation: 'Phantom types provide compile-time type safety without storing the type in fields. Example: Coin<phantom T> creates different coin types without extra storage.',
-      hints: ['Think about Sui Coin<T> - does it store T in any field?', 'Phantom means "exists at compile time but not runtime"']
     },
     {
-      id: 'quiz-7-5',
-      type: 'multiple_choice',
       question: 'Which generic struct definition is VALID?',
       options: [
-        { text: 'struct Box<T: copy> { value: T }', isCorrect: true },
-        { text: 'struct Box(T) { value: T }', isCorrect: false },
-        { text: 'struct Box[T] { value: T }', isCorrect: false },
-        { text: 'struct Box<T> { value: U }', isCorrect: false }
+        'struct Box<T: copy> { value: T }',
+        'struct Box(T) { value: T }',
+        'struct Box[T] { value: T }',
+        'struct Box<T> { value: U }'
       ],
+      correctAnswer: 0,
       explanation: 'Correct syntax uses angle brackets <T> and can include constraints. The type parameter must be used in fields (unless phantom).',
-      hints: ['Use angle brackets <>', 'Type parameters can have constraints after a colon']
     }
   ],
+  quizPassThreshold: 0.8,
 
-  // ============================================================
-  // FINAL PRACTICE PROJECT
-  // ============================================================
-  practice: {
-    id: 'practice-7',
-    title: 'Generic Container Library',
-    description: `Build a complete generic container library with Box<T>, Pair<T, U>, and a function demonstrating type constraints!
-
-**Requirements:**
-
-1. \`Box<T>\` - A wrapper for any value
-   - \`create<T>(T): Box<T>\` - Create a box
-   - \`unwrap<T>(Box<T>): T\` - Extract value, consuming box
-   - \`peek<T>(&Box<T>): &T\` - View value without consuming
-
-2. \`Pair<T, U>\` - Hold two values of different types
-   - \`make_pair<T, U>(T, U): Pair<T, U>\` - Create pair
-   - \`swap<T, U>(Pair<T, U>): Pair<U, T>\` - Swap positions
-   - \`first<T, U>(&Pair<T, U>): &T\` - Get first element
-   - \`second<T, U>(&Pair<T, U>): &U\` - Get second element
-
-3. **Type Constraint Function** (USER REQUESTED!)
-   - \`drop_box<T: drop>(Box<T>)\` - Destroy box with constraint
-
-This demonstrates generic functions, structs, and type constraints!`,
-    starterCode: `module lesson7::container {
+  starterCode: `module lesson7::container {
     // TODO: Define Box<T> struct with store and drop abilities
     public struct Box<___> has ___, ___ {
         value: ___
@@ -861,7 +834,8 @@ This demonstrates generic functions, structs, and type constraints!`,
         drop_box(box2);  // u64 has 'drop' - this works!
     }
 }`,
-    solution: `module lesson7::container {
+
+  solution: `module lesson7::container {
     public struct Box<T> has store, drop {
         value: T
     }
@@ -928,53 +902,13 @@ This demonstrates generic functions, structs, and type constraints!`,
         drop_box(box2);  // u64 has 'drop' - this works!
     }
 }`,
-    hints: [
-      'Box<T> needs just one type parameter T, used in the value field',
-      'Pair<T, U> needs TWO type parameters for different field types',
-      'Type constraints come after type parameters with a colon: <T: drop>',
-      'peek() returns a reference to the field: &box.value',
-      'swap() creates new Pair with first and second reversed',
-      'drop_box() must have constraint T: drop to discard the value'
-    ],
-    tests: [
-      {
-        name: 'Box creation and unwrap',
-        code: 'let box = create(100); assert!(unwrap(box) == 100, 0);'
-      },
-      {
-        name: 'Peek does not consume box',
-        code: 'let box = create(42); let _ = peek(&box); let _ = unwrap(box);'
-      },
-      {
-        name: 'Pair with different types',
-        code: 'let p = make_pair(10, true); assert!(*first(&p) == 10, 0); assert!(*second(&p) == true, 1);'
-      },
-      {
-        name: 'Swap reverses pair',
-        code: 'let p = make_pair(1, 2); let s = swap(p); assert!(*first(&s) == 2, 0);'
-      },
-      {
-        name: 'drop_box with constraint',
-        code: 'let box = create(100); drop_box(box);'
-      }
-    ]
-  },
 
-  additionalResources: [
-    {
-      title: 'Move Book - Generics',
-      url: 'https://move-book.com/advanced-topics/generics.html',
-      description: 'Official Move documentation on generic programming'
-    },
-    {
-      title: 'Sui Move by Example - Generics',
-      url: 'https://examples.sui.io/basics/generics.html',
-      description: 'Practical examples of generics in Sui Move'
-    },
-    {
-      title: 'Understanding Phantom Types',
-      url: 'https://move-book.com/advanced-topics/phantom-types.html',
-      description: 'Deep dive into phantom type parameters'
-    }
-  ]
+  hints: [
+    "Box<T> needs just one type parameter T, used in the value field",
+    "Pair<T, U> needs TWO type parameters for different field types",
+    "Type constraints come after type parameters with a colon: <T: drop>",
+    "peek() returns a reference to the field: &box.value",
+    "swap() creates new Pair with first and second reversed",
+    "drop_box() must have constraint T: drop to discard the value"
+  ],
 };

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import LessonView from '@/app/components/lessons/LessonView';
 import { lesson1 } from '@/app/lib/lessons/lesson1';
 import { lesson2 } from '@/app/lib/lessons/lesson2';
@@ -15,7 +16,7 @@ export default async function LessonPage({
   const { id } = await params;
 
   // Lesson map - add new lessons here
-  const lessonMap: Record<string, any> = {
+  const lessonMap: Record<string, typeof lesson1> = {
     '1': lesson1,
     '2': lesson2,
     '3': lesson3,
@@ -33,12 +34,12 @@ export default async function LessonPage({
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white mb-4">Lesson Not Found</h1>
           <p className="text-gray-400 mb-8">This lesson doesn&apos;t exist yet!</p>
-          <a
+          <Link
             href="/"
             className="px-6 py-3 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors"
           >
             Go Home
-          </a>
+          </Link>
         </div>
       </div>
     );

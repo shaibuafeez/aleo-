@@ -78,7 +78,7 @@ export default function ClickRevealInteractive({ config }: ClickRevealInteractiv
           className="text-center text-sm text-sui-gray-600 mt-4"
         >
           {revealedIndices.size === reveals.length ? (
-            <span className="text-sui-ocean font-bold">🎉 You've discovered them all!</span>
+            <span className="text-sui-ocean font-bold">🎉 You&apos;ve discovered them all!</span>
           ) : (
             <span>
               Discovered: {revealedIndices.size}/{reveals.length}

@@ -148,7 +148,7 @@ export class MoveParser {
 
   private parseStructs(): MoveStruct[] {
     const structs: MoveStruct[] = [];
-    const structRegex = /(?:public\s+)?struct\s+(\w+)(?:\s+has\s+([\w,\s]+))?\s*\{([^}]*)\}/gs;
+    const structRegex = /(?:public\s+)?struct\s+(\w+)(?:\s+has\s+([\w,\s]+))?\s*\{([^}]*)\}/g;
     let match;
 
     while ((match = structRegex.exec(this.code)) !== null) {
@@ -184,7 +184,7 @@ export class MoveParser {
 
   private parseFunctions(): MoveFunction[] {
     const functions: MoveFunction[] = [];
-    const functionRegex = /(?:(public)\s+)?(?:(entry)\s+)?fun\s+(\w+)\s*\(([^)]*)\)(?:\s*:\s*([^{]+))?\s*\{/gs;
+    const functionRegex = /(?:(public)\s+)?(?:(entry)\s+)?fun\s+(\w+)\s*\(([^)]*)\)(?:\s*:\s*([^{]+))?\s*\{/g;
     let match;
 
     while ((match = functionRegex.exec(this.code)) !== null) {

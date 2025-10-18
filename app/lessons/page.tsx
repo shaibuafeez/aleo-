@@ -301,7 +301,7 @@ export default function LessonsHub() {
             </motion.div>
             <h3 className="text-2xl font-bold text-sui-navy mb-2">More Lessons Coming Soon!</h3>
             <p className="text-sui-gray-600">
-              We're working on 11 more lessons covering NFTs, DeFi, and on-chain games.
+              We&apos;re working on 11 more lessons covering NFTs, DeFi, and on-chain games.
             </p>
           </motion.div>
         </div>

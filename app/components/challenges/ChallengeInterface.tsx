@@ -27,7 +27,7 @@ export default function ChallengeInterface({
   const [feedback, setFeedback] = useState<{type: 'success' | 'error', message: string} | null>(null);
 
   const startTimeRef = useRef(Date.now());
-  const timerRef = useRef<NodeJS.Timeout>();
+  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Timer effect
   useEffect(() => {

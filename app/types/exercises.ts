@@ -181,7 +181,7 @@ export interface OutputPredictionExercise extends BaseExercise {
   executionSteps?: {
     step: number;
     description: string;
-    variables?: Record<string, any>;
+    variables?: Record<string, number | string | boolean>;
   }[];
 }
 
@@ -240,7 +240,7 @@ export interface ExerciseAttempt {
   timestamp: Date;
 
   // Answer data
-  userAnswer: any;                // Depends on exercise type
+  userAnswer: ExerciseAnswer;                // Depends on exercise type
   isCorrect: boolean;
   score: number;
 

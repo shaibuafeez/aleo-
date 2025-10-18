@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LessonContent, WeaknessTopic } from '@/app/types/lesson';
 import { useGameStore } from '@/app/lib/store/gameStore';
@@ -121,7 +122,7 @@ export default function LessonView({ lesson }: LessonViewProps) {
           <div className="relative pt-32 pb-20 px-6 overflow-hidden">
             {/* Back Button */}
             <div className="max-w-7xl mx-auto mb-8">
-              <a
+              <Link
                 href="/lessons"
                 className="inline-flex items-center gap-2 text-sui-gray-600 hover:text-sui-ocean transition-colors"
               >
@@ -129,7 +130,7 @@ export default function LessonView({ lesson }: LessonViewProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 Back to Lessons
-              </a>
+              </Link>
             </div>
 
             <div className="max-w-4xl mx-auto text-center relative z-10">
@@ -244,7 +245,7 @@ export default function LessonView({ lesson }: LessonViewProps) {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
                     </svg>
                   </div>
-                  What You'll Learn
+                  What You&apos;ll Learn
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   {(lesson.teachingSections

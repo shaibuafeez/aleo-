@@ -90,7 +90,7 @@ export default function DailyChallengePage() {
   if (!todaysChallenge) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-sui-gray-600">Loading today's challenge...</div>
+        <div className="text-xl text-sui-gray-600">Loading today&apos;s challenge...</div>
       </div>
     );
   }

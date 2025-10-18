@@ -85,7 +85,7 @@ export function recordAttempt(
   timeSpent: number
 ): ExerciseProgress {
   const allProgress = getAllProgress();
-  let exerciseProgress = allProgress[exerciseId] || initializeExerciseProgress(userId, exerciseId);
+  const exerciseProgress = allProgress[exerciseId] || initializeExerciseProgress(userId, exerciseId);
 
   // Create attempt record
   const attempt: ExerciseAttempt = {
