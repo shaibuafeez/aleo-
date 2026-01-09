@@ -207,7 +207,7 @@ export default function LessonsPage() {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-6xl md:text-8xl font-black tracking-tighter-swiss mb-4"
+              className="text-5xl md:text-8xl font-black tracking-tighter-swiss mb-4 leading-none"
             >
               Curriculum
             </motion.h1>
@@ -243,13 +243,13 @@ export default function LessonsPage() {
 
       {/* Filter Bar */}
       <div className="sticky top-24 z-20 px-6 mb-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="inline-flex bg-white/80 backdrop-blur-md p-1.5 rounded-2xl border border-zinc-200 shadow-lg shadow-zinc-200/50">
+        <div className="max-w-7xl mx-auto flex justify-center">
+          <div className="inline-flex bg-white/80 backdrop-blur-md p-1.5 rounded-2xl border border-zinc-200 shadow-lg shadow-zinc-200/50 overflow-x-auto max-w-full scrollbar-hide">
             {(['All', 'Beginner', 'Intermediate', 'Advanced'] as const).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${filter === f
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-200 whitespace-nowrap ${filter === f
                   ? 'bg-zinc-900 text-white shadow-md transform scale-105'
                   : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
                   }`}
@@ -279,7 +279,7 @@ export default function LessonsPage() {
               >
                 <Link href={isLocked ? '#' : `/lessons/${lesson.id}`} className={isLocked ? 'cursor-not-allowed' : ''}>
                   <TiltCard className={`h-full ${isLocked ? 'pointer-events-none' : ''}`}>
-                    <SpotlightCard className={`h-full rounded-[2rem] p-8 flex flex-col justify-between transition-all duration-500
+                    <SpotlightCard className={`h-full rounded-[2rem] p-6 md:p-8 flex flex-col justify-between transition-all duration-500
                                     ${isLocked ? 'bg-zinc-100 opacity-60 grayscale' : 'bg-white hover:shadow-2xl hover:shadow-blue-900/10'}`
                     }>
                       {/* Top Row */}
