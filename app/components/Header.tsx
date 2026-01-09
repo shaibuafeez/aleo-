@@ -133,7 +133,7 @@ export default function Header() {
                             })}
                             <div className="h-[1px] bg-zinc-100 my-1 mx-2" />
                             <Link href="/connect" onClick={() => setIsMobileMenuOpen(false)}>
-                                <button className="w-full bg-blue-600 text-white px-4 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20">
+                                <button className="w-full bg-black text-white px-4 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-zinc-800 transition-colors shadow-lg shadow-black/20">
                                     Connect Wallet
                                 </button>
                             </Link>
