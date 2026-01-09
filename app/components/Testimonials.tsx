@@ -143,14 +143,38 @@ export default function Testimonials() {
                             </p>
 
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="group bg-white text-black px-8 py-4 md:px-12 md:py-6 rounded-full text-lg md:text-xl font-bold hover:shadow-[0_0_50px_-10px_rgba(255,255,255,0.3)] transition-all flex items-center gap-3"
+                                initial="initial"
+                                whileHover="hover"
+                                whileTap={{ scale: 0.98 }}
+                                className="group relative bg-white text-black px-8 py-4 md:px-10 md:py-5 rounded-full text-lg md:text-xl font-bold overflow-hidden shadow-lg transition-all hover:shadow-[0_0_40px_-5px_rgba(255,255,255,0.4)]"
                             >
-                                <span>Start Building</span>
-                                <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
+                                <motion.div
+                                    variants={{
+                                        initial: { y: 0 },
+                                        hover: { y: "-100%" }
+                                    }}
+                                    transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }} // Cubic bezier for snap
+                                    className="flex items-center gap-2 relative z-10"
+                                >
+                                    <span>Start Building</span>
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </motion.div>
+
+                                <motion.div
+                                    variants={{
+                                        initial: { y: "100%" },
+                                        hover: { y: 0 }
+                                    }}
+                                    transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+                                    className="absolute inset-0 flex items-center justify-center gap-2 bg-black text-white z-10"
+                                >
+                                    <span>Let's Build</span>
+                                    <svg className="w-5 h-5 rotate-[-45deg]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </motion.div>
                             </motion.button>
                         </div>
                     </div>
