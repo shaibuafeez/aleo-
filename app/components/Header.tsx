@@ -94,16 +94,29 @@ export default function Header() {
                         Connect Wallet
                     </button>
                 </Link>
+            </motion.nav>
 
-                {/* Mobile Menu Dropdown */}
-                <AnimatePresence>
-                    {isMobileMenuOpen && (
+            {/* Mobile Menu Dropdown & Backdrop */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <>
+                        {/* Backdrop */}
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="absolute top-full left-0 right-0 mt-2 p-2 bg-white/90 backdrop-blur-xl border border-black/5 rounded-3xl shadow-2xl flex flex-col gap-1 overflow-hidden origin-top z-50 md:hidden"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 pointer-events-auto md:hidden"
+                        />
+
+                        {/* Menu Card */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: -20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="fixed top-24 left-4 right-4 p-2 bg-white border border-black/5 rounded-3xl shadow-2xl flex flex-col gap-1 overflow-hidden origin-top z-50 pointer-events-auto md:hidden"
                         >
                             {navItems.map((item) => {
                                 const isActive = pathname === item.href;
@@ -112,7 +125,7 @@ export default function Header() {
                                         key={item.name}
                                         href={item.href}
                                         onClick={() => setIsMobileMenuOpen(false)}
-                                        className={`relative px-4 py-3 rounded-2xl text-sm font-medium transition-all ${isActive ? 'bg-black text-white' : 'text-zinc-600 hover:bg-zinc-100'}`}
+                                        className={`relative px-4 py-3 rounded-2xl text-sm font-bold transition-all ${isActive ? 'bg-black text-white' : 'text-zinc-600 hover:bg-zinc-100'}`}
                                     >
                                         {item.name}
                                     </Link>
@@ -120,14 +133,14 @@ export default function Header() {
                             })}
                             <div className="h-[1px] bg-zinc-100 my-1 mx-2" />
                             <Link href="/connect" onClick={() => setIsMobileMenuOpen(false)}>
-                                <button className="w-full bg-blue-600 text-white px-4 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors">
+                                <button className="w-full bg-blue-600 text-white px-4 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20">
                                     Connect Wallet
                                 </button>
                             </Link>
                         </motion.div>
-                    )}
-                </AnimatePresence>
-            </motion.nav>
+                    </>
+                )}
+            </AnimatePresence>
         </header>
     );
 }
