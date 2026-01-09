@@ -83,7 +83,7 @@ export default function Testimonials() {
                             >
                                 <div>
                                     {/* Quote Mark */}
-                                    <div className="text-6xl text-blue-600 mb-6 font-serif opacity-30">"</div>
+                                    <div className="text-6xl text-blue-600 mb-6 font-serif opacity-30">&quot;</div>
 
                                     <h3 className="text-xl md:text-2xl font-medium text-black leading-tight mb-8 tracking-tight">
                                         {t.quote}

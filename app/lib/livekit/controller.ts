@@ -139,7 +139,7 @@ export class LiveKitController {
       auth_token: authToken,
       connection_details: {
         ws_url: process.env.LIVEKIT_URL!,
-        token: at.toJwt(),
+        token: await at.toJwt(),
       },
     };
   }
@@ -212,7 +212,7 @@ export class LiveKitController {
       auth_token: authToken,
       connection_details: {
         ws_url: process.env.LIVEKIT_URL!,
-        token: at.toJwt(),
+        token: await at.toJwt(),
       },
     };
   }

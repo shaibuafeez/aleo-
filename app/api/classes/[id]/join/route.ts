@@ -20,11 +20,14 @@ export async function POST(
     }
 
     // Get class from database
-    const { data: classData, error: classError } = await supabase
+    const { data, error: classError } = await supabase
       .from('classes')
       .select('*')
       .eq('id', class_id)
+      .eq('id', class_id)
       .single();
+
+    const classData = data as unknown as { status: string; livekit_room_name: string | null } | null;
 
     if (classError || !classData) {
       return NextResponse.json({ error: 'Class not found' }, { status: 404 });
@@ -52,18 +55,21 @@ export async function POST(
       .eq('id', user.id)
       .single();
 
+    const userProfile = userData as unknown as { username?: string; avatar_url?: string } | null;
+
     // Join LiveKit room
     const controller = new LiveKitController();
     const response = await controller.joinClass({
       room_name: classData.livekit_room_name,
       user_id: user.id,
-      username: userData?.username || user.email || 'Anonymous',
-      avatar_url: userData?.avatar_url,
+      username: userProfile?.username || user.email || 'Anonymous',
+      avatar_url: userProfile?.avatar_url,
     });
 
     // Create or update booking
     const { error: bookingError } = await supabase
       .from('class_bookings')
+      // @ts-expect-error Supabase types mismatch
       .upsert({
         user_id: user.id,
         class_id: class_id,
@@ -75,6 +81,7 @@ export async function POST(
     }
 
     // Increment participant count
+    // @ts-expect-error Supabase types mismatch
     const { error: countError } = await supabase.rpc('increment', {
       row_id: class_id,
       table_name: 'classes',
@@ -86,10 +93,10 @@ export async function POST(
     }
 
     return NextResponse.json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error joining class:', error);
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
+      { error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
     );
   }

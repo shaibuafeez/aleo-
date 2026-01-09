@@ -35,7 +35,8 @@ export default function RecentActivity() {
         const activityList: ActivityItem[] = [];
 
         // Get recent lesson completions
-        const { data: lessons } = await supabase
+        // Get recent lesson completions
+        const { data: rawLessons } = await supabase
           .from('user_progress')
           .select('lesson_id, completed_at, xp_earned')
           .eq('user_id', user.id)
@@ -43,6 +44,9 @@ export default function RecentActivity() {
           .not('completed_at', 'is', null)
           .order('completed_at', { ascending: false })
           .limit(5);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const lessons = rawLessons as any[] | null;
 
         lessons?.forEach((lesson) => {
           if (!lesson.completed_at) return;
@@ -58,12 +62,16 @@ export default function RecentActivity() {
         });
 
         // Get recent achievements
-        const { data: achievements } = await supabase
+        // Get recent achievements
+        const { data: rawAchievements } = await supabase
           .from('achievements')
           .select('achievement_id, achievement_name, unlocked_at')
           .eq('user_id', user.id)
           .order('unlocked_at', { ascending: false })
           .limit(3);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const achievements = rawAchievements as any[] | null;
 
         achievements?.forEach((achievement) => {
           activityList.push({

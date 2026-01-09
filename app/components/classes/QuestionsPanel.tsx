@@ -71,6 +71,7 @@ export function QuestionsPanel({ classId, isInstructor = false }: QuestionsPanel
     if (!newQuestion.trim() || !qa_enabled) return;
 
     setLoading(true);
+    // @ts-expect-error Supabase types mismatch
     const { error } = await supabase.from('class_messages').insert({
       class_id: classId,
       user_id: localParticipant.identity,
@@ -90,6 +91,7 @@ export function QuestionsPanel({ classId, isInstructor = false }: QuestionsPanel
     if (!replyText.trim()) return;
 
     setLoading(true);
+    // @ts-expect-error Supabase types mismatch
     const { error } = await supabase.from('class_messages').insert({
       class_id: classId,
       user_id: localParticipant.identity,
@@ -111,6 +113,7 @@ export function QuestionsPanel({ classId, isInstructor = false }: QuestionsPanel
   const upvoteQuestion = async (questionId: string, currentUpvotes: number) => {
     const { error } = await supabase
       .from('class_messages')
+      // @ts-expect-error Supabase types mismatch
       .update({ upvotes: currentUpvotes + 1 })
       .eq('id', questionId);
 

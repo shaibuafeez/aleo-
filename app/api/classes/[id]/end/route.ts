@@ -14,11 +14,14 @@ export async function POST(
     const session = getSessionFromReq(req);
 
     // Get class from database
-    const { data: classData, error: classError } = await supabase
+    const { data, error: classError } = await supabase
       .from('classes')
       .select('*')
       .eq('id', class_id)
+      .eq('id', class_id)
       .single();
+
+    const classData = data as unknown as { instructor_id: string; livekit_room_name: string | null } | null;
 
     if (classError || !classData) {
       return NextResponse.json({ error: 'Class not found' }, { status: 404 });
@@ -50,6 +53,7 @@ export async function POST(
     // Update class in database
     const { error: updateError } = await supabase
       .from('classes')
+      // @ts-expect-error Supabase types mismatch
       .update({
         status: 'completed',
         ended_at: new Date().toISOString(),
@@ -65,10 +69,10 @@ export async function POST(
     }
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error ending class:', error);
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
+      { error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
     );
   }

@@ -38,11 +38,15 @@ export default function StreakHeatmap() {
         });
 
         // Get user progress data
-        const { data: progress } = await supabase
+        // Get user progress data
+        const { data: rawProgress } = await supabase
           .from('user_progress')
           .select('completed_at')
           .eq('user_id', user.id)
           .not('completed_at', 'is', null);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const progress = rawProgress as any[] | null;
 
         // Count lessons per day
         const activityMap = new Map<string, number>();

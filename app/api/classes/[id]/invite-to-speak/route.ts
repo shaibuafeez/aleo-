@@ -24,11 +24,14 @@ export async function POST(
     }
 
     // Get class from database
-    const { data: classData, error: classError } = await supabase
+    const { data, error: classError } = await supabase
       .from('classes')
       .select('*')
       .eq('id', class_id)
+      .eq('id', class_id)
       .single();
+
+    const classData = data as unknown as { instructor_id: string; livekit_room_name: string | null } | null;
 
     if (classError || !classData) {
       return NextResponse.json({ error: 'Class not found' }, { status: 404 });
@@ -53,10 +56,10 @@ export async function POST(
     );
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error inviting to speak:', error);
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
+      { error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
     );
   }

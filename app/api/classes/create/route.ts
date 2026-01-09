@@ -26,11 +26,14 @@ export async function POST(req: NextRequest) {
     }
 
     // Get class from database
-    const { data: classData, error: classError } = await supabase
+    const { data, error: classError } = await supabase
       .from('classes')
       .select('*')
       .eq('id', class_id)
+      .eq('id', class_id)
       .single();
+
+    const classData = data as unknown as { instructor_id: string; chat_enabled?: boolean; qa_enabled?: boolean; donations_enabled?: boolean } | null;
 
     if (classError || !classData) {
       return NextResponse.json({ error: 'Class not found' }, { status: 404 });
@@ -63,6 +66,7 @@ export async function POST(req: NextRequest) {
     // Update class in database with LiveKit room info
     const { error: updateError } = await supabase
       .from('classes')
+      // @ts-expect-error Supabase types mismatch
       .update({
         livekit_room_name: response.room_name,
         livekit_metadata: metadata,

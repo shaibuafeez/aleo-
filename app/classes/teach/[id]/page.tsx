@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useState, useCallback } from 'react';
 import { LiveKitRoom } from '@livekit/components-react';
 import { ClassPlayer } from '@/app/components/classes/ClassPlayer';
 import { ClassChat } from '@/app/components/classes/ClassChat';
@@ -21,14 +21,13 @@ export default function TeachClassPage({
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'chat' | 'qa' | 'participants'>('qa');
   const [ending, setEnding] = useState(false);
-  const supabase = createClient();
   const router = useRouter();
 
   useEffect(() => {
     startClass();
   }, [classId]);
 
-  const startClass = async () => {
+  const startClass = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -49,13 +48,13 @@ export default function TeachClassPage({
 
       const data = await response.json();
       setToken(data.connection_details.token);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error starting class:', err);
-      setError(err.message || 'Failed to start class');
+      setError(err instanceof Error ? err.message : 'Failed to start class');
     } finally {
       setLoading(false);
     }
-  };
+  }, [classId]);
 
   const endClass = async () => {
     if (!confirm('Are you sure you want to end the class? This action cannot be undone.')) {
@@ -75,9 +74,9 @@ export default function TeachClassPage({
 
       // Redirect to classes page
       router.push('/classes');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error ending class:', err);
-      alert('Failed to end class: ' + err.message);
+      alert('Failed to end class: ' + (err instanceof Error ? err.message : String(err)));
       setEnding(false);
     }
   };
@@ -169,31 +168,28 @@ export default function TeachClassPage({
               <div className="bg-gray-900 rounded-lg p-1 flex gap-1">
                 <button
                   onClick={() => setActiveTab('chat')}
-                  className={`flex-1 px-4 py-2 rounded transition-colors ${
-                    activeTab === 'chat'
-                      ? 'bg-gray-700 text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
+                  className={`flex-1 px-4 py-2 rounded transition-colors ${activeTab === 'chat'
+                    ? 'bg-gray-700 text-white'
+                    : 'text-gray-400 hover:text-white'
+                    }`}
                 >
                   Chat
                 </button>
                 <button
                   onClick={() => setActiveTab('qa')}
-                  className={`flex-1 px-4 py-2 rounded transition-colors ${
-                    activeTab === 'qa'
-                      ? 'bg-gray-700 text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
+                  className={`flex-1 px-4 py-2 rounded transition-colors ${activeTab === 'qa'
+                    ? 'bg-gray-700 text-white'
+                    : 'text-gray-400 hover:text-white'
+                    }`}
                 >
                   Q&A
                 </button>
                 <button
                   onClick={() => setActiveTab('participants')}
-                  className={`flex-1 px-4 py-2 rounded transition-colors ${
-                    activeTab === 'participants'
-                      ? 'bg-gray-700 text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
+                  className={`flex-1 px-4 py-2 rounded transition-colors ${activeTab === 'participants'
+                    ? 'bg-gray-700 text-white'
+                    : 'text-gray-400 hover:text-white'
+                    }`}
                 >
                   People
                 </button>

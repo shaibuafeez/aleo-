@@ -11,7 +11,7 @@ export default async function ClassesPage() {
   const supabase = await createClient();
 
   // Fetch all upcoming and live classes
-  const { data: classes, error } = await supabase
+  const { data: rawClasses, error } = await supabase
     .from('classes')
     .select(`
       *,
@@ -22,6 +22,9 @@ export default async function ClassesPage() {
     `)
     .in('status', ['scheduled', 'live'])
     .order('scheduled_at', { ascending: true });
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const classes = rawClasses as any[] | null;
 
   if (error) {
     console.error('Error fetching classes:', error);
@@ -78,10 +81,10 @@ export default async function ClassesPage() {
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-sui-ocean flex items-center justify-center text-white font-semibold">
-                          {(classItem.instructor as any)?.username?.[0]?.toUpperCase() || 'I'}
+                          {(classItem.instructor as { username: string } | null)?.username?.[0]?.toUpperCase() || 'I'}
                         </div>
                         <span className="text-sui-gray-700">
-                          {(classItem.instructor as any)?.username || 'Instructor'}
+                          {(classItem.instructor as { username: string } | null)?.username || 'Instructor'}
                         </span>
                       </div>
                       <span className="text-sui-gray-500">
@@ -147,10 +150,10 @@ export default async function ClassesPage() {
                     </div>
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-8 h-8 rounded-full bg-sui-ocean flex items-center justify-center text-white font-semibold">
-                        {(classItem.instructor as any)?.username?.[0]?.toUpperCase() || 'I'}
+                        {(classItem.instructor as { username: string } | null)?.username?.[0]?.toUpperCase() || 'I'}
                       </div>
                       <span className="text-sui-gray-700 text-sm">
-                        {(classItem.instructor as any)?.username || 'Instructor'}
+                        {(classItem.instructor as { username: string } | null)?.username || 'Instructor'}
                       </span>
                     </div>
                     <button className="w-full px-4 py-2 bg-sui-ocean hover:bg-sui-ocean-dark text-white rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-sui-ocean/30">

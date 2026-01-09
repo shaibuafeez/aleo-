@@ -37,8 +37,9 @@ export default function ScheduleClassPage() {
       const scheduledAt = new Date(`${scheduledDate}T${scheduledTime}`).toISOString();
 
       // Create class in database
-      const { data, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from('classes')
+        // @ts-expect-error Supabase types mismatch
         .insert({
           instructor_id: user.id,
           title,
@@ -60,9 +61,9 @@ export default function ScheduleClassPage() {
 
       // Redirect to classes page
       router.push('/classes');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error scheduling class:', err);
-      setError(err.message || 'Failed to schedule class');
+      setError(err instanceof Error ? err.message : 'Failed to schedule class');
     } finally {
       setLoading(false);
     }

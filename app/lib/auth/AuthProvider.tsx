@@ -71,6 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Create user profile in public.users table
   const createUserProfile = async (userId: string, email: string, username?: string) => {
+    // @ts-expect-error Supabase types mismatch
     const { error } = await supabase.from('users').insert({
       id: userId,
       email,

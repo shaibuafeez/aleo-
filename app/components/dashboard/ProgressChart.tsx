@@ -30,20 +30,28 @@ export default function ProgressChart() {
         const supabase = getSupabase();
 
         // Get analytics events for XP gains
-        const { data: events } = await supabase
+        // Get analytics events for XP gains
+        const { data: rawEvents } = await supabase
           .from('analytics_events')
           .select('created_at, event_data')
           .eq('user_id', user.id)
           .eq('event_type', 'xp_gained')
           .order('created_at', { ascending: true });
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const events = rawEvents as any[] | null;
+
         // Get user progress completions
-        const { data: progress } = await supabase
+        // Get user progress completions
+        const { data: rawProgress } = await supabase
           .from('user_progress')
           .select('completed_at, xp_earned')
           .eq('user_id', user.id)
           .not('completed_at', 'is', null)
           .order('completed_at', { ascending: true });
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const progress = rawProgress as any[] | null;
 
         // Combine and aggregate by day
         const progressMap = new Map<string, { xp: number; level: number }>();
@@ -124,8 +132,8 @@ export default function ProgressChart() {
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="xpGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6FBCF0" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#6FBCF0" stopOpacity={0.1}/>
+                  <stop offset="5%" stopColor="#6FBCF0" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#6FBCF0" stopOpacity={0.1} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5F3FF" />
