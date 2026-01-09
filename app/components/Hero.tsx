@@ -72,15 +72,33 @@ export default function Hero() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-6">
                         <Link
                             href="/lessons"
-                            className="group relative px-10 py-5 bg-black text-white rounded-full font-bold text-lg tracking-wide hover:scale-105 transition-all duration-300 shadow-2xl shadow-blue-900/20 overflow-hidden"
+                            className="group relative px-10 py-5 bg-black text-white rounded-full font-bold text-lg tracking-wide hover:scale-105 transition-all duration-300 shadow-2xl shadow-blue-900/20 overflow-hidden block"
                         >
-                            <span className="relative z-10 flex items-center gap-3">
-                                Start Learning
-                                <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            {/* Standard Text (Slides Up) */}
+                            <motion.div
+                                initial={{ y: 0 }}
+                                whileHover={{ y: "-100%" }}
+                                transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+                                className="flex items-center gap-3 relative z-10"
+                            >
+                                <span>Start Learning</span>
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                 </svg>
-                            </span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </motion.div>
+
+                            {/* Reveal Text (Slides In from Bottom) */}
+                            <motion.div
+                                initial={{ y: "100%" }}
+                                whileHover={{ y: 0 }}
+                                transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
+                                className="absolute inset-0 flex items-center justify-center gap-3 bg-blue-600 text-white z-10"
+                            >
+                                <span>Let's Go</span>
+                                <svg className="w-5 h-5 rotate-[-45deg]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </motion.div>
                         </Link>
                     </div>
                 </div>
