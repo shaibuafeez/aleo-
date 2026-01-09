@@ -103,9 +103,9 @@ export default function Hero() {
                                             hover: { y: 0 }
                                         }}
                                         transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
-                                        className="absolute inset-0 flex items-center justify-center gap-3 bg-blue-600 text-white z-10"
+                                        className="absolute inset-0 flex items-center justify-center gap-3 bg-zinc-800 text-white z-10"
                                     >
-                                        <span className="uppercase tracking-widest">LET'S BUILD</span>
+                                        <span className="tracking-wide">Let's build</span>
                                         <svg className="w-5 h-5 rotate-[-45deg]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                         </svg>
