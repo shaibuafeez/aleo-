@@ -42,7 +42,7 @@ export default function Hero() {
     return (
         <section
             ref={containerRef}
-            className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white text-black pt-32"
+            className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white text-black pt-40 md:pt-48"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
         >
@@ -53,7 +53,7 @@ export default function Hero() {
             <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
 
                 {/* Left Content */}
-                <div className="text-center lg:text-left space-y-8">
+                <div className="text-center lg:text-left space-y-10 lg:space-y-8">
 
                     {/* Live Badge */}
 
