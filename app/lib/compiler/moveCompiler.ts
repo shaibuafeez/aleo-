@@ -3,7 +3,7 @@
  * Main entry point for Move code compilation and validation
  */
 
-import { parseMove, ParseResult, ParseError } from './moveParser';
+import { parseMove, ParseError } from './moveParser';
 import { checkTypes } from './moveTypeChecker';
 
 export interface CompilationResult {

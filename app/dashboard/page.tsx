@@ -128,7 +128,7 @@ export default function DashboardPage() {
                 Recent Achievements
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {achievements.slice(0, 4).map((achievement, index) => (
+                {achievements.slice(0, 4).map((achievement) => (
                   <div
                     key={achievement.id}
                     className="bg-sui-sky rounded-2xl p-4 text-center hover:shadow-lg transition-shadow"

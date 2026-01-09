@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const supabase = getSupabase();
 
-  const { loadFromSupabase, syncWithSupabase, resetStore } = useGameStore();
+  const { loadFromSupabase, resetStore } = useGameStore();
 
   useEffect(() => {
     // Get initial session

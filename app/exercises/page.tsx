@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
+import { motion } from 'framer-motion';
 import ExerciseRenderer from '../components/exercises/ExerciseRenderer';
 import {
   allExercises,
@@ -28,7 +27,7 @@ export default function ExercisesPage() {
   const [filterTopic, setFilterTopic] = useState<ExerciseTopic | 'all'>('all');
   const [filterDifficulty, setFilterDifficulty] = useState<ExerciseDifficulty | 'all'>('all');
   const [showCompleted, setShowCompleted] = useState(true);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
 
   // Get statistics
   const stats = getOverallStatistics();
@@ -286,7 +285,7 @@ export default function ExercisesPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredExercises.map((exercise, index) => {
-                const progress = getExerciseProgress(exercise.id);
+
                 const isCompleted = isExerciseCompleted(exercise.id);
 
                 return (
