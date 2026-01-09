@@ -116,7 +116,7 @@ export default function Testimonials() {
                     initial={{ opacity: 0, scale: 0.98 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="mt-32 relative rounded-[3rem] overflow-hidden bg-[#050505] border border-white/10 shadow-2xl"
+                    className="mt-20 md:mt-32 relative rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#050505] border border-white/10 shadow-2xl"
                 >
                     {/* Noise Texture */}
                     <div className="absolute inset-0 bg-noise-overlay opacity-[0.07] pointer-events-none mix-blend-overlay" />
@@ -124,28 +124,28 @@ export default function Testimonials() {
                     {/* Abstract Blue Orb */}
                     <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 pointer-events-none" />
 
-                    <div className="relative z-10 p-12 md:p-24 grid md:grid-cols-2 gap-12 items-center">
+                    <div className="relative z-10 p-8 md:p-24 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 border border-white/10 rounded-full bg-white/5 backdrop-blur-sm">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 md:mb-6 border border-white/10 rounded-full bg-white/5 backdrop-blur-sm">
                                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                                 <span className="text-xs font-mono font-medium text-gray-400 uppercase tracking-wider">Accepting New Students</span>
                             </div>
 
-                            <h2 className="text-5xl md:text-8xl font-bold text-white tracking-tighter-swiss leading-[0.9] mb-8">
+                            <h2 className="text-4xl md:text-8xl font-bold text-white tracking-tighter-swiss leading-[0.9] mb-4 md:mb-8">
                                 Ready to <br />
                                 <span className="text-gray-500">break stuff?</span>
                             </h2>
                         </div>
 
                         <div className="flex flex-col items-start md:items-end justify-center">
-                            <p className="text-gray-400 text-xl md:text-2xl mb-10 max-w-md text-left md:text-right leading-relaxed">
+                            <p className="text-gray-400 text-lg md:text-2xl mb-8 md:mb-10 max-w-md text-left md:text-right leading-relaxed">
                                 Join the cohort defining the future of on-chain finance on Sui.
                             </p>
 
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="group bg-white text-black px-12 py-6 rounded-full text-xl font-bold hover:shadow-[0_0_50px_-10px_rgba(255,255,255,0.3)] transition-all flex items-center gap-3"
+                                className="group bg-white text-black px-8 py-4 md:px-12 md:py-6 rounded-full text-lg md:text-xl font-bold hover:shadow-[0_0_50px_-10px_rgba(255,255,255,0.3)] transition-all flex items-center gap-3"
                             >
                                 <span>Start Building</span>
                                 <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
