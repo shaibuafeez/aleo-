@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from 'react';
+import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import InteractiveCodeVisualizer from './InteractiveCodeVisualizer';
@@ -69,16 +70,19 @@ export default function Hero() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-                        <button
-                            className="px-8 py-4 bg-black text-white rounded-lg font-bold uppercase tracking-wide hover:bg-gray-800 transition-all duration-300 hover:-translate-y-1 shadow-lg"
+                        <Link
+                            href="/lessons"
+                            className="px-8 py-4 bg-black text-white rounded-lg font-bold uppercase tracking-wide hover:bg-gray-800 transition-all duration-300 hover:-translate-y-1 shadow-lg text-center"
                         >
                             Start Learning
-                        </button>
-                        <button
-                            className="px-8 py-4 bg-white border border-gray-200 text-black rounded-lg font-bold uppercase tracking-wide hover:bg-gray-50 transition-all duration-300 hover:border-gray-400"
+                        </Link>
+                        <Link
+                            href="https://docs.sui.io/guides/developer/getting-started/sui-move"
+                            target="_blank"
+                            className="px-8 py-4 bg-white border border-gray-200 text-black rounded-lg font-bold uppercase tracking-wide hover:bg-gray-50 transition-all duration-300 hover:border-gray-400 text-center"
                         >
                             Documentation
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
