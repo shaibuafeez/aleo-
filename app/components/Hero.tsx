@@ -69,19 +69,18 @@ export default function Hero() {
                         Interactive. Precise. Award-winning.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-6">
                         <Link
                             href="/lessons"
-                            className="px-8 py-4 bg-black text-white rounded-lg font-bold uppercase tracking-wide hover:bg-gray-800 transition-all duration-300 hover:-translate-y-1 shadow-lg text-center"
+                            className="group relative px-10 py-5 bg-black text-white rounded-full font-bold text-lg tracking-wide hover:scale-105 transition-all duration-300 shadow-2xl shadow-blue-900/20 overflow-hidden"
                         >
-                            Start Learning
-                        </Link>
-                        <Link
-                            href="https://docs.sui.io/guides/developer/getting-started/sui-move"
-                            target="_blank"
-                            className="px-8 py-4 bg-white border border-gray-200 text-black rounded-lg font-bold uppercase tracking-wide hover:bg-gray-50 transition-all duration-300 hover:border-gray-400 text-center"
-                        >
-                            Documentation
+                            <span className="relative z-10 flex items-center gap-3">
+                                Start Learning
+                                <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </Link>
                     </div>
                 </div>
