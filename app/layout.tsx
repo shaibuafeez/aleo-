@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { SuiProvider } from "./lib/sui/SuiProvider";
-import Navigation from "./components/Navigation";
+import { AuthProvider } from "./lib/auth/AuthProvider";
+import SmoothScroll from "./components/SmoothScroll";
+import Cursor from "./components/Cursor";
+import Header from "./components/Header";
+import DataMigrationNotice from "./components/auth/DataMigrationNotice";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Move By Practice - Learn Sui Move by Building",
-  description: "Gamified platform to learn Sui Move through interactive coding challenges. Master blockchain development with hands-on lessons.",
-  keywords: ["Sui", "Move", "blockchain", "smart contracts", "web3", "learning platform"],
-  authors: [{ name: "Move By Practice" }],
-  openGraph: {
-    title: "Move By Practice - Learn Sui Move by Building",
-    description: "Gamified platform to learn Sui Move through interactive coding challenges",
-    type: "website",
-  },
+  title: "Move by Practice | Master Sui Move",
+  description: "Interactive, gamified platform to learn Sui Move and build real projects.",
 };
 
 export default function RootLayout({
@@ -21,12 +21,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className="antialiased" suppressHydrationWarning>
-        <SuiProvider>
-          <Navigation />
-          {children}
-        </SuiProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} antialiased selection:bg-blue-500 selection:text-white`}>
+        <AuthProvider>
+          <SuiProvider>
+            <SmoothScroll />
+            <Cursor />
+            <Header />
+
+            {/* Main Content Wrapper */}
+            <div className="relative z-10">
+              {children}
+            </div>
+
+            <div className="bg-noise absolute inset-0 pointer-events-none z-50 mix-blend-overlay opacity-10" />
+            <DataMigrationNotice />
+          </SuiProvider>
+        </AuthProvider>
       </body>
     </html>
   );

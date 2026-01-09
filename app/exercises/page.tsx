@@ -6,9 +6,6 @@ import Link from 'next/link';
 import ExerciseRenderer from '../components/exercises/ExerciseRenderer';
 import {
   allExercises,
-  getExercisesByType,
-  getExercisesByTopic,
-  getExercisesByDifficulty
 } from '../data/exercises';
 import {
   Exercise,
@@ -79,60 +76,33 @@ export default function ExercisesPage() {
     }, 3000);
   };
 
-  const getExerciseTypeIcon = (type: ExerciseType) => {
-    switch (type) {
-      case 'code_completion':
-        return (
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-          </svg>
-        );
-      case 'bug_fix':
-        return (
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-        );
-      case 'multiple_choice':
-        return (
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-          </svg>
-        );
-      case 'output_prediction':
-        return (
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-          </svg>
-        );
-    }
-  };
-
   const getDifficultyColor = (difficulty: ExerciseDifficulty) => {
     switch (difficulty) {
       case 'beginner':
-        return 'bg-green-100 text-green-700 border-green-300';
+        return 'bg-emerald-100 text-emerald-800 border-emerald-200';
       case 'intermediate':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-300';
+        return 'bg-amber-100 text-amber-800 border-amber-200';
       case 'advanced':
-        return 'bg-red-100 text-red-700 border-red-300';
+        return 'bg-rose-100 text-rose-800 border-rose-200';
     }
   };
 
   // If an exercise is selected, show the practice interface
   if (selectedExercise) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-sui-sky/20 to-white pt-24 sm:pt-32 pb-20 px-4 sm:px-6">
+      <div className="min-h-screen bg-[#FDFDFD] pt-24 sm:pt-32 pb-20 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           {/* Back Button */}
           <button
             onClick={() => setSelectedExercise(null)}
-            className="mb-6 flex items-center gap-2 text-sui-ocean hover:text-sui-ocean-dark font-semibold transition-colors"
+            className="mb-8 flex items-center gap-2 text-zinc-500 hover:text-zinc-900 font-medium transition-colors group"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Exercises
+            <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center group-hover:bg-zinc-200 transition-colors">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+            </div>
+            Back to Hub
           </button>
 
           {/* Exercise */}
@@ -146,124 +116,112 @@ export default function ExercisesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sui-sky/20 to-white py-8 sm:py-16 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8 sm:mb-12"
-        >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-sui-navy mb-3 sm:mb-4">
-            Practice Exercises
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-sui-gray-600">
-            Master Move programming with interactive exercises
-          </p>
-        </motion.div>
+    <div className="min-h-screen bg-[#FDFDFD] pt-24 pb-12 px-4 sm:px-6 font-sans text-zinc-900">
+      <div className="max-w-7xl mx-auto space-y-12">
 
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white rounded-xl border-2 border-sui-gray-200 p-4 text-center"
+            className="space-y-2"
           >
-            <div className="text-3xl font-bold text-sui-ocean mb-1">
-              {stats.completedExercises}
-            </div>
-            <div className="text-xs sm:text-sm text-sui-gray-600">
-              Completed
-            </div>
+            <h1 className="text-6xl font-black tracking-tight text-zinc-900">
+              Practice Hub
+            </h1>
+            <p className="text-xl text-zinc-500 font-medium max-w-lg">
+              Master Move language concepts through hands-on interactive challenges.
+            </p>
           </motion.div>
-
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white rounded-xl border-2 border-sui-gray-200 p-4 text-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="hidden md:block"
           >
-            <div className="text-3xl font-bold text-blue-600 mb-1">
-              {stats.masteredExercises}
-            </div>
-            <div className="text-xs sm:text-sm text-sui-gray-600">
-              Mastered
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white rounded-xl border-2 border-sui-gray-200 p-4 text-center"
-          >
-            <div className="text-3xl font-bold text-green-600 mb-1">
-              {stats.totalXP}
-            </div>
-            <div className="text-xs sm:text-sm text-sui-gray-600">
-              Total XP
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="bg-white rounded-xl border-2 border-sui-gray-200 p-4 text-center"
-          >
-            <div className="text-3xl font-bold text-orange-600 mb-1">
-              {stats.averageScore}%
-            </div>
-            <div className="text-xs sm:text-sm text-sui-gray-600">
-              Avg Score
+            <div className="h-16 w-16 rounded-full bg-zinc-900 flex items-center justify-center text-3xl shadow-xl">
+              💪
             </div>
           </motion.div>
         </div>
 
-        {/* Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-white rounded-xl sm:rounded-2xl border-2 border-sui-gray-200 p-4 sm:p-6 mb-6"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-sui-navy">Filters</h2>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === 'grid' ? 'bg-sui-ocean text-white' : 'bg-gray-100 text-gray-600'
-                }`}
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === 'list' ? 'bg-sui-ocean text-white' : 'bg-gray-100 text-gray-600'
-                }`}
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
+        {/* Bento Grid Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Main Progress - Large Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="col-span-1 md:col-span-2 bg-zinc-900 text-white rounded-3xl p-8 relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+              <svg className="w-48 h-48" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
             </div>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Type Filter */}
-            <div>
-              <label className="block text-sm font-semibold text-sui-navy mb-2">
-                Exercise Type
-              </label>
+            <div className="relative z-10 h-full flex flex-col justify-between">
+              <div>
+                <h3 className="text-zinc-400 font-bold uppercase tracking-widest text-sm mb-1">Total Progress</h3>
+                <div className="text-5xl font-black tracking-tight flex items-baseline gap-2">
+                  {Math.round((stats.completedExercises / allExercises.length) * 100)}%
+                  <span className="text-lg font-medium text-zinc-500">Mastery</span>
+                </div>
+              </div>
+              <div className="w-full bg-zinc-800 h-2 rounded-full mt-6 overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(stats.completedExercises / allExercises.length) * 100}%` }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                  className="h-full bg-white rounded-full"
+                />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Mastered Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white rounded-3xl border border-zinc-200 p-8 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"
+          >
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-blue-50 rounded-full" />
+            <div className="relative z-10 text-center">
+              <div className="text-4xl font-black text-blue-600 mb-2">{stats.masteredExercises}</div>
+              <div className="text-sm font-bold text-zinc-500 uppercase tracking-wide">Exercises Mastered</div>
+            </div>
+          </motion.div>
+
+          {/* XP Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white rounded-3xl border border-zinc-200 p-8 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"
+          >
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-green-50 rounded-full" />
+            <div className="relative z-10 text-center">
+              <div className="text-4xl font-black text-green-600 mb-2">{stats.totalXP}</div>
+              <div className="text-sm font-bold text-zinc-500 uppercase tracking-wide">Total XP Earned</div>
+            </div>
+          </motion.div>
+        </div>
+
+
+        {/* Filter Island */}
+        <div className="sticky top-4 z-30">
+          <motion.div
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="bg-white/80 backdrop-blur-xl border border-white/20 shadow-xl shadow-zinc-200/20 rounded-2xl p-4 flex flex-wrap gap-4 items-center justify-between"
+          >
+            {/* Left: Dropdowns */}
+            <div className="flex flex-wrap gap-2">
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value as ExerciseType | 'all')}
-                className="w-full px-3 py-2 border-2 border-sui-gray-300 rounded-lg focus:border-sui-ocean outline-none text-sm"
+                className="bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-semibold text-sm rounded-xl px-4 py-2.5 border-none outline-none focus:ring-2 focus:ring-zinc-900/10 cursor-pointer transition-colors appearance-none"
+                style={{ backgroundImage: 'none' }}
               >
                 <option value="all">All Types</option>
                 <option value="code_completion">Code Completion</option>
@@ -271,19 +229,27 @@ export default function ExercisesPage() {
                 <option value="multiple_choice">Multiple Choice</option>
                 <option value="output_prediction">Output Prediction</option>
               </select>
-            </div>
 
-            {/* Topic Filter */}
-            <div>
-              <label className="block text-sm font-semibold text-sui-navy mb-2">
-                Topic
-              </label>
+              <select
+                value={filterDifficulty}
+                onChange={(e) => setFilterDifficulty(e.target.value as ExerciseDifficulty | 'all')}
+                className="bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-semibold text-sm rounded-xl px-4 py-2.5 border-none outline-none focus:ring-2 focus:ring-zinc-900/10 cursor-pointer transition-colors appearance-none"
+                style={{ backgroundImage: 'none' }}
+              >
+                <option value="all">All Difficulties</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+
               <select
                 value={filterTopic}
                 onChange={(e) => setFilterTopic(e.target.value as ExerciseTopic | 'all')}
-                className="w-full px-3 py-2 border-2 border-sui-gray-300 rounded-lg focus:border-sui-ocean outline-none text-sm"
+                className="bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-semibold text-sm rounded-xl px-4 py-2.5 border-none outline-none focus:ring-2 focus:ring-zinc-900/10 cursor-pointer transition-colors appearance-none"
+                style={{ backgroundImage: 'none' }}
               >
                 <option value="all">All Topics</option>
+                {/* We can map these dynamically but keeping explicit for now */}
                 <option value="functions">Functions</option>
                 <option value="structs">Structs</option>
                 <option value="abilities">Abilities</option>
@@ -296,140 +262,78 @@ export default function ExercisesPage() {
               </select>
             </div>
 
-            {/* Difficulty Filter */}
-            <div>
-              <label className="block text-sm font-semibold text-sui-navy mb-2">
-                Difficulty
-              </label>
-              <select
-                value={filterDifficulty}
-                onChange={(e) => setFilterDifficulty(e.target.value as ExerciseDifficulty | 'all')}
-                className="w-full px-3 py-2 border-2 border-sui-gray-300 rounded-lg focus:border-sui-ocean outline-none text-sm"
-              >
-                <option value="all">All Levels</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </div>
-
-            {/* Show Completed Toggle */}
-            <div>
-              <label className="block text-sm font-semibold text-sui-navy mb-2">
-                Status
-              </label>
-              <label className="flex items-center gap-2 px-3 py-2 border-2 border-sui-gray-300 rounded-lg cursor-pointer hover:border-sui-ocean transition-colors">
-                <input
-                  type="checkbox"
-                  checked={showCompleted}
-                  onChange={(e) => setShowCompleted(e.target.checked)}
-                  className="w-4 h-4 text-sui-ocean focus:ring-2 focus:ring-sui-ocean"
-                />
-                <span className="text-sm">Show completed</span>
+            {/* Right: Toggles */}
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2 cursor-pointer group">
+                <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${showCompleted ? 'bg-zinc-900 border-zinc-900' : 'border-zinc-300 group-hover:border-zinc-400'}`}>
+                  {showCompleted && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M5 13l4 4L19 7" /></svg>}
+                </div>
+                <input type="checkbox" checked={showCompleted} onChange={(e) => setShowCompleted(e.target.checked)} className="hidden" />
+                <span className="text-sm font-semibold text-zinc-600 group-hover:text-zinc-900 transition-colors">Show Completed</span>
               </label>
             </div>
-          </div>
+          </motion.div>
+        </div>
 
-          {/* Results Count */}
-          <div className="mt-4 text-sm text-sui-gray-600">
-            Showing {filteredExercises.length} of {allExercises.length} exercises
-          </div>
-        </motion.div>
+        {/* Exercises Grid */}
+        <div>
+          {filteredExercises.length === 0 ? (
+            <div className="text-center py-24 bg-zinc-50 rounded-3xl border-2 border-dashed border-zinc-200">
+              <div className="text-8xl mb-6 opacity-20 filter grayscale">🦖</div>
+              <h3 className="text-2xl font-black text-zinc-400 mb-2">No Challenges Found</h3>
+              <p className="text-zinc-400 font-medium">Try loosening your filters to find more exercises.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredExercises.map((exercise, index) => {
+                const progress = getExerciseProgress(exercise.id);
+                const isCompleted = isExerciseCompleted(exercise.id);
 
-        {/* Exercise Grid/List */}
-        {filteredExercises.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-bold text-sui-navy mb-2">No exercises found</h3>
-            <p className="text-sui-gray-600">Try adjusting your filters</p>
-          </div>
-        ) : (
-          <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6' : 'space-y-4'}>
-            {filteredExercises.map((exercise, index) => {
-              const progress = getExerciseProgress(exercise.id);
-              const isCompleted = isExerciseCompleted(exercise.id);
-
-              return (
-                <motion.div
-                  key={exercise.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => setSelectedExercise(exercise)}
-                  className="bg-white rounded-xl border-2 border-sui-gray-200 hover:border-sui-ocean p-4 sm:p-6 cursor-pointer transition-all hover:shadow-lg group"
-                >
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                      exercise.type === 'code_completion' ? 'bg-blue-100 text-blue-600' :
-                      exercise.type === 'bug_fix' ? 'bg-red-100 text-red-600' :
-                      exercise.type === 'multiple_choice' ? 'bg-blue-100 text-blue-600' :
-                      'bg-green-100 text-green-600'
-                    }`}>
-                      {getExerciseTypeIcon(exercise.type)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-bold text-sui-navy mb-1 group-hover:text-sui-ocean transition-colors">
-                        {exercise.title}
-                      </h3>
-                      <p className="text-sm text-sui-gray-600 line-clamp-2">
-                        {exercise.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Meta Info */}
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold border ${getDifficultyColor(exercise.difficulty)}`}>
-                      {exercise.difficulty}
-                    </span>
-                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-sui-sky/30 text-sui-ocean border border-sui-ocean/20">
-                      {exercise.topic.replace('_', ' ')}
-                    </span>
-                    <span className="px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-300">
-                      {exercise.estimatedTime} min
-                    </span>
-                  </div>
-
-                  {/* Progress */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-sui-ocean">
-                        {exercise.baseXP} XP
+                return (
+                  <motion.div
+                    key={exercise.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    onClick={() => setSelectedExercise(exercise)}
+                    className="bg-white rounded-3xl border border-zinc-200 p-6 md:p-8 cursor-pointer group hover:shadow-xl hover:shadow-zinc-200/50 hover:border-zinc-300 transition-all hover:-translate-y-1 relative overflow-hidden"
+                  >
+                    <div className="flex justify-between items-start mb-6 relative z-10">
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border ${getDifficultyColor(exercise.difficulty)}`}>
+                        {exercise.difficulty}
                       </span>
-                      {progress && progress.totalAttempts > 0 && (
-                        <span className="text-xs text-sui-gray-500">
-                          • {progress.totalAttempts} attempt{progress.totalAttempts !== 1 ? 's' : ''}
+                      {isCompleted && (
+                        <span className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
+                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path d="M5 13l4 4L19 7" /></svg>
                         </span>
                       )}
                     </div>
-                    {isCompleted && (
-                      <div className="flex items-center gap-1 text-green-600">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                    )}
-                  </div>
 
-                  {progress && progress.bestScore > 0 && (
-                    <div className="mt-3 pt-3 border-t border-sui-gray-200">
-                      <div className="flex items-center justify-between text-xs text-sui-gray-600 mb-1">
-                        <span>Best Score</span>
-                        <span className="font-semibold">{progress.bestScore}%</span>
-                      </div>
-                      <div className="w-full bg-sui-gray-200 rounded-full h-1.5">
-                        <div
-                          className="bg-sui-ocean h-1.5 rounded-full"
-                          style={{ width: `${progress.bestScore}%` }}
-                        />
+                    <div className="relative z-10">
+                      <h3 className="text-xl font-bold text-zinc-900 mb-2 group-hover:text-blue-600 transition-colors">
+                        {exercise.title}
+                      </h3>
+                      <p className="text-sm text-zinc-500 font-medium line-clamp-2 mb-6">
+                        {exercise.description}
+                      </p>
+
+                      <div className="flex items-center justify-between text-xs font-bold text-zinc-400 uppercase tracking-wider">
+                        <span className="flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-zinc-300"></span>
+                          {exercise.type.replace('_', ' ')}
+                        </span>
+                        <span>{exercise.baseXP} XP</span>
                       </div>
                     </div>
-                  )}
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
+
+                    {/* Hover Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-zinc-50 opacity-0 group-hover:opacity-100 transition-opacity z-0" />
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,16 @@
+anon_public = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnZGh2cnF1eGJ4Ynl4c255dGJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwMzQyNzMsImV4cCI6MjA4MjYxMDI3M30.T3TvOoIRog8UvI8RGScModbPcCIyB6cv3Z7Zh7zmBhg"
+service_role_secret = " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnZGh2cnF1eGJ4Ynl4c255dGJrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzAzNDI3MywiZXhwIjoyMDgyNjEwMjczfQ.3m_ArRMs9hyjxHoDhkljOtS_5p2V1tMdjuE9c8aILac "
+
+
+
+
+
+
+
+
+
+
+
+
+
+

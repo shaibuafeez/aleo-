@@ -92,68 +92,47 @@ export default function QuizComponent({
 
   if (quizComplete) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sui-mist via-white to-sui-sky flex items-center justify-center p-8">
+      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-8">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="max-w-2xl w-full bg-white rounded-3xl shadow-xl p-12 border-2 border-sui-gray-200 text-center"
+          className="max-w-2xl w-full bg-white rounded-[2.5rem] shadow-2xl p-12 md:p-16 border border-zinc-100 text-center relative overflow-hidden"
         >
-          {/* Score Display */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring' }}
-            className={`w-32 h-32 mx-auto mb-6 rounded-full flex items-center justify-center text-5xl font-black ${
-              passed
-                ? 'bg-gradient-to-br from-green-400 to-green-600 text-white'
-                : 'bg-gradient-to-br from-orange-400 to-orange-600 text-white'
-            }`}
-          >
-            {score}/{totalQuestions}
-          </motion.div>
+          {/* Confetti Background */}
+          {passed && <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />}
 
-          {/* Result Message */}
-          <h2 className="text-4xl font-black text-sui-navy mb-4">
-            {passed ? '🎉 Amazing Work!' : '💪 Keep Trying!'}
+          {/* Score Display circle */}
+          <div className="relative mb-8">
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", bounce: 0.5 }}
+              className={`w-40 h-40 mx-auto rounded-full flex items-center justify-center text-6xl font-black shadow-xl ring-8 ring-white ${passed ? 'bg-zinc-900 text-white' : 'bg-red-500 text-white'
+                }`}
+            >
+              {Math.round((score / totalQuestions) * 100)}%
+            </motion.div>
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white px-4 py-1 rounded-full text-sm font-bold shadow-md border border-zinc-100 whitespace-nowrap">
+              {score} / {totalQuestions} Correct
+            </div>
+          </div>
+
+          <h2 className="text-4xl md:text-5xl font-black text-zinc-900 mb-6 tracking-tight">
+            {passed ? 'Lesson Mastered!' : 'Keep Going!'}
           </h2>
 
-          <p className="text-xl text-sui-gray-700 mb-8">
+          <p className="text-xl text-zinc-500 mb-12 font-medium leading-relaxed max-w-lg mx-auto">
             {passed
-              ? `You scored ${score} out of ${totalQuestions}! You're ready for the practice challenge.`
-              : `You need ${requiredScore} correct answers to pass. You got ${score}. Let's try again!`}
+              ? "You've crushed the concepts. You're ready to prove your skills in the code editor."
+              : "You're getting there! Review the concepts and try again to unlock the practice."
+            }
           </p>
 
-          {/* XP Reward */}
-          {passed && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-sui-ocean/10 text-sui-ocean rounded-full font-bold mb-8"
-            >
-              +50 XP Earned! 🌟
-            </motion.div>
-          )}
-
-          {/* Weakness Summary */}
-          {!passed && weaknesses.length > 0 && (
-            <div className="mb-8 p-6 bg-sui-sky rounded-2xl text-left">
-              <h3 className="font-bold text-sui-navy mb-3">📚 Topics to Review:</h3>
-              <ul className="space-y-2">
-                {Array.from(new Set(weaknesses)).map((topic, index) => (
-                  <li key={index} className="text-sui-gray-700">
-                    • {topic.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {!passed && (
               <button
                 onClick={handleRetry}
-                className="px-8 py-4 bg-white text-sui-navy border-2 border-sui-gray-300 rounded-2xl font-bold hover:border-sui-ocean hover:text-sui-ocean transition-all"
+                className="px-10 py-5 bg-white text-zinc-900 border-2 border-zinc-200 rounded-full font-bold text-lg hover:border-zinc-900 transition-all"
               >
                 Try Again
               </button>
@@ -161,9 +140,12 @@ export default function QuizComponent({
             {passed && (
               <button
                 onClick={handleContinueToPractice}
-                className="px-8 py-4 bg-gradient-to-r from-sui-ocean to-sui-ocean-dark text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                className="group relative px-10 py-5 bg-zinc-900 text-white rounded-full font-bold text-lg shadow-xl hover:bg-zinc-800 hover:scale-105 active:scale-95 transition-all"
               >
-                {transitionMessage} 💻
+                <div className="flex items-center gap-2">
+                  {transitionMessage}
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </div>
               </button>
             )}
           </div>
@@ -173,95 +155,129 @@ export default function QuizComponent({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sui-mist via-white to-sui-sky flex items-center justify-center p-8">
-      <div className="max-w-3xl w-full">
-        {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-sui-gray-600">
-              Question {currentQuestionIndex + 1} of {totalQuestions}
-            </span>
-            <span className="text-sm font-bold text-sui-ocean">
-              Score: {score}/{totalQuestions}
-            </span>
+    <div className="min-h-screen bg-[#FAFAFA] flex flex-col items-center justify-center p-6 md:p-12 relative overflow-hidden">
+      {/* Background Ambience */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-3xl w-full relative z-10">
+        {/* Progress Header */}
+        <div className="flex items-center justify-between mb-8 px-2">
+          <div className="flex gap-2">
+            {questions.map((_, idx) => (
+              <div key={idx} className={`h-1.5 w-8 rounded-full transition-colors duration-300 ${idx < currentQuestionIndex ? 'bg-zinc-900' :
+                  idx === currentQuestionIndex ? 'bg-blue-500' : 'bg-zinc-200'
+                }`} />
+            ))}
           </div>
-          <div className="h-2 bg-sui-gray-200 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-sui-ocean to-sui-ocean-dark"
-              initial={{ width: '0%' }}
-              animate={{ width: `${((currentQuestionIndex + 1) / totalQuestions) * 100}%` }}
-              transition={{ duration: 0.3 }}
-            />
+          <div className="text-xs font-bold text-zinc-400 uppercase tracking-widest">
+            Question {currentQuestionIndex + 1}
           </div>
         </div>
 
-        {/* Question Card */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestionIndex}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            className="bg-white rounded-3xl shadow-xl p-12 border-2 border-sui-gray-200"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -40, scale: 0.95 }}
+            transition={{ type: "spring", bounce: 0.2 }}
           >
-            {/* Question */}
-            <h3 className="text-2xl font-bold text-sui-navy mb-8">{currentQuestion.question}</h3>
+            {/* Question Card */}
+            <div className="bg-transparent mb-12">
+              <h2 className="text-3xl md:text-5xl font-black text-zinc-900 leading-[1.1] tracking-tight">
+                {currentQuestion.question}
+              </h2>
+            </div>
 
-            {/* Answer Options */}
-            <div className="space-y-4 mb-8">
+            {/* Options Grid */}
+            <div className="grid grid-cols-1 gap-4">
               {currentQuestion.options.map((option, index) => {
                 const isSelected = selectedAnswer === index;
                 const isCorrect = index === currentQuestion.correctAnswer;
-                const showCorrect = showFeedback && isCorrect;
-                const showWrong = showFeedback && isSelected && !isCorrect;
+                const showResult = showFeedback;
+
+                let cardStyle = "bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-lg";
+                let textStyle = "text-zinc-600";
+                let icon = null;
+
+                if (showResult) {
+                  if (isCorrect) {
+                    cardStyle = "bg-green-500 border-green-500 shadow-green-200 shadow-xl";
+                    textStyle = "text-white font-bold";
+                    icon = "✅";
+                  } else if (isSelected) {
+                    cardStyle = "bg-red-500 border-red-500 shadow-red-200 shadow-xl";
+                    textStyle = "text-white font-bold";
+                    icon = "❌";
+                  } else {
+                    cardStyle = "bg-white opacity-50";
+                  }
+                } else if (isSelected) {
+                  cardStyle = "bg-zinc-900 border-zinc-900 shadow-xl ring-2 ring-zinc-900 ring-offset-2";
+                  textStyle = "text-white font-bold";
+                }
 
                 return (
                   <motion.button
                     key={index}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={showFeedback}
-                    whileHover={{ scale: showFeedback ? 1 : 1.02 }}
-                    whileTap={{ scale: showFeedback ? 1 : 0.98 }}
-                    className={`w-full p-5 rounded-2xl border-2 text-left font-semibold transition-all ${
-                      showCorrect
-                        ? 'bg-green-100 border-green-500 text-green-900'
-                        : showWrong
-                        ? 'bg-red-100 border-red-500 text-red-900'
-                        : isSelected
-                        ? 'bg-sui-ocean border-sui-ocean text-white'
-                        : 'bg-white border-sui-gray-300 text-sui-navy hover:border-sui-ocean'
-                    }`}
+                    whileHover={!showFeedback ? { scale: 1.02 } : {}}
+                    whileTap={!showFeedback ? { scale: 0.98 } : {}}
+                    className={`w-full p-6 md:p-8 rounded-[2rem] border-2 text-left transition-all duration-300 relative group overflow-hidden ${cardStyle}`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span>{option}</span>
-                      {showCorrect && <span className="text-2xl">✅</span>}
-                      {showWrong && <span className="text-2xl">❌</span>}
+                    <div className="flex items-center justify-between relative z-10">
+                      <span className={`text-xl ${textStyle}`}>{option}</span>
+                      {icon && <span className="text-2xl">{icon}</span>}
+
+                      {!showFeedback && !isSelected && (
+                        <div className="w-8 h-8 rounded-full border-2 border-zinc-100 flex items-center justify-center group-hover:border-zinc-300 transition-colors">
+                          <div className="w-2 h-2 rounded-full bg-zinc-200 group-hover:bg-zinc-400" />
+                        </div>
+                      )}
+                      {!showFeedback && isSelected && (
+                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+                          <div className="w-3 h-3 rounded-full bg-zinc-900" />
+                        </div>
+                      )}
                     </div>
                   </motion.button>
                 );
               })}
             </div>
 
-            {/* Explanation (shown after answer) */}
-            {showFeedback && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="p-6 bg-sui-sky rounded-2xl border-2 border-sui-ocean mb-6"
-              >
-                <h4 className="font-bold text-sui-navy mb-2">💡 Explanation:</h4>
-                <p className="text-sui-gray-700 leading-relaxed">{currentQuestion.explanation}</p>
-              </motion.div>
-            )}
+            {/* Bottom Action Area */}
+            <div className="mt-12 flex items-center justify-between">
+              {showFeedback ? (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="flex-1 mr-8"
+                >
+                  <p className="text-zinc-500 leading-relaxed font-medium">
+                    <span className="text-zinc-900 font-bold block mb-1">Why?</span>
+                    {currentQuestion.explanation}
+                  </p>
+                </motion.div>
+              ) : <div className="flex-1" />}
 
-            {/* Action Button */}
-            <button
-              onClick={showFeedback ? handleNextQuestion : handleSubmitAnswer}
-              disabled={!showFeedback && selectedAnswer === null}
-              className="w-full px-8 py-4 bg-gradient-to-r from-sui-ocean to-sui-ocean-dark text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-            >
-              {showFeedback ? (isLastQuestion ? 'See Results' : 'Next Question →') : 'Submit Answer'}
-            </button>
+              <button
+                onClick={showFeedback ? handleNextQuestion : handleSubmitAnswer}
+                disabled={!showFeedback && selectedAnswer === null}
+                className={`px-10 py-5 rounded-full font-bold text-lg transition-all duration-300
+                     ${!showFeedback && selectedAnswer === null
+                    ? 'bg-zinc-100 text-zinc-300 cursor-not-allowed'
+                    : 'bg-zinc-900 text-white shadow-xl hover:scale-105 active:scale-95'
+                  }
+                  `}
+              >
+                {showFeedback ? (isLastQuestion ? 'Complete Quiz' : 'Next Question') : 'Check Answer'}
+              </button>
+            </div>
+
           </motion.div>
         </AnimatePresence>
       </div>

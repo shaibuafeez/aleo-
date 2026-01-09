@@ -155,247 +155,248 @@ export default function MultipleChoiceExerciseComponent({
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      {/* Header */}
-      <div className="bg-white rounded-xl sm:rounded-2xl border-2 border-sui-gray-200 p-4 sm:p-6">
-        <div className="flex items-start gap-3 sm:gap-4 mb-4">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-            </svg>
+    <div className="space-y-8 max-w-4xl mx-auto">
+      {/* Header Card */}
+      <div className="bg-white rounded-[2rem] border border-zinc-200 p-8 shadow-xl shadow-zinc-200/50 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+          <svg className="w-32 h-32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          </svg>
+        </div>
+
+        <div className="relative z-10">
+          <div className="flex flex-col gap-6">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border ${exercise.difficulty === 'beginner' ? 'bg-green-100 text-green-700 border-green-200' :
+                    exercise.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
+                      'bg-red-100 text-red-700 border-red-200'
+                  }`}>
+                  {exercise.difficulty}
+                </span>
+                <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-zinc-100 text-zinc-500 border border-zinc-200">
+                  {exercise.topic.replace('_', ' ')}
+                </span>
+              </div>
+              <h3 className="text-4xl font-black text-zinc-900 mb-3 tracking-tight">
+                {exercise.title}
+              </h3>
+              <p className="text-lg text-zinc-500 font-medium leading-relaxed max-w-2xl">
+                {exercise.description}
+              </p>
+            </div>
           </div>
-          <div className="flex-1">
-            <h3 className="text-xl sm:text-2xl font-bold text-sui-navy mb-2">
-              {exercise.title}
-            </h3>
-            <p className="text-sm sm:text-base text-sui-gray-600">
-              {exercise.description}
+        </div>
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+        {/* Question & Code Column */}
+        <div className="space-y-8">
+          <div className="bg-white rounded-[2rem] border border-zinc-200 p-8 shadow-sm">
+            <h4 className="text-sm font-bold text-zinc-400 uppercase tracking-widest mb-6">Challenge</h4>
+            <p className="text-2xl font-bold text-zinc-800 leading-snug">
+              {exercise.question}
             </p>
           </div>
-        </div>
 
-        {/* Difficulty & Topic */}
-        <div className="flex flex-wrap gap-2">
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-300">
-            {exercise.difficulty}
-          </span>
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-sui-sky/30 text-sui-ocean border border-sui-ocean/20">
-            {exercise.topic.replace('_', ' ')}
-          </span>
-          {exercise.allowMultipleAnswers && (
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-300">
-              Select all that apply
-            </span>
+          {/* Code Snippet (Mac Style) */}
+          {exercise.codeSnippet && (
+            <div className="bg-[#1E1E2E] rounded-xl overflow-hidden shadow-2xl ring-4 ring-zinc-900/5">
+              <div className="flex items-center px-4 py-3 bg-[#181825] border-b border-white/5">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
+                  <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+                  <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
+                </div>
+                <span className="ml-4 text-xs font-mono text-zinc-500">task_reference.move</span>
+              </div>
+              <div className="p-4">
+                <Editor
+                  height="200px"
+                  defaultLanguage="rust"
+                  value={exercise.codeSnippet}
+                  theme="vs-dark"
+                  options={{
+                    readOnly: true,
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    fontFamily: "'JetBrains Mono', monospace",
+                    lineNumbers: 'on',
+                    scrollBeyondLastLine: false,
+                    wordWrap: 'on',
+                    padding: { top: 16, bottom: 16 }
+                  }}
+                />
+              </div>
+            </div>
           )}
         </div>
-      </div>
 
-      {/* Question */}
-      <div className="bg-white rounded-xl sm:rounded-2xl border-2 border-sui-gray-200 p-4 sm:p-6">
-        <h4 className="text-lg sm:text-xl font-bold text-sui-navy mb-4">
-          Question
-        </h4>
-        <p className="text-sm sm:text-base text-sui-gray-700 leading-relaxed">
-          {exercise.question}
-        </p>
-      </div>
-
-      {/* Code Snippet (if provided) */}
-      {exercise.codeSnippet && (
-        <div className="bg-white rounded-xl sm:rounded-2xl border-2 border-sui-gray-200 p-4 sm:p-6">
-          <h4 className="text-lg sm:text-xl font-bold text-sui-navy mb-4">
-            Code Reference
-          </h4>
-          <div className="border-2 border-sui-gray-200 rounded-xl overflow-hidden">
-            <Editor
-              height="200px"
-              defaultLanguage="rust"
-              value={exercise.codeSnippet}
-              theme="vs-dark"
-              options={{
-                readOnly: true,
-                minimap: { enabled: false },
-                fontSize: 13,
-                lineNumbers: 'on',
-                scrollBeyondLastLine: false,
-                wordWrap: 'on'
-              }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Answer Options */}
-      <div className="bg-white rounded-xl sm:rounded-2xl border-2 border-sui-gray-200 p-4 sm:p-6">
-        <h4 className="text-lg sm:text-xl font-bold text-sui-navy mb-4">
-          {exercise.allowMultipleAnswers ? 'Select All Correct Answers' : 'Select Your Answer'}
-        </h4>
-
-        <div className="space-y-3">
-          {shuffledOptions.map((option, index) => {
-            const isSelected = selectedOptions.includes(option.id);
-            const showCorrect = showExplanations && option.isCorrect;
-            const showIncorrect = showExplanations && isSelected && !option.isCorrect;
-
-            return (
-              <div key={option.id}>
-                <motion.button
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  onClick={() => handleOptionToggle(option.id)}
-                  disabled={showExplanations}
-                  className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                    showCorrect
-                      ? 'border-green-400 bg-green-50'
-                      : showIncorrect
-                      ? 'border-red-400 bg-red-50'
-                      : isSelected
-                      ? 'border-sui-ocean bg-sui-ocean/10'
-                      : 'border-sui-gray-200 hover:border-sui-ocean/50'
-                  } ${showExplanations ? 'cursor-not-allowed' : ''}`}
-                >
-                  <div className="flex items-start gap-3">
-                    {/* Radio/Checkbox Icon */}
-                    <div className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-${exercise.allowMultipleAnswers ? 'md' : 'full'} border-2 flex items-center justify-center transition-all ${
-                      showCorrect
-                        ? 'border-green-600 bg-green-600'
-                        : showIncorrect
-                        ? 'border-red-600 bg-red-600'
-                        : isSelected
-                        ? 'border-sui-ocean bg-sui-ocean'
-                        : 'border-sui-gray-400'
-                    }`}>
-                      {(isSelected || showCorrect) && (
-                        <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      )}
-                      {showIncorrect && (
-                        <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      )}
-                    </div>
-
-                    {/* Option Text */}
-                    <div className="flex-1">
-                      <p className={`text-sm sm:text-base font-medium ${
-                        showCorrect ? 'text-green-900' :
-                        showIncorrect ? 'text-red-900' :
-                        'text-sui-navy'
-                      }`}>
-                        {option.text}
-                      </p>
-
-                      {/* Explanation (shown after submission) */}
-                      {showExplanations && option.explanation && (
-                        <motion.p
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          className={`text-xs sm:text-sm mt-2 pt-2 border-t ${
-                            option.isCorrect
-                              ? 'border-green-300 text-green-700'
-                              : 'border-gray-300 text-gray-600'
-                          }`}
-                        >
-                          {option.explanation}
-                        </motion.p>
-                      )}
-                    </div>
-                  </div>
-                </motion.button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Hints Section */}
-      {exercise.hints.length > 0 && (
-        <div className="bg-white rounded-xl sm:rounded-2xl border-2 border-sui-gray-200 p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-lg sm:text-xl font-bold text-sui-navy">
-              Hints ({hintsUsed}/{exercise.hints.length})
+        {/* Options Column */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-bold text-zinc-400 uppercase tracking-widest">
+              {exercise.allowMultipleAnswers ? 'Select all that apply' : 'Choose the best answer'}
             </h4>
-            {hintsUsed < exercise.hints.length && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+            {/* Hints Button */}
+            {exercise.hints.length > 0 && (
+              <button
                 onClick={handleHint}
-                className="px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 border-2 border-yellow-300 rounded-lg font-semibold text-sm transition-colors"
+                disabled={hintsUsed >= exercise.hints.length}
+                className="text-xs font-bold text-blue-500 hover:text-blue-600 uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Get Hint
-              </motion.button>
+                {hintsUsed < exercise.hints.length ? `Need a Hint? (${hintsUsed}/${exercise.hints.length})` : 'All Hints Used'}
+              </button>
             )}
           </div>
 
-          {hintsUsed > 0 && (
-            <div className="space-y-2">
-              {exercise.hints.slice(0, hintsUsed).map((hint, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-blue-50 border-2 border-blue-200 rounded-lg p-3"
+          <div className="grid grid-cols-1 gap-4">
+            {shuffledOptions.map((option) => {
+              const isSelected = selectedOptions.includes(option.id);
+              const showCorrect = showExplanations && option.isCorrect;
+              const showIncorrect = showExplanations && isSelected && !option.isCorrect;
+
+              return (
+                <motion.button
+                  key={option.id}
+                  whileHover={!showExplanations ? { scale: 1.01, y: -2 } : {}}
+                  whileTap={!showExplanations ? { scale: 0.99 } : {}}
+                  onClick={() => handleOptionToggle(option.id)}
+                  disabled={showExplanations}
+                  className={`w-full text-left p-6 rounded-2xl border-2 transition-all relative overflow-hidden group ${showCorrect
+                      ? 'bg-green-50 border-green-500 shadow-green-100 shadow-lg'
+                      : showIncorrect
+                        ? 'bg-red-50 border-red-500 shadow-red-100 shadow-lg message-shake'
+                        : isSelected
+                          ? 'bg-zinc-900 border-zinc-900 text-white shadow-xl'
+                          : 'bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-lg'
+                    }`}
                 >
-                  <p className="text-sm text-blue-900">{hint}</p>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+                  <div className="flex items-start gap-4 relative z-10">
+                    <div className={`flex-shrink-0 w-6 h-6 mt-0.5 rounded-${exercise.allowMultipleAnswers ? 'md' : 'full'} border-2 flex items-center justify-center transition-colors ${showCorrect ? 'border-green-600 bg-green-600 text-white' :
+                        showIncorrect ? 'border-red-600 bg-red-600 text-white' :
+                          isSelected ? 'border-white bg-white text-zinc-900' :
+                            'border-zinc-300 group-hover:border-zinc-400'
+                      }`}>
+                      {(isSelected || showCorrect || showIncorrect) && (
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                          {showIncorrect
+                            ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            : <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          }
+                        </svg>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <span className={`text-lg font-medium ${isSelected && !showExplanations ? 'text-white' :
+                          showCorrect ? 'text-green-900' :
+                            showIncorrect ? 'text-red-900' :
+                              'text-zinc-700'
+                        }`}>
+                        {option.text}
+                      </span>
 
-      {/* Submit Button */}
-      <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={handleSubmit}
-        disabled={isSubmitting || selectedOptions.length === 0 || showExplanations}
-        className="w-full bg-gradient-to-r from-sui-ocean to-sui-ocean-dark text-white rounded-xl py-3 sm:py-4 font-semibold text-base sm:text-lg shadow-lg hover:shadow-2xl hover:shadow-sui-ocean/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isSubmitting ? 'Checking...' : 'Submit Answer'}
-      </motion.button>
-
-      {/* Feedback */}
-      <AnimatePresence>
-        {feedback && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className={`p-4 sm:p-6 rounded-xl border-2 ${
-              feedback.type === 'success'
-                ? 'bg-green-50 border-green-300'
-                : feedback.type === 'partial'
-                ? 'bg-yellow-50 border-yellow-300'
-                : 'bg-red-50 border-red-300'
-            }`}
-          >
-            <div className="flex items-start gap-3">
-              <div className="text-2xl">
-                {feedback.type === 'success' ? '✅' : feedback.type === 'partial' ? '⚠️' : '❌'}
-              </div>
-              <div className="flex-1">
-                <h4 className={`font-bold text-lg mb-1 ${
-                  feedback.type === 'success' ? 'text-green-700' :
-                  feedback.type === 'partial' ? 'text-yellow-700' : 'text-red-700'
-                }`}>
-                  {feedback.message}
-                </h4>
-                {feedback.details && (
-                  <p className="text-sm text-gray-700 mt-2">{feedback.details}</p>
-                )}
-                {feedback.earnedXP > 0 && (
-                  <div className="mt-3 px-3 py-2 bg-white rounded-lg border-2 border-sui-ocean/20">
-                    <span className="text-sui-ocean font-bold">+{feedback.earnedXP} XP</span>
+                      {/* Hint/Explanation Expansion */}
+                      <AnimatePresence>
+                        {showExplanations && option.explanation && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                            animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
+                            className={`text-sm ${option.isCorrect ? 'text-green-700' : 'text-red-700'
+                              }`}
+                          >
+                            <span className="font-bold mr-1">{option.isCorrect ? 'Correct:' : 'Incorrect:'}</span>
+                            {option.explanation}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Hints Display */}
+      <AnimatePresence>
+        {hintsUsed > 0 && (
+          <div className="space-y-4">
+            {exercise.hints.slice(0, hintsUsed).map((hint, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 flex gap-4"
+              >
+                <span className="text-2xl">💡</span>
+                <div>
+                  <h4 className="text-sm font-bold text-yellow-800 uppercase tracking-wider mb-1">Hint {index + 1}</h4>
+                  <p className="text-yellow-900 font-medium">{hint}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         )}
       </AnimatePresence>
+
+      {/* Feedback & Action Area */}
+      <div className="sticky bottom-6 z-20">
+        <AnimatePresence mode="wait">
+          {feedback ? (
+            <motion.div
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 100 }}
+              className={`rounded-3xl p-6 shadow-2xl border-2 flex items-center justify-between gap-6 backdrop-blur-md ${feedback.type === 'success' ? 'bg-green-50/90 border-green-500' :
+                  feedback.type === 'partial' ? 'bg-yellow-50/90 border-yellow-500' :
+                    'bg-red-50/90 border-red-500'
+                }`}
+            >
+              <div className="flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl ${feedback.type === 'success' ? 'bg-green-200 text-green-700' :
+                    feedback.type === 'partial' ? 'bg-yellow-200 text-yellow-700' :
+                      'bg-red-200 text-red-700'
+                  }`}>
+                  {feedback.type === 'success' ? '🎉' : feedback.type === 'partial' ? '⚠️' : '❌'}
+                </div>
+                <div>
+                  <h4 className={`font-bold text-lg ${feedback.type === 'success' ? 'text-green-900' :
+                      feedback.type === 'partial' ? 'text-yellow-900' :
+                        'text-red-900'
+                    }`}>
+                    {feedback.message} - <span className="text-base font-normal opacity-80">{feedback.details}</span>
+                  </h4>
+                </div>
+              </div>
+
+              {feedback.type !== 'success' && (
+                <button
+                  onClick={() => { setFeedback(null); setShowExplanations(false); }}
+                  className="px-6 py-3 bg-white rounded-xl font-bold text-sm shadow-sm hover:bg-zinc-50 transition-colors"
+                >
+                  Try Again
+                </button>
+              )}
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <button
+                onClick={handleSubmit}
+                disabled={isSubmitting || selectedOptions.length === 0}
+                className="w-full bg-zinc-900 text-white rounded-full py-5 font-bold text-xl shadow-xl hover:bg-zinc-800 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              >
+                {isSubmitting ? 'Verifying...' : 'Check Answer'}
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

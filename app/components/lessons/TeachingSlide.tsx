@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TeachingSlide as TeachingSlideType } from '@/app/types/lesson';
 import DragDropInteractive from './interactive/DragDropInteractive';
@@ -67,110 +67,119 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage }:
     }
   };
 
+  // Add keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') goToNextSlide();
+      if (e.key === 'ArrowLeft') goToPreviousSlide();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentSlideIndex]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sui-mist via-white to-sui-sky flex items-start justify-center p-8 pt-8">
-      <div className="max-w-4xl w-full">
-        {/* Progress Indicator */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-sui-gray-600">
-              Slide {currentSlideIndex + 1} of {slides.length}
-            </span>
-            <div className="flex gap-1.5">
-              {slides.map((_, index) => (
-                <div
-                  key={index}
-                  className={`h-2 rounded-full transition-all ${
-                    index === currentSlideIndex
-                      ? 'w-8 bg-sui-ocean'
-                      : index < currentSlideIndex
-                      ? 'w-2 bg-sui-ocean/50'
-                      : 'w-2 bg-sui-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="h-1 bg-sui-gray-200 rounded-full overflow-hidden">
+    <div className="min-h-screen bg-[#FDFDFD] text-zinc-900 flex flex-col">
+      {/* Top Progress Stories */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex gap-2 px-4 py-4 bg-[#FDFDFD]">
+        {slides.map((_, index) => (
+          <div
+            key={index}
+            className="h-1.5 flex-1 rounded-full bg-zinc-100 overflow-hidden"
+          >
             <motion.div
-              className="h-full bg-gradient-to-r from-sui-ocean to-sui-ocean-dark"
-              initial={{ width: '0%' }}
-              animate={{ width: `${((currentSlideIndex + 1) / slides.length) * 100}%` }}
-              transition={{ duration: 0.3 }}
+              className="h-full bg-zinc-900"
+              initial={{ width: "0%" }}
+              animate={{
+                width: index < currentSlideIndex ? "100%" : index === currentSlideIndex ? "100%" : "0%"
+              }}
+              transition={{ duration: index === currentSlideIndex ? 20 : 0.3 }} // Subtle timer effect for current slide? changing back to simple fill for now
+              style={{ width: index <= currentSlideIndex ? "100%" : "0%" }}
             />
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* Slide Content */}
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={currentSlideIndex}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: 'spring', stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 },
-            }}
-            className="bg-white rounded-3xl shadow-xl p-12 border-2 border-sui-gray-200"
-          >
-            {/* Emoji Icon */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-sui-sky to-sui-ocean/20 rounded-3xl flex items-center justify-center text-6xl"
-            >
-              {currentSlide.emoji}
-            </motion.div>
+      <div className="flex-1 max-w-[1600px] mx-auto w-full pt-12">
+        <div className="flex flex-col lg:flex-row h-[calc(100vh-48px)]">
 
-            {/* Title */}
-            <h2 className="text-4xl font-black text-sui-navy text-center mb-6">
-              {currentSlide.title}
-            </h2>
+          {/* LEFT: Narrative */}
+          <div className="w-full lg:w-[40%] p-8 lg:p-16 overflow-y-auto flex flex-col justify-center relative z-10">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlideIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+              >
+                {/* Emoji */}
+                <div className="text-6xl mb-8">{currentSlide.emoji}</div>
 
-            {/* Content */}
-            <div className="text-lg text-sui-gray-700 leading-relaxed text-center mb-8 max-w-2xl mx-auto">
-              {currentSlide.content}
+                {/* Title */}
+                <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-8 text-zinc-900">
+                  {currentSlide.title}
+                </h2>
+
+                {/* Content */}
+                <div className="text-xl md:text-2xl font-medium text-zinc-500 leading-relaxed mb-12">
+                  {currentSlide.content}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Navigation */}
+            <div className="flex items-center gap-4 mt-auto pt-8">
+              <button
+                onClick={goToPreviousSlide}
+                disabled={isFirstSlide}
+                className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${isFirstSlide ? 'text-zinc-300' : 'text-zinc-900 hover:bg-zinc-100'
+                  }`}
+              >
+                ←
+              </button>
+              <button
+                onClick={goToNextSlide}
+                className="flex-1 bg-zinc-900 text-white h-14 rounded-2xl font-bold text-lg hover:bg-zinc-800 transition-transform active:scale-95 flex items-center justify-center gap-2"
+              >
+                {isLastSlide ? (
+                  <>Complete <span className="text-xl">🎉</span></>
+                ) : (
+                  'Continue'
+                )}
+              </button>
             </div>
+          </div>
 
-            {/* Interactive Element */}
-            {currentSlide.interactiveElement && (
-              <div className="mt-8 mb-8">
-                {renderInteractiveElement()}
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
+          {/* RIGHT: Interactive Playground */}
+          <div className="w-full lg:w-[60%] bg-zinc-50 border-l border-zinc-200 relative overflow-hidden flex items-center justify-center p-8 lg:p-12">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
 
-        {/* Navigation Buttons */}
-        <div className="flex items-center justify-between mt-8">
-          <button
-            onClick={goToPreviousSlide}
-            disabled={isFirstSlide}
-            className={`px-6 py-3 rounded-2xl font-semibold transition-all ${
-              isFirstSlide
-                ? 'bg-sui-gray-200 text-sui-gray-400 cursor-not-allowed'
-                : 'bg-white text-sui-navy border-2 border-sui-gray-300 hover:border-sui-ocean hover:text-sui-ocean'
-            }`}
-          >
-            ← Previous
-          </button>
+            <div className="relative w-full max-w-2xl">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlideIndex}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full"
+                >
+                  {currentSlide.interactiveElement ? (
+                    <div className="bg-white rounded-3xl shadow-2xl shadow-zinc-200/50 border border-zinc-200 overflow-hidden min-h-[400px] flex items-center justify-center">
+                      {renderInteractiveElement()}
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-3xl p-12 text-center border border-zinc-200 shadow-sm">
+                      <div className="text-8xl mb-6 opacity-20 filter blur-sm">✨</div>
+                      <p className="text-zinc-400 font-medium">Concept Slide</p>
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
 
-          <button
-            onClick={goToNextSlide}
-            className="px-8 py-4 bg-gradient-to-r from-sui-ocean to-sui-ocean-dark text-white rounded-2xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
-          >
-            {isLastSlide ? (
-              <span className="flex items-center gap-2">
-                {transitionMessage} 🎯
-              </span>
-            ) : (
-              'Next →'
-            )}
-          </button>
         </div>
       </div>
     </div>

@@ -1,134 +1,57 @@
 'use client';
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useRef } from "react";
+import Hero from "./components/Hero";
+import Testimonials from "./components/Testimonials";
 import AnimatedCodePreview from "./components/AnimatedCodePreview";
 import AnimatedCounter from "./components/AnimatedCounter";
 import Footer from "./components/Footer";
+import CinematicScroll from "./components/CinematicScroll";
 
 export default function Home() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  // Smooth spring physics for scroll animations
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  // Parallax effects
+  const heroY = useTransform(smoothProgress, [0, 0.3], [0, -100]);
+  const heroOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
+  const featuresY = useTransform(smoothProgress, [0.2, 0.5], [100, 0]);
+  const featuresScale = useTransform(smoothProgress, [0.1, 0.4], [0.95, 1]);
+  const stepsScale = useTransform(smoothProgress, [0.5, 0.8], [0.8, 1]);
+
   return (
-    <div className="min-h-screen bg-white">
+    <div ref={containerRef} className="min-h-screen bg-white text-black">
       {/* Hero Section */}
-      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6">
+      <Hero />
 
-        <div className="max-w-6xl mx-auto text-center relative z-10">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-sui-sky/50 rounded-full text-sm text-sui-navy font-medium mb-8 backdrop-blur-sm border border-sui-ocean/20"
-          >
-            <span className="w-2 h-2 bg-sui-ocean rounded-full animate-pulse"></span>
-            Powered by Sui
-          </motion.div>
 
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-sui-navy mb-6 leading-tight"
-          >
-            Learn Move by<br />
-            <motion.span
-              className="text-transparent bg-clip-text bg-gradient-to-r from-sui-ocean via-sui-ocean-dark to-sui-ocean"
-              animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: 'linear',
-              }}
-              style={{
-                backgroundSize: '200% 200%',
-              }}
-            >
-              Building Real Projects
-            </motion.span>
-          </motion.h1>
 
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-sui-gray-600 mb-8 sm:mb-12 max-w-3xl mx-auto font-light"
-          >
-            Master Sui Move through interactive, gamified lessons. No installation needed.
-            Code in your browser. Deploy to testnet instantly.
-          </motion.p>
+      {/* Cinematic Scroll Sequence */}
+      <CinematicScroll />
 
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-16 w-full max-w-[340px] sm:max-w-none mx-auto px-4"
-          >
-            <Link
-              href="/lessons"
-              className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-sui-ocean to-sui-ocean-dark text-white rounded-full hover:shadow-2xl hover:shadow-sui-ocean/40 transition-all font-semibold text-base sm:text-lg hover:-translate-y-1"
-            >
-              <span className="flex items-center justify-center gap-2">
-                Start Free Course
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  →
-                </motion.span>
-              </span>
-            </Link>
-            <a
-              href="#how-it-works"
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white text-sui-navy border-2 border-sui-gray-300 rounded-full hover:border-sui-ocean hover:shadow-lg transition-all font-semibold text-base sm:text-lg"
-            >
-              See How It Works
-            </a>
-          </motion.div>
+      {/* Spacer */}
+      <div className="h-20" />
 
-          {/* Animated Code Preview */}
-          <div className="mb-16">
-            <AnimatedCodePreview />
-          </div>
-
-          {/* Animated Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="grid grid-cols-3 gap-3 sm:gap-6 md:gap-8 max-w-full sm:max-w-2xl mx-auto px-2"
-          >
-            <div className="p-3 sm:p-4 md:p-6 bg-white/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-sui-gray-200">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-sui-ocean mb-0.5 sm:mb-1">
-                <AnimatedCounter from={0} to={14} duration={2} />
-              </div>
-              <div className="text-[10px] sm:text-xs md:text-sm text-sui-gray-600 font-medium">Interactive Lessons</div>
-            </div>
-            <div className="p-3 sm:p-4 md:p-6 bg-white/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-sui-gray-200">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-sui-ocean mb-0.5 sm:mb-1">
-                <AnimatedCounter from={0} to={0} duration={2} suffix="s" />
-              </div>
-              <div className="text-[10px] sm:text-xs md:text-sm text-sui-gray-600 font-medium">Setup Time</div>
-            </div>
-            <div className="p-3 sm:p-4 md:p-6 bg-white/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-sui-gray-200">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-sui-ocean mb-0.5 sm:mb-1">
-                <AnimatedCounter from={0} to={5} duration={2} suffix="min" />
-              </div>
-              <div className="text-[10px] sm:text-xs md:text-sm text-sui-gray-600 font-medium">First Deploy</div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-24 px-6 bg-white">
-
+      {/* Features Section - Modern Bento Grid */}
+      <motion.section
+        id="features"
+        style={{ scale: featuresScale }}
+        className="py-24 px-6 bg-gray-50 relative z-20"
+      >
         <div className="max-w-7xl mx-auto relative z-10">
-          {/* Header with enhanced animation */}
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -155,310 +78,337 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* Feature Cards Grid with enhanced interactions */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-            {/* Feature 1 - Instant Compilation */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              whileHover={{ y: -8 }}
-              className="group relative p-6 sm:p-8 md:p-10 bg-white rounded-2xl sm:rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-2xl hover:shadow-sui-ocean/20"
-            >
-              {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-sui-ocean/0 to-sui-ocean/0 group-hover:from-sui-ocean/5 group-hover:to-transparent rounded-2xl sm:rounded-3xl transition-all duration-300" />
+          {/* Bento Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-[minmax(200px,auto)]">
 
+            {/* Large Featured Card - Instant Compilation */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8 }}
+              className="group relative lg:col-span-2 lg:row-span-2 p-10 bg-black text-white rounded-[2rem] overflow-hidden shadow-2xl hover:shadow-black/20"
+            >
+              <div className="relative z-10 h-full flex flex-col">
+                <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-8 backdrop-blur-md border border-white/10">
+                  <span className="text-3xl">⚡️</span>
+                </div>
+
+                <h3 className="text-4xl font-bold tracking-tighter-swiss mb-4">Instant Compilation</h3>
+                <p className="text-gray-400 text-lg leading-relaxed mb-8 max-w-sm">
+                  Zero setup. Compile Move code directly in your browser with our WASM engine.
+                </p>
+
+                {/* Stats */}
+                <div className="mt-auto flex gap-4">
+                  <div className="bg-white/10 px-5 py-3 rounded-xl border border-white/10">
+                    <div className="text-2xl font-mono text-white">0s</div>
+                    <div className="text-[10px] uppercase tracking-widest text-gray-500">Setup</div>
+                  </div>
+                  <div className="bg-white/10 px-5 py-3 rounded-xl border border-white/10">
+                    <div className="text-2xl font-mono text-blue-400">100%</div>
+                    <div className="text-[10px] uppercase tracking-widest text-gray-500">Web</div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Gamified Experience */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="group lg:col-span-2 p-8 bg-white border border-gray-200 rounded-[2rem] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-black mb-2 tracking-tighter-swiss">Gamified Learning</h3>
+                  <p className="text-gray-500 text-sm">Earn XP and collect on-chain achievements.</p>
+                </div>
+                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-bold border border-yellow-200">
+                  XP
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Deploy to Sui - Tall Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 80, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{
+                duration: 0.9,
+                delay: 0.3,
+                type: "spring",
+                bounce: 0.4
+              }}
+              whileHover={{ y: -8, scale: 1.05 }}
+              className="group relative lg:row-span-2 p-8 bg-white rounded-[2rem] border border-gray-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+            >
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-sui-sky/30 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6 group-hover:bg-sui-ocean/20 transition-colors duration-300"
+                className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-blue-100"
               >
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-sui-ocean group-hover:text-sui-ocean-dark transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </motion.div>
-
-              <h3 className="relative text-lg sm:text-xl md:text-2xl font-bold text-sui-navy mb-2 sm:mb-3 md:mb-4 group-hover:text-sui-ocean transition-colors duration-300">
-                Instant Compilation
-              </h3>
-              <p className="relative text-sui-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
-                Real Move compiler runs in your browser. No downloads, no setup, no waiting. Just pure learning.
-              </p>
-            </motion.div>
-
-            {/* Feature 2 - Gamified Experience */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              whileHover={{ y: -8 }}
-              className="group relative p-6 sm:p-8 md:p-10 bg-white rounded-2xl sm:rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-2xl hover:shadow-sui-ocean/20"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-sui-ocean/0 to-sui-ocean/0 group-hover:from-sui-ocean/5 group-hover:to-transparent rounded-2xl sm:rounded-3xl transition-all duration-300" />
-
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: -5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-sui-sky/30 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6 group-hover:bg-sui-ocean/20 transition-colors duration-300"
-              >
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-sui-ocean group-hover:text-sui-ocean-dark transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
-                </svg>
-              </motion.div>
-
-              <h3 className="relative text-lg sm:text-xl md:text-2xl font-bold text-sui-navy mb-2 sm:mb-3 md:mb-4 group-hover:text-sui-ocean transition-colors duration-300">
-                Gamified Experience
-              </h3>
-              <p className="relative text-sui-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
-                Earn XP, level up, unlock achievements, and compete on leaderboards. Learning has never been this fun.
-              </p>
-            </motion.div>
-
-            {/* Feature 3 - Deploy to Sui */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              whileHover={{ y: -8 }}
-              className="group relative p-6 sm:p-8 md:p-10 bg-white rounded-2xl sm:rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-2xl hover:shadow-sui-ocean/20"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-sui-ocean/0 to-sui-ocean/0 group-hover:from-sui-ocean/5 group-hover:to-transparent rounded-2xl sm:rounded-3xl transition-all duration-300" />
-
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-sui-sky/30 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6 group-hover:bg-sui-ocean/20 transition-colors duration-300"
-              >
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-sui-ocean group-hover:text-sui-ocean-dark transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <svg className="w-8 h-8 text-sui-ocean" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                 </svg>
               </motion.div>
 
-              <h3 className="relative text-lg sm:text-xl md:text-2xl font-bold text-sui-navy mb-2 sm:mb-3 md:mb-4 group-hover:text-sui-ocean transition-colors duration-300">
+              <h3 className="text-2xl font-bold text-black mb-3 group-hover:text-blue-600 transition-colors tracking-tighter-swiss">
                 Deploy to Sui
               </h3>
-              <p className="relative text-sui-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
-                One-click deployment to Sui testnet. See your smart contracts live on the blockchain in minutes.
+              <p className="text-sui-gray-700 leading-relaxed mb-6">
+                One-click deployment to Sui testnet. See your smart contracts live on the blockchain.
               </p>
+
+              <div className="mt-auto">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-sui-ocean/20">
+                  <div className="flex items-center gap-2 text-sui-ocean font-semibold text-sm">
+                    <span className="w-2 h-2 bg-sui-ocean rounded-full animate-pulse"></span>
+                    Deploy in 5 minutes
+                  </div>
+                </div>
+              </div>
             </motion.div>
 
-            {/* Feature 4 - VS Code Experience */}
+            {/* VS Code Experience */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              whileHover={{ y: -8 }}
-              className="group relative p-6 sm:p-8 md:p-10 bg-white rounded-2xl sm:rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-2xl hover:shadow-sui-ocean/20"
+              whileHover={{ y: -5 }}
+              className="group relative p-8 bg-white rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-xl"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-sui-ocean/0 to-sui-ocean/0 group-hover:from-sui-ocean/5 group-hover:to-transparent rounded-2xl sm:rounded-3xl transition-all duration-300" />
-
               <motion.div
-                whileHover={{ scale: 1.1, rotate: -5 }}
+                whileHover={{ scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-sui-sky/30 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6 group-hover:bg-sui-ocean/20 transition-colors duration-300"
+                className="w-16 h-16 bg-sui-navy/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-sui-ocean/10 transition-colors"
               >
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-sui-ocean group-hover:text-sui-ocean-dark transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <svg className="w-10 h-10 text-sui-navy group-hover:text-sui-ocean transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" width="40" height="40">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
               </motion.div>
 
-              <h3 className="relative text-lg sm:text-xl md:text-2xl font-bold text-sui-navy mb-2 sm:mb-3 md:mb-4 group-hover:text-sui-ocean transition-colors duration-300">
-                VS Code Experience
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                VS Code Editor
               </h3>
-              <p className="relative text-sui-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
-                Monaco editor with full Move syntax highlighting, auto-completion, and error detection.
+              <p className="text-sui-gray-700 leading-relaxed text-sm">
+                Monaco editor with syntax highlighting and auto-completion.
               </p>
             </motion.div>
 
-            {/* Feature 5 - Hands-On Projects */}
+            {/* Hands-On Projects - Wide Card */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              whileHover={{ y: -8 }}
-              className="group relative p-6 sm:p-8 md:p-10 bg-white rounded-2xl sm:rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-2xl hover:shadow-sui-ocean/20"
+              whileHover={{ y: -5 }}
+              whileHover={{ y: -5 }}
+              className="group relative lg:col-span-2 p-8 bg-black rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-black/20"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-sui-ocean/0 to-sui-ocean/0 group-hover:from-sui-ocean/5 group-hover:to-transparent rounded-2xl sm:rounded-3xl transition-all duration-300" />
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+              </div>
 
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-sui-sky/30 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6 group-hover:bg-sui-ocean/20 transition-colors duration-300"
-              >
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-sui-ocean group-hover:text-sui-ocean-dark transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </motion.div>
+              <div className="relative z-10">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                      className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6"
+                    >
+                      <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" width="40" height="40">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </motion.div>
 
-              <h3 className="relative text-lg sm:text-xl md:text-2xl font-bold text-sui-navy mb-2 sm:mb-3 md:mb-4 group-hover:text-sui-ocean transition-colors duration-300">
-                Hands-On Projects
-              </h3>
-              <p className="relative text-sui-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
-                Build real NFTs, DeFi protocols, and on-chain games. Create a portfolio while you learn.
-              </p>
+                    <h3 className="text-2xl font-bold text-white mb-3 tracking-tighter-swiss">
+                      Hands-On Projects
+                    </h3>
+                    <p className="text-white/90 leading-relaxed">
+                      Build real NFTs, DeFi protocols, and on-chain games. Create a portfolio while you learn.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
 
-            {/* Feature 6 - NFT Certificates */}
+            {/* NFT Certificates */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              whileHover={{ y: -8 }}
-              className="group relative p-6 sm:p-8 md:p-10 bg-white rounded-2xl sm:rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-2xl hover:shadow-sui-ocean/20"
+              whileHover={{ y: -5 }}
+              className="group relative p-8 bg-white rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-xl"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-sui-ocean/0 to-sui-ocean/0 group-hover:from-sui-ocean/5 group-hover:to-transparent rounded-2xl sm:rounded-3xl transition-all duration-300" />
-
               <motion.div
                 whileHover={{ scale: 1.1, rotate: -5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-sui-sky/30 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6 group-hover:bg-sui-ocean/20 transition-colors duration-300"
+                className="w-16 h-16 bg-sui-ocean/10 rounded-2xl flex items-center justify-center mb-6 group-hover:shadow-lg group-hover:bg-sui-ocean/20 transition-colors"
               >
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-sui-ocean group-hover:text-sui-ocean-dark transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <svg className="w-8 h-8 text-sui-ocean" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" width="32" height="32">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
               </motion.div>
 
-              <h3 className="relative text-lg sm:text-xl md:text-2xl font-bold text-sui-navy mb-2 sm:mb-3 md:mb-4 group-hover:text-sui-ocean transition-colors duration-300">
+              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
                 NFT Certificates
               </h3>
-              <p className="relative text-sui-gray-700 leading-relaxed text-sm sm:text-base md:text-lg">
-                Earn on-chain certificates as Sui NFTs. Showcase your skills and unlock advanced courses.
+              <p className="text-sui-gray-700 leading-relaxed text-sm">
+                Earn on-chain certificates as Sui NFTs. Showcase your skills.
               </p>
             </motion.div>
+
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* How It Works */}
-      <section id="how-it-works" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 bg-white">
+      {/* How It Works - Swiss Timeline */}
+      <motion.section
+        id="how-it-works"
+        style={{ scale: stepsScale }}
+        className="py-24 md:py-32 px-6 bg-white relative overflow-hidden"
+      >
+        {/* Graph Grid Background */}
+        <div className="absolute inset-0 bg-grid-graph opacity-60 pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-8 sm:mb-12 md:mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-sui-navy mb-3 sm:mb-4">
-              From Zero to Deploy in 3 Steps
-            </h2>
-            <p className="text-sm sm:text-base md:text-lg text-sui-gray-600">
-              Start building on Sui blockchain in minutes, not hours
-            </p>
-          </motion.div>
+        <div className="max-w-7xl mx-auto relative z-10">
 
-          <div className="grid md:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
-            {/* Step 1 */}
+          {/* Header */}
+          <div className="mb-24 md:mb-32">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-center relative"
+              className="inline-flex items-center gap-2 px-3 py-1 mb-6 border border-gray-200 rounded-full bg-white shadow-sm"
             >
-              <motion.div
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ type: "spring", stiffness: 200, delay: 0.3 }}
-                className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-gradient-to-br from-sui-ocean to-sui-ocean-dark rounded-full flex items-center justify-center text-2xl sm:text-2xl md:text-3xl font-bold text-white mx-auto mb-3 sm:mb-4 md:mb-6 shadow-lg shadow-sui-ocean/30 relative z-10"
-              >
+              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-xs font-mono font-medium text-gray-600 uppercase tracking-wider">The Process</span>
+            </motion.div>
+
+            <h2 className="text-5xl md:text-7xl font-bold text-black mb-6 tracking-tighter-swiss leading-[0.9]">
+              From Zero to <br className="hidden md:block" />
+              <span className="text-gray-400">Deploy in Minutes.</span>
+            </h2>
+          </div>
+
+          {/* Timeline Process */}
+          <div className="relative grid md:grid-cols-3 gap-12">
+
+            {/* Connecting Line (Desktop) */}
+            <div className="absolute top-12 left-0 w-full h-px bg-gray-200 hidden md:block" />
+
+            {/* Step 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="relative group"
+            >
+              <div className="absolute -top-16 -left-4 text-[12rem] font-bold text-gray-50 opacity-50 select-none -z-10 leading-none">
                 1
-              </motion.div>
-              <div className="bg-white/50 backdrop-blur-sm p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-sui-gray-200">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-sui-navy mb-2 sm:mb-2.5 md:mb-3">
-                  Pick a Lesson
-                </h3>
-                <p className="text-sm sm:text-base text-sui-gray-600">
-                  Choose from 14 interactive lessons covering NFTs, DeFi, and on-chain games
-                </p>
               </div>
+
+              {/* Timeline Dot */}
+              <div className="w-24 h-24 bg-white border border-gray-200 rounded-full flex items-center justify-center mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                <svg className="w-10 h-10 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+
+              <h3 className="text-2xl font-bold text-black mb-4 tracking-tight">Pick a Lesson</h3>
+              <p className="text-gray-500 leading-relaxed font-medium">
+                Choose from 14 interactive modules covering everything from basics to DeFi protocols.
+              </p>
             </motion.div>
 
             {/* Step 2 */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="text-center relative"
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="relative group"
             >
-              <motion.div
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ type: "spring", stiffness: 200, delay: 0.5 }}
-                className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-gradient-to-br from-sui-ocean to-sui-ocean-dark rounded-full flex items-center justify-center text-2xl sm:text-2xl md:text-3xl font-bold text-white mx-auto mb-3 sm:mb-4 md:mb-6 shadow-lg shadow-sui-ocean/30 relative z-10"
-              >
+              <div className="absolute -top-16 -left-4 text-[12rem] font-bold text-gray-50 opacity-50 select-none -z-10 leading-none">
                 2
-              </motion.div>
-              <div className="bg-white/50 backdrop-blur-sm p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-sui-gray-200">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-sui-navy mb-2 sm:mb-2.5 md:mb-3">
-                  Write & Test Code
-                </h3>
-                <p className="text-sm sm:text-base text-sui-gray-600">
-                  Code in your browser with instant feedback. Our compiler validates your Move code in real-time
-                </p>
               </div>
+
+              {/* Timeline Dot */}
+              <div className="w-24 h-24 bg-black text-white border border-black rounded-full flex items-center justify-center mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500 shadow-xl">
+                <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </div>
+
+              <h3 className="text-2xl font-bold text-black mb-4 tracking-tight">Write & Test</h3>
+              <p className="text-gray-500 leading-relaxed font-medium">
+                Write Move code in our browser-based IDE. Get instant compilation feedback via WASM.
+              </p>
             </motion.div>
 
             {/* Step 3 */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="text-center relative"
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="relative group"
             >
-              <motion.div
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ type: "spring", stiffness: 200, delay: 0.7 }}
-                className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-gradient-to-br from-sui-ocean to-sui-ocean-dark rounded-full flex items-center justify-center text-2xl sm:text-2xl md:text-3xl font-bold text-white mx-auto mb-3 sm:mb-4 md:mb-6 shadow-lg shadow-sui-ocean/30 relative z-10"
-              >
+              <div className="absolute -top-16 -left-4 text-[12rem] font-bold text-gray-50 opacity-50 select-none -z-10 leading-none">
                 3
-              </motion.div>
-              <div className="bg-white/50 backdrop-blur-sm p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-sui-gray-200">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-sui-navy mb-2 sm:mb-2.5 md:mb-3">
-                  Deploy to Sui
-                </h3>
-                <p className="text-sm sm:text-base text-sui-gray-600">
-                  One click to deploy your smart contract to Sui testnet. See it live on the blockchain
-                </p>
               </div>
+
+              {/* Timeline Dot */}
+              <div className="w-24 h-24 bg-white border border-gray-200 rounded-full flex items-center justify-center mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                <svg className="w-10 h-10 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                </svg>
+              </div>
+
+              <h3 className="text-2xl font-bold text-black mb-4 tracking-tight">Deploy to Sui</h3>
+              <p className="text-gray-500 leading-relaxed font-medium">
+                One-click deployment to Testnet. Verify your contract and mint your proof-of-knowledge NFT.
+              </p>
             </motion.div>
           </div>
 
+          {/* Bottom CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="text-center mt-8 sm:mt-12 md:mt-16"
+            className="text-center mt-20"
           >
             <Link
               href="/lessons"
-              className="inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-sui-ocean to-sui-ocean-dark text-white rounded-full hover:shadow-2xl hover:shadow-sui-ocean/40 transition-all font-semibold text-base sm:text-lg hover:-translate-y-1"
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full hover:bg-gray-800 transition-all font-bold text-lg hover:-translate-y-1 shadow-xl"
             >
               <span>View All Lessons</span>
-              <motion.span
+              <motion.svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
                 animate={{ x: [0, 5, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
-                →
-              </motion.span>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </motion.svg>
             </Link>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
+
+      {/* Testimonials & Community */}
+      <Testimonials />
 
       {/* Footer */}
       <Footer />

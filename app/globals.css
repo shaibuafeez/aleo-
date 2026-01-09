@@ -1,70 +1,144 @@
 @import "tailwindcss";
-@import "./fonts.css";
 
 :root {
-  /* Sui Official Color Palette */
-  --sui-ocean: #6FBCF0;
-  --sui-ocean-dark: #4DA2D9;
-  --sui-sea: #4CA3D9;
-  --sui-navy: #0A2540;
-  --sui-midnight: #0D1B2A;
-  --sui-sky: #E5F3FF;
-  --sui-mist: #F7FBFF;
+  /* Clean Light Mode Palette */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f4f6;
+  /* Gray-100 */
+  --text-primary: #0a0a0a;
+  --text-secondary: #52525b;
+  /* Zinc-600 */
 
-  /* Neutrals */
-  --sui-white: #FFFFFF;
-  --sui-gray-50: #F8FAFC;
-  --sui-gray-100: #F1F5F9;
-  --sui-gray-200: #E2E8F0;
-  --sui-gray-300: #CBD5E1;
-  --sui-gray-400: #94A3B8;
-  --sui-gray-500: #64748B;
-  --sui-gray-600: #475569;
-  --sui-gray-700: #334155;
-  --sui-gray-800: #1E293B;
-  --sui-gray-900: #0F172A;
+  /* Brand Accents (Move Blue - No Purple) */
+  --accent-primary: #2563eb;
+  /* Blue-600 */
+  --accent-secondary: #60a5fa;
+  /* Blue-400 */
+  --accent-glow: rgba(37, 99, 235, 0.2);
 
-  /* Background */
-  --background: var(--sui-white);
-  --foreground: var(--sui-navy);
+  /* Borders */
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-focus: rgba(0, 0, 0, 0.15);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  /* Sui Colors */
-  --color-sui-ocean: var(--sui-ocean);
-  --color-sui-ocean-dark: var(--sui-ocean-dark);
-  --color-sui-sea: var(--sui-sea);
-  --color-sui-navy: var(--sui-navy);
-  --color-sui-midnight: var(--sui-midnight);
-  --color-sui-sky: var(--sui-sky);
-  --color-sui-mist: var(--sui-mist);
-
-  /* Font Family */
-  --font-sans: 'Cabinet Grotesk', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-}
-
-/* Disable dark mode - keep light theme always */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: var(--sui-midnight);
-    --foreground: var(--sui-white);
+@layer base {
+  body {
+    @apply bg-[var(--bg-primary)] text-[var(--text-primary)] antialiased cursor-none;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
-} */
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Cabinet Grotesk', system-ui, -apple-system, sans-serif;
-  font-feature-settings: 'ss01' on, 'ss02' on;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Smooth Selection */
+  ::selection {
+    background-color: var(--accent-primary);
+    color: white;
+  }
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Premium Noise Texture */
+  .bg-noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  .bg-noise-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* Glassmorphism Utilities */
+  .glass-panel {
+    background-color: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Softer border */
+  }
+
+  /* Swiss Graph Paper Grid */
+  .bg-grid-graph {
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+
+  /* Typography Utilities */
+  .tracking-tighter-swiss {
+    letter-spacing: -0.04em;
+  }
+
+  /* SVG Reset */
+  svg {
+    max-width: 100%;
+    vertical-align: middle;
+  }
+
+  /* Scrollbar Hiding */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Custom Cursor */
+.cursor-dot {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, background-color 0.3s;
+}
+
+.cursor-dot.hovered {
+  width: 80px;
+  height: 80px;
+  background-color: var(--accent-primary);
+  mix-blend-mode: normal;
+  opacity: 0.8;
 }
