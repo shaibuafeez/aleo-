@@ -210,8 +210,8 @@ export function getOverallStatistics() {
 /**
  * Get statistics for a specific exercise type.
  */
-export function getStatisticsByType(type: string) {
-  const allProgress = getAllProgress();
+export function getStatisticsByType(_type: string) {
+  // const allProgress = getAllProgress();
   // Note: We'd need to enhance this to store exercise type in progress
   // For now, return placeholder
   return {
@@ -224,8 +224,8 @@ export function getStatisticsByType(type: string) {
 /**
  * Get statistics for a specific topic.
  */
-export function getStatisticsByTopic(topic: string) {
-  const allProgress = getAllProgress();
+export function getStatisticsByTopic(_topic: string) {
+  // const allProgress = getAllProgress();
   // Note: We'd need to enhance this to store topic in progress
   // For now, return placeholder
   return {

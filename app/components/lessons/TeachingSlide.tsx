@@ -100,10 +100,10 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage }:
       </div>
 
       <div className="flex-1 max-w-[1600px] mx-auto w-full pt-12">
-        <div className="flex flex-col lg:flex-row h-[calc(100vh-48px)]">
+        <div className="flex flex-col lg:flex-row min-h-[calc(100vh-48px)] lg:h-[calc(100vh-48px)]">
 
           {/* LEFT: Narrative */}
-          <div className="w-full lg:w-[40%] p-8 lg:p-16 overflow-y-auto flex flex-col justify-center relative z-10">
+          <div className="w-full lg:w-[40%] p-6 md:p-8 lg:p-16 overflow-y-auto flex flex-col justify-center relative z-10 order-1 lg:order-none">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlideIndex}
@@ -113,30 +113,30 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage }:
                 transition={{ duration: 0.4 }}
               >
                 {/* Emoji */}
-                <div className="text-6xl mb-8">{currentSlide.emoji}</div>
+                <div className="text-5xl md:text-6xl mb-6 md:mb-8">{currentSlide.emoji}</div>
 
                 {/* Title */}
-                <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-8 text-zinc-900">
+                <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-6 md:mb-8 text-zinc-900 leading-tight">
                   {currentSlide.title}
                 </h2>
 
                 {/* Content */}
-                <div className="text-xl md:text-2xl font-medium text-zinc-500 leading-relaxed mb-12">
+                <div className="text-lg md:text-2xl font-medium text-zinc-500 leading-relaxed mb-8 md:mb-12">
                   {currentSlide.content}
                 </div>
               </motion.div>
             </AnimatePresence>
 
             {/* Navigation */}
-            <div className="flex items-center gap-4 mt-auto pt-8">
-              <button
-                onClick={goToPreviousSlide}
-                disabled={isFirstSlide}
-                className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${isFirstSlide ? 'text-zinc-300' : 'text-zinc-900 hover:bg-zinc-100'
-                  }`}
-              >
-                ←
-              </button>
+            <div className="flex items-center gap-4 mt-auto pt-8 pb-8 lg:pb-0">
+              {!isFirstSlide && (
+                <button
+                  onClick={goToPreviousSlide}
+                  className="w-12 h-12 rounded-full flex items-center justify-center transition-colors text-zinc-900 hover:bg-zinc-100"
+                >
+                  ←
+                </button>
+              )}
               <button
                 onClick={goToNextSlide}
                 className="flex-1 bg-zinc-900 text-white h-14 rounded-2xl font-bold text-lg hover:bg-zinc-800 transition-transform active:scale-95 flex items-center justify-center gap-2"
@@ -151,7 +151,7 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage }:
           </div>
 
           {/* RIGHT: Interactive Playground */}
-          <div className="w-full lg:w-[60%] bg-zinc-50 border-l border-zinc-200 relative overflow-hidden flex items-center justify-center p-8 lg:p-12">
+          <div className={`w-full lg:w-[60%] bg-zinc-50 border-t lg:border-t-0 lg:border-l border-zinc-200 relative overflow-hidden items-center justify-center p-6 lg:p-12 order-2 lg:order-none min-h-[300px] lg:min-h-0 ${!currentSlide.interactiveElement ? 'hidden lg:flex' : 'flex'}`}>
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
 
@@ -166,12 +166,12 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage }:
                   className="w-full"
                 >
                   {currentSlide.interactiveElement ? (
-                    <div className="bg-white rounded-3xl shadow-2xl shadow-zinc-200/50 border border-zinc-200 overflow-hidden min-h-[400px] flex items-center justify-center">
+                    <div className="bg-white rounded-3xl shadow-2xl shadow-zinc-200/50 border border-zinc-200 overflow-hidden min-h-[300px] md:min-h-[400px] flex items-center justify-center">
                       {renderInteractiveElement()}
                     </div>
                   ) : (
-                    <div className="bg-white rounded-3xl p-12 text-center border border-zinc-200 shadow-sm">
-                      <div className="text-8xl mb-6 opacity-20 filter blur-sm">✨</div>
+                    <div className="bg-white rounded-3xl p-8 md:p-12 text-center border border-zinc-200 shadow-sm">
+                      <div className="text-6xl md:text-8xl mb-6 opacity-20 filter blur-sm">✨</div>
                       <p className="text-zinc-400 font-medium">Concept Slide</p>
                     </div>
                   )}

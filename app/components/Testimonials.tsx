@@ -68,35 +68,47 @@ export default function Testimonials() {
                     </h2>
                 </div>
 
-                {/* Testimonials Grid */}
-                <div className="grid md:grid-cols-2 gap-12 md:gap-20">
-                    {TESTIMONIALS.map((t, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0, y: 40 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.2 }}
-                            className="relative group"
-                        >
-                            {/* Quote Mark */}
-                            <div className="text-6xl text-blue-600 mb-6 font-serif opacity-30">"</div>
-
-                            <h3 className="text-2xl md:text-3xl font-medium text-black leading-tight mb-8 tracking-tight">
-                                {t.quote}
-                            </h3>
-
-                            <div className="flex items-center gap-4 border-t border-gray-100 pt-6">
-                                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-lg font-bold text-gray-400">
-                                    {t.author[0]}
-                                </div>
+                {/* Testimonials Slider */}
+                <div className="relative overflow-hidden -mx-6 px-6 md:px-0 md:mx-0">
+                    <motion.div
+                        className="flex gap-6 md:gap-8 cursor-grab active:cursor-grabbing"
+                        drag="x"
+                        dragConstraints={{ right: 0, left: -1000 }} // Adjustable based on content width
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
+                            <motion.div
+                                key={i}
+                                className="relative min-w-[85vw] md:min-w-[400px] bg-gray-50 rounded-3xl p-8 border border-gray-100 flex flex-col justify-between select-none"
+                            >
                                 <div>
-                                    <div className="font-bold text-black">{t.author}</div>
-                                    <div className="text-sm text-gray-500">{t.role} @ {t.company}</div>
+                                    {/* Quote Mark */}
+                                    <div className="text-6xl text-blue-600 mb-6 font-serif opacity-30">"</div>
+
+                                    <h3 className="text-xl md:text-2xl font-medium text-black leading-tight mb-8 tracking-tight">
+                                        {t.quote}
+                                    </h3>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
+
+                                <div className="flex items-center gap-4 border-t border-gray-200 pt-6">
+                                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-lg font-bold text-gray-400 border border-gray-100">
+                                        {t.author[0]}
+                                    </div>
+                                    <div>
+                                        <div className="font-bold text-black">{t.author}</div>
+                                        <div className="text-sm text-gray-500">{t.role} @ {t.company}</div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+
+                    {/* Visual Hint for Scroll */}
+                    <div className="flex justify-center mt-8 gap-2 md:hidden">
+                        <div className="w-2 h-2 rounded-full bg-blue-600"></div>
+                        <div className="w-2 h-2 rounded-full bg-gray-200"></div>
+                        <div className="w-2 h-2 rounded-full bg-gray-200"></div>
+                    </div>
                 </div>
 
                 {/* Final Large CTA - Swiss Dark Mode */}

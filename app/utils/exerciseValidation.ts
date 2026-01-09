@@ -2,7 +2,6 @@ import {
   ValidationResult,
   ExerciseFeedback,
   ValidationError,
-  FeedbackType
 } from '../types/exercises';
 
 // ============================================================================

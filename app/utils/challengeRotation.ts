@@ -114,7 +114,7 @@ export function hasCompletedToday(lastCompletedDate: string): boolean {
 /**
  * Calculate streak status
  */
-export function calculateStreak(lastCompletedDate: string, currentStreak: number): {
+export function calculateStreak(lastCompletedDate: string): {
   shouldContinue: boolean;
   shouldReset: boolean;
   isToday: boolean;

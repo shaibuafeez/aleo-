@@ -55,10 +55,7 @@ export default function Hero() {
                 <div className="text-center lg:text-left space-y-8">
 
                     {/* Live Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-md text-[10px] font-mono font-medium tracking-wider text-gray-500 uppercase">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                        Mainnet: Connected
-                    </div>
+
 
                     <h1 className="text-6xl md:text-8xl font-black tracking-tighter-swiss leading-[0.85] text-black">
                         LEARN MOVE.

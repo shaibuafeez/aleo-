@@ -155,9 +155,9 @@ export default function MultipleChoiceExerciseComponent({
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-6 md:space-y-8 max-w-4xl mx-auto pb-32">
       {/* Header Card */}
-      <div className="bg-white rounded-[2rem] border border-zinc-200 p-8 shadow-xl shadow-zinc-200/50 relative overflow-hidden group">
+      <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] border border-zinc-200 p-5 md:p-8 shadow-xl shadow-zinc-200/50 relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
           <svg className="w-32 h-32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -169,8 +169,8 @@ export default function MultipleChoiceExerciseComponent({
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border ${exercise.difficulty === 'beginner' ? 'bg-green-100 text-green-700 border-green-200' :
-                    exercise.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
-                      'bg-red-100 text-red-700 border-red-200'
+                  exercise.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
+                    'bg-red-100 text-red-700 border-red-200'
                   }`}>
                   {exercise.difficulty}
                 </span>
@@ -178,7 +178,7 @@ export default function MultipleChoiceExerciseComponent({
                   {exercise.topic.replace('_', ' ')}
                 </span>
               </div>
-              <h3 className="text-4xl font-black text-zinc-900 mb-3 tracking-tight">
+              <h3 className="text-2xl md:text-4xl font-black text-zinc-900 mb-2 md:mb-3 tracking-tight">
                 {exercise.title}
               </h3>
               <p className="text-lg text-zinc-500 font-medium leading-relaxed max-w-2xl">
@@ -264,20 +264,20 @@ export default function MultipleChoiceExerciseComponent({
                   whileTap={!showExplanations ? { scale: 0.99 } : {}}
                   onClick={() => handleOptionToggle(option.id)}
                   disabled={showExplanations}
-                  className={`w-full text-left p-6 rounded-2xl border-2 transition-all relative overflow-hidden group ${showCorrect
-                      ? 'bg-green-50 border-green-500 shadow-green-100 shadow-lg'
-                      : showIncorrect
-                        ? 'bg-red-50 border-red-500 shadow-red-100 shadow-lg message-shake'
-                        : isSelected
-                          ? 'bg-zinc-900 border-zinc-900 text-white shadow-xl'
-                          : 'bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-lg'
+                  className={`w-full text-left p-4 md:p-6 rounded-xl md:rounded-2xl border-2 transition-all relative overflow-hidden group ${showCorrect
+                    ? 'bg-green-50 border-green-500 shadow-green-100 shadow-lg'
+                    : showIncorrect
+                      ? 'bg-red-50 border-red-500 shadow-red-100 shadow-lg message-shake'
+                      : isSelected
+                        ? 'bg-zinc-900 border-zinc-900 text-white shadow-xl'
+                        : 'bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-lg'
                     }`}
                 >
                   <div className="flex items-start gap-4 relative z-10">
                     <div className={`flex-shrink-0 w-6 h-6 mt-0.5 rounded-${exercise.allowMultipleAnswers ? 'md' : 'full'} border-2 flex items-center justify-center transition-colors ${showCorrect ? 'border-green-600 bg-green-600 text-white' :
-                        showIncorrect ? 'border-red-600 bg-red-600 text-white' :
-                          isSelected ? 'border-white bg-white text-zinc-900' :
-                            'border-zinc-300 group-hover:border-zinc-400'
+                      showIncorrect ? 'border-red-600 bg-red-600 text-white' :
+                        isSelected ? 'border-white bg-white text-zinc-900' :
+                          'border-zinc-300 group-hover:border-zinc-400'
                       }`}>
                       {(isSelected || showCorrect || showIncorrect) && (
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
@@ -289,10 +289,10 @@ export default function MultipleChoiceExerciseComponent({
                       )}
                     </div>
                     <div className="flex-1">
-                      <span className={`text-lg font-medium ${isSelected && !showExplanations ? 'text-white' :
-                          showCorrect ? 'text-green-900' :
-                            showIncorrect ? 'text-red-900' :
-                              'text-zinc-700'
+                      <span className={`text-base md:text-lg font-medium ${isSelected && !showExplanations ? 'text-white' :
+                        showCorrect ? 'text-green-900' :
+                          showIncorrect ? 'text-red-900' :
+                            'text-zinc-700'
                         }`}>
                         {option.text}
                       </span>
@@ -343,7 +343,7 @@ export default function MultipleChoiceExerciseComponent({
       </AnimatePresence>
 
       {/* Feedback & Action Area */}
-      <div className="sticky bottom-6 z-20">
+      <div className="sticky bottom-4 md:bottom-6 z-20">
         <AnimatePresence mode="wait">
           {feedback ? (
             <motion.div
@@ -351,21 +351,21 @@ export default function MultipleChoiceExerciseComponent({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 100 }}
               className={`rounded-3xl p-6 shadow-2xl border-2 flex items-center justify-between gap-6 backdrop-blur-md ${feedback.type === 'success' ? 'bg-green-50/90 border-green-500' :
-                  feedback.type === 'partial' ? 'bg-yellow-50/90 border-yellow-500' :
-                    'bg-red-50/90 border-red-500'
+                feedback.type === 'partial' ? 'bg-yellow-50/90 border-yellow-500' :
+                  'bg-red-50/90 border-red-500'
                 }`}
             >
               <div className="flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl ${feedback.type === 'success' ? 'bg-green-200 text-green-700' :
-                    feedback.type === 'partial' ? 'bg-yellow-200 text-yellow-700' :
-                      'bg-red-200 text-red-700'
+                  feedback.type === 'partial' ? 'bg-yellow-200 text-yellow-700' :
+                    'bg-red-200 text-red-700'
                   }`}>
                   {feedback.type === 'success' ? '🎉' : feedback.type === 'partial' ? '⚠️' : '❌'}
                 </div>
                 <div>
                   <h4 className={`font-bold text-lg ${feedback.type === 'success' ? 'text-green-900' :
-                      feedback.type === 'partial' ? 'text-yellow-900' :
-                        'text-red-900'
+                    feedback.type === 'partial' ? 'text-yellow-900' :
+                      'text-red-900'
                     }`}>
                     {feedback.message} - <span className="text-base font-normal opacity-80">{feedback.details}</span>
                   </h4>

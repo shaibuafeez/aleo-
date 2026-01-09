@@ -50,7 +50,7 @@ export default function DailyChallengePage() {
 
   const handleCompleteChallenge = (earnedXP: number, timeSpent: number, hintsUsed: number) => {
     // Update streak using the streak calculation system
-    const streakStatus = calculateStreak(userStreak.lastCompletedDate, userStreak.currentStreak);
+    const streakStatus = calculateStreak(userStreak.lastCompletedDate);
     const newStreak = { ...userStreak };
 
     if (streakStatus.shouldContinue) {

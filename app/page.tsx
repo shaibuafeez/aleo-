@@ -5,8 +5,6 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import Hero from "./components/Hero";
 import Testimonials from "./components/Testimonials";
-import AnimatedCodePreview from "./components/AnimatedCodePreview";
-import AnimatedCounter from "./components/AnimatedCounter";
 import Footer from "./components/Footer";
 import CinematicScroll from "./components/CinematicScroll";
 
@@ -25,9 +23,6 @@ export default function Home() {
   });
 
   // Parallax effects
-  const heroY = useTransform(smoothProgress, [0, 0.3], [0, -100]);
-  const heroOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
-  const featuresY = useTransform(smoothProgress, [0.2, 0.5], [100, 0]);
   const featuresScale = useTransform(smoothProgress, [0.1, 0.4], [0.95, 1]);
   const stepsScale = useTransform(smoothProgress, [0.5, 0.8], [0.8, 1]);
 
@@ -87,26 +82,28 @@ export default function Home() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8 }}
-              className="group relative lg:col-span-2 lg:row-span-2 p-10 bg-black text-white rounded-[2rem] overflow-hidden shadow-2xl hover:shadow-black/20"
+              className="group relative lg:col-span-2 lg:row-span-2 p-6 md:p-10 bg-black text-white rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-2xl hover:shadow-black/20 sticky top-20 md:top-24 z-10 lg:static lg:z-auto"
             >
               <div className="relative z-10 h-full flex flex-col">
-                <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-8 backdrop-blur-md border border-white/10">
-                  <span className="text-3xl">⚡️</span>
+                <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-6 backdrop-blur-md border border-white/10">
+                  <svg className="w-6 h-6 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
                 </div>
 
-                <h3 className="text-4xl font-bold tracking-tighter-swiss mb-4">Instant Compilation</h3>
-                <p className="text-gray-400 text-lg leading-relaxed mb-8 max-w-sm">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tighter-swiss mb-3">Instant Compilation</h3>
+                <p className="text-gray-400 text-base md:text-lg leading-relaxed mb-6 max-w-sm">
                   Zero setup. Compile Move code directly in your browser with our WASM engine.
                 </p>
 
                 {/* Stats */}
-                <div className="mt-auto flex gap-4">
-                  <div className="bg-white/10 px-5 py-3 rounded-xl border border-white/10">
-                    <div className="text-2xl font-mono text-white">0s</div>
+                <div className="mt-auto flex gap-3">
+                  <div className="bg-white/10 px-4 py-3 rounded-xl border border-white/10">
+                    <div className="text-xl font-mono text-white">0s</div>
                     <div className="text-[10px] uppercase tracking-widest text-gray-500">Setup</div>
                   </div>
-                  <div className="bg-white/10 px-5 py-3 rounded-xl border border-white/10">
-                    <div className="text-2xl font-mono text-blue-400">100%</div>
+                  <div className="bg-white/10 px-4 py-3 rounded-xl border border-white/10">
+                    <div className="text-xl font-mono text-blue-400">100%</div>
                     <div className="text-[10px] uppercase tracking-widest text-gray-500">Web</div>
                   </div>
                 </div>
@@ -118,7 +115,7 @@ export default function Home() {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="group lg:col-span-2 p-8 bg-white border border-gray-200 rounded-[2rem] hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              className="group lg:col-span-2 p-6 md:p-8 bg-white border border-gray-200 rounded-[1.5rem] md:rounded-[2rem] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 sticky top-24 md:top-28 z-20 lg:static lg:z-auto"
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -143,7 +140,7 @@ export default function Home() {
                 bounce: 0.4
               }}
               whileHover={{ y: -8, scale: 1.05 }}
-              className="group relative lg:row-span-2 p-8 bg-white rounded-[2rem] border border-gray-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+              className="group relative lg:row-span-2 p-6 md:p-8 bg-white rounded-[1.5rem] md:rounded-[2rem] border border-gray-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 sticky top-28 md:top-32 z-30 lg:static lg:z-auto"
             >
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
@@ -179,7 +176,7 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
               whileHover={{ y: -5 }}
-              className="group relative p-8 bg-white rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-xl"
+              className="group relative p-6 md:p-8 bg-white rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-xl sticky top-32 md:top-36 z-40 lg:static lg:z-auto"
             >
               <motion.div
                 whileHover={{ scale: 1.1 }}
@@ -206,8 +203,7 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.5 }}
               whileHover={{ y: -5 }}
-              whileHover={{ y: -5 }}
-              className="group relative lg:col-span-2 p-8 bg-black rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-black/20"
+              className="group relative lg:col-span-2 p-6 md:p-8 bg-black rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-black/20 sticky top-36 md:top-40 z-50 lg:static lg:z-auto"
             >
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white rounded-full blur-3xl"></div>
@@ -244,7 +240,7 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.6 }}
               whileHover={{ y: -5 }}
-              className="group relative p-8 bg-white rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-xl"
+              className="group relative p-6 md:p-8 bg-white rounded-3xl border-2 border-sui-navy transition-all duration-300 hover:border-sui-ocean hover:shadow-xl sticky top-40 md:top-44 z-60 lg:static lg:z-auto"
             >
               <motion.div
                 whileHover={{ scale: 1.1, rotate: -5 }}
@@ -298,7 +294,7 @@ export default function Home() {
           </div>
 
           {/* Timeline Process */}
-          <div className="relative grid md:grid-cols-3 gap-12">
+          <div className="relative flex overflow-x-auto pb-12 -mx-6 px-6 md:grid md:grid-cols-3 md:gap-12 md:overflow-visible md:pb-0 md:mx-0 md:px-0 snap-x snap-mandatory gap-6 scrollbar-hide">
 
             {/* Connecting Line (Desktop) */}
             <div className="absolute top-12 left-0 w-full h-px bg-gray-200 hidden md:block" />
@@ -309,7 +305,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="relative group"
+              className="relative group min-w-[85vw] md:min-w-0 snap-center"
             >
               <div className="absolute -top-16 -left-4 text-[12rem] font-bold text-gray-50 opacity-50 select-none -z-10 leading-none">
                 1
@@ -334,7 +330,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="relative group"
+              className="relative group min-w-[85vw] md:min-w-0 snap-center"
             >
               <div className="absolute -top-16 -left-4 text-[12rem] font-bold text-gray-50 opacity-50 select-none -z-10 leading-none">
                 2
@@ -359,7 +355,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6, duration: 0.8 }}
-              className="relative group"
+              className="relative group min-w-[85vw] md:min-w-0 snap-center"
             >
               <div className="absolute -top-16 -left-4 text-[12rem] font-bold text-gray-50 opacity-50 select-none -z-10 leading-none">
                 3
