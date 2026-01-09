@@ -56,6 +56,6 @@ export default function Cursor() {
     }, []);
 
     return (
-        <div ref={cursorRef} className="cursor-dot fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference" />
+        <div ref={cursorRef} className="hidden md:block cursor-dot fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference" />
     );
 }
