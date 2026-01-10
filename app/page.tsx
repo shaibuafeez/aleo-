@@ -6,7 +6,7 @@ import { useRef } from "react";
 import Hero from "./components/Hero";
 import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
-import CinematicScroll from "./components/CinematicScroll";
+
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -33,8 +33,7 @@ export default function Home() {
 
 
 
-      {/* Cinematic Scroll Sequence */}
-      <CinematicScroll />
+
 
       {/* Spacer */}
       <div className="h-20" />
