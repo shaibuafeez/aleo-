@@ -121,8 +121,7 @@ export default function Testimonials() {
                     {/* Noise Texture */}
                     <div className="absolute inset-0 bg-noise-overlay opacity-[0.07] pointer-events-none mix-blend-overlay" />
 
-                    {/* Abstract Blue Orb */}
-                    <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+
 
                     <div className="relative z-10 p-8 md:p-24 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
                         <div>
