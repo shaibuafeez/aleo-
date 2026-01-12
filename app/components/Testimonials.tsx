@@ -16,13 +16,13 @@ const COMPANIES = [
 const TESTIMONIALS = [
     {
         quote: "The visualizer makes Move concepts click instantly. I went from zero to mainnet in a weekend.",
-        author: "Alex D.",
+        author: "Alex Davila",
         role: "Smart Contract Engineer",
         company: "Mysten Labs"
     },
     {
         quote: "Finally, a learning platform that treats frontend and contract integration as first-class citizens.",
-        author: "Sarah K.",
+        author: "Sarah Chen",
         role: "Full Stack Dev",
         company: "Stealth Startup"
     }
