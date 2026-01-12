@@ -85,7 +85,7 @@ export default function Home() {
             >
               <div className="relative z-10 h-full flex flex-col">
                 <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-6 backdrop-blur-md border border-white/10">
-                  <svg className="w-6 h-6 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
@@ -121,7 +121,7 @@ export default function Home() {
                   <h3 className="text-2xl font-bold text-black mb-2 tracking-tighter-swiss">Gamified Learning</h3>
                   <p className="text-gray-500 text-sm">Earn XP and collect on-chain achievements.</p>
                 </div>
-                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 font-bold border border-yellow-200">
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-900 font-bold border border-gray-200">
                   XP
                 </div>
               </div>
@@ -354,59 +354,53 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6, duration: 0.8 }}
-              className="relative group min-w-[85vw] md:min-w-0 snap-center"
-            >
-              <div className="absolute -top-16 -left-4 text-[12rem] font-bold text-gray-50 opacity-50 select-none -z-10 leading-none">
-                3
-              </div>
-
               {/* Timeline Dot */}
               <div className="w-24 h-24 bg-white border border-gray-200 rounded-full flex items-center justify-center mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500 shadow-lg">
-                <svg className="w-10 h-10 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-                </svg>
-              </div>
+              <svg className="w-10 h-10 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+              </svg>
+            </div>
 
-              <h3 className="text-2xl font-bold text-black mb-4 tracking-tight">Deploy to Sui</h3>
-              <p className="text-gray-500 leading-relaxed font-medium">
-                One-click deployment to Testnet. Verify your contract and mint your proof-of-knowledge NFT.
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Bottom CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mt-20"
-          >
-            <Link
-              href="/lessons"
-              className="group inline-flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full hover:bg-gray-800 transition-all font-bold text-lg hover:-translate-y-1 shadow-xl"
-            >
-              <span>View All Lessons</span>
-              <motion.svg
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </motion.svg>
-            </Link>
+            <h3 className="text-2xl font-bold text-black mb-4 tracking-tight">Deploy to Sui</h3>
+            <p className="text-gray-500 leading-relaxed font-medium">
+              One-click deployment to Testnet. Verify your contract and mint your proof-of-knowledge NFT.
+            </p>
           </motion.div>
         </div>
-      </motion.section>
 
-      {/* Testimonials & Community */}
-      <Testimonials />
-
-      {/* Footer */}
-      <Footer />
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-20"
+        >
+          <Link
+            href="/lessons"
+            className="group inline-flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full hover:bg-gray-800 transition-all font-bold text-lg hover:-translate-y-1 shadow-xl"
+          >
+            <span>View All Lessons</span>
+            <motion.svg
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+              animate={{ x: [0, 5, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </motion.svg>
+          </Link>
+        </motion.div>
     </div>
+      </motion.section >
+
+    {/* Testimonials & Community */ }
+    < Testimonials />
+
+    {/* Footer */ }
+    < Footer />
+    </div >
   );
 }
