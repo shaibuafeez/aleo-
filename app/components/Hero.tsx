@@ -119,7 +119,7 @@ export default function Hero() {
                 <div className="relative perspective-1000">
                     <motion.div
                         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                        className="relative z-10"
+                        className="relative z-10 scale-110 -translate-y-8 md:-translate-y-12"
                     >
                         <InteractiveCodeVisualizer />
                     </motion.div>
