@@ -120,10 +120,10 @@ function SpotlightCard({ children, className = "" }: { children: React.ReactNode
           background: useMotionTemplate`
             radial-gradient(
               650px circle at ${mouseX}px ${mouseY}px,
-              rgba(37, 99, 235, 0.15),
+              rgba(82, 82, 91, 0.15),
               transparent 80%
             )
-          `,
+      `,
         }}
       />
       {children}
@@ -280,7 +280,7 @@ export default function LessonsPage() {
                 <Link href={isLocked ? '#' : `/lessons/${lesson.id}`} className={isLocked ? 'cursor-not-allowed' : ''}>
                   <TiltCard className={`h-full ${isLocked ? 'pointer-events-none' : ''}`}>
                     <SpotlightCard className={`h-full rounded-[2rem] p-6 md:p-8 flex flex-col justify-between transition-all duration-500
-                                    ${isLocked ? 'bg-zinc-100 opacity-60 grayscale' : 'bg-white hover:shadow-2xl hover:shadow-blue-900/10'}`
+                                    ${isLocked ? 'bg-zinc-100 opacity-60 grayscale' : 'bg-white hover:shadow-2xl hover:shadow-zinc-900/10'}`
                     }>
                       {/* Top Row */}
                       <div className="flex justify-between items-start mb-8 relative z-10">
