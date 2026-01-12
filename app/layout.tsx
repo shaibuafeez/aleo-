@@ -11,7 +11,7 @@ import DataMigrationNotice from "./components/auth/DataMigrationNotice";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Move by Practice | Master Sui Move",
+  title: "Glide | Master Sui Move",
   description: "Interactive, gamified platform to learn Sui Move and build real projects.",
 };
 

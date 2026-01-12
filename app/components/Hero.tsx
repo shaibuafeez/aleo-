@@ -60,14 +60,13 @@ export default function Hero() {
 
 
                     <h1 className="text-6xl md:text-8xl font-black tracking-tighter-swiss leading-[0.85] text-black">
-                        LEARN MOVE.
+                        MASTER MOVE.
                         <br />
-                        <span className="text-gray-400">BUILD FUTURE.</span>
+                        <span className="text-gray-400">BUILD THE FUTURE.</span>
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-600 max-w-lg mx-auto lg:mx-0 font-medium leading-relaxed tracking-tight">
-                        The definitive platform for Sui smart contracts.
-                        Interactive. Precise. Award-winning.
+                        The interactive platform to master Sui Move. Write code, deploy contracts, and earn on-chain credentials.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center lg:items-start pt-6">

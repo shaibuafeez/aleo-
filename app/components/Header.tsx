@@ -28,10 +28,12 @@ export default function Header() {
             >
                 {/* Logo */}
                 <Link href="/" className="px-4 py-2 flex items-center gap-2 group">
-                    <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center">
-                        <span className="font-bold text-white text-xs">M</span>
+                    <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
                     </div>
-                    <span className="font-bold text-black tracking-tight hidden sm:block group-hover:text-blue-600 transition-colors">Move</span>
+                    <span className="font-bold text-black tracking-tight hidden sm:block group-hover:text-blue-600 transition-colors">Glide</span>
                 </Link>
 
                 {/* Desktop Nav Items */}
@@ -90,8 +92,8 @@ export default function Header() {
                 </button>
 
                 {/* CTA */}
-                <Link href="/connect" className="hidden md:block px-4 py-2">
-                    <button className="bg-black text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider hover:bg-blue-600 transition-all duration-300 hover:shadow-lg">
+                <Link href="/connect" className="hidden md:block">
+                    <button className="bg-black text-white px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider hover:bg-zinc-800 transition-all duration-300 hover:shadow-lg">
                         Connect Wallet
                     </button>
                 </Link>
