@@ -4,7 +4,6 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import Hero from "./components/Hero";
-import VelocityScroll from './components/VelocityScroll';
 import Testimonials from "./components/Testimonials";
 import Footer from "./components/Footer";
 
@@ -31,8 +30,7 @@ export default function Home() {
     <div ref={containerRef} className="min-h-screen bg-white text-black">
       {/* Hero Section */}
       <Hero />
-      <VelocityScroll />
-      {/* <CinematicScroll /> */}
+
 
 
 
