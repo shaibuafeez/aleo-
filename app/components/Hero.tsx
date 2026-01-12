@@ -43,7 +43,7 @@ export default function Hero() {
     return (
         <section
             ref={containerRef}
-            className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white text-black pt-40 md:pt-48"
+            className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white text-black pt-32 md:pt-40"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
         >
@@ -51,25 +51,25 @@ export default function Hero() {
             {/* Swiss Graph Grid */}
             <div className="absolute inset-0 z-0 bg-grid-graph pointer-events-none opacity-60"></div>
 
-            <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+            <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
                 {/* Left Content */}
-                <div className="text-center lg:text-left space-y-10 lg:space-y-8">
+                <div className="text-center lg:text-left space-y-6 lg:space-y-8">
 
                     {/* Live Badge */}
 
 
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter-swiss leading-[0.85] text-black">
+                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter-swiss leading-none text-black">
                         MASTER MOVE.
                         <br />
-                        <span className="text-gray-400">BUILD THE FUTURE.</span>
+                        <span className="text-gray-300">BUILD THE FUTURE.</span>
                     </h1>
 
-                    <p className="text-lg md:text-xl text-gray-600 max-w-lg mx-auto lg:mx-0 font-medium leading-relaxed tracking-tight">
+                    <p className="text-lg text-gray-500 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed tracking-tight">
                         The interactive platform to master Sui Move. Write code, deploy contracts, and earn on-chain credentials.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center lg:items-start pt-6">
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center lg:items-start pt-4">
                         <Magnetic>
                             <motion.div
                                 initial="rest"
