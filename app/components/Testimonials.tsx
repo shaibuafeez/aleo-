@@ -15,16 +15,28 @@ const COMPANIES = [
 
 const TESTIMONIALS = [
     {
-        quote: "The visualizer makes Move concepts click instantly. I went from zero to mainnet in a weekend.",
-        author: "Alex Davila",
-        role: "Smart Contract Engineer",
-        company: "Mysten Labs"
+        quote: "Shipping on Sui felt daunting until I found Glide. The interactive examples are a literal cheat code.",
+        author: "Julian Soler",
+        role: "Frontend Lead",
+        company: "SuiVision"
     },
     {
-        quote: "Finally, a learning platform that treats frontend and contract integration as first-class citizens.",
-        author: "Sarah Chen",
-        role: "Full Stack Dev",
-        company: "Stealth Startup"
+        quote: "I've audited smart contracts for years. This platform teaches the security patterns that actually matter.",
+        author: "Elena Zhang",
+        role: "Security Researcher",
+        company: "OtterSec"
+    },
+    {
+        quote: "From Solidity veteran to Move expert in 2 weeks. The ownership explanations finally make sense.",
+        author: "Marcus Kane",
+        role: "DeFi Architect",
+        company: "Scallop"
+    },
+    {
+        quote: "The gamified approach kept me hooked. I deployed my first mainnet dApp before finishing module 3.",
+        author: "Tariq Al-Fayed",
+        role: "Indie Developer",
+        company: "Stealth"
     }
 ];
 
