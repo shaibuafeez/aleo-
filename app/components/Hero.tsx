@@ -54,7 +54,7 @@ export default function Hero() {
             <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
                 {/* Left Content */}
-                <div className="text-center lg:text-left space-y-6 lg:space-y-8">
+                <div className="text-center lg:text-left space-y-6 lg:space-y-8 lg:pl-12">
 
                     {/* Live Badge */}
 
