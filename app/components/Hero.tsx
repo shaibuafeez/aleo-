@@ -62,7 +62,7 @@ export default function Hero() {
                     <h1 className="text-6xl md:text-8xl font-black tracking-tighter-swiss leading-none text-black">
                         MASTER MOVE.
                         <br />
-                        <span className="text-gray-300">BUILD THE FUTURE.</span>
+                        <span className="text-gray-400">BUILD THE FUTURE.</span>
                     </h1>
 
                     <p className="text-lg text-gray-500 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed tracking-tight">
@@ -119,7 +119,7 @@ export default function Hero() {
                 <div className="relative perspective-1000">
                     <motion.div
                         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                        className="relative z-10 scale-110 -translate-y-8 md:-translate-y-12"
+                        className="relative z-10 scale-90 md:scale-110 mt-8 md:mt-0 md:-translate-y-12"
                     >
                         <InteractiveCodeVisualizer />
                     </motion.div>

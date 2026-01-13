@@ -4,14 +4,25 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const codeSnippet = `module move_by_practice::hero_contract {
-    use sui::object::{Self, UID};
+    use sui::object::{Self, UID, ID};
     use sui::transfer;
     use sui::tx_context::{Self, TxContext};
+    use sui::event;
 
+    // Error codes
+    const E_NOT_ENOUGH_XP: u64 = 0;
+
+    // Hero NFT with trainable stats
     struct Hero has key, store {
         id: UID,
         power: u64,
         xp: u64,
+    }
+
+    // Events
+    struct HeroCreated has copy, drop {
+        hero_id: ID,
+        owner: address,
     }
 
     public entry fun create_hero(ctx: &mut TxContext) {
@@ -20,7 +31,21 @@ const codeSnippet = `module move_by_practice::hero_contract {
             power: 100,
             xp: 0,
         };
+
+        event::emit(HeroCreated {
+            hero_id: object::uid_to_inner(&hero.id),
+            owner: tx_context::sender(ctx),
+        });
+
         transfer::transfer(hero, tx_context::sender(ctx));
+    }
+
+    public entry fun train_hero(hero: &mut Hero) {
+        hero.xp = hero.xp + 10;
+        if (hero.xp >= 100) {
+            hero.power = hero.power + 10;
+            hero.xp = 0;
+        }
     }
 }`;
 
@@ -90,12 +115,38 @@ export default function InteractiveCodeVisualizer() {
                     <pre className="whitespace-pre-wrap">
                         <code className="language-move">
                             {displayedCode.split(/(\s+)/).map((chunk, i) => {
-                                // Light Mode Syntax
+                                // Light Mode Syntax Highlighting
                                 let color = "text-gray-800";
-                                if (["module", "use", "struct", "public", "fun", "entry"].includes(chunk.trim())) color = "text-red-500 font-bold";
-                                if (["Hero", "UID", "TxContext", "u64", "object", "transfer"].includes(chunk.trim())) color = "text-blue-600 font-bold";
-                                if (["has", "key", "store", "let"].includes(chunk.trim())) color = "text-purple-600";
-                                if (chunk.trim().startsWith("0x")) color = "text-green-600";
+
+                                // Keywords (red)
+                                if (["module", "use", "struct", "public", "fun", "entry", "const", "if", "mut"].includes(chunk.trim())) {
+                                    color = "text-red-500 font-bold";
+                                }
+
+                                // Types & Structs (blue)
+                                if (["Hero", "HeroCreated", "UID", "ID", "TxContext", "u64", "address"].includes(chunk.trim())) {
+                                    color = "text-blue-600 font-bold";
+                                }
+
+                                // Modules & special functions (blue)
+                                if (["object", "transfer", "event", "tx_context"].includes(chunk.trim())) {
+                                    color = "text-blue-600 font-bold";
+                                }
+
+                                // Abilities & keywords (purple)
+                                if (["has", "key", "store", "drop", "copy", "let"].includes(chunk.trim())) {
+                                    color = "text-purple-600";
+                                }
+
+                                // Numbers (green)
+                                if (/^\d+$/.test(chunk.trim()) || chunk.trim().startsWith("0x")) {
+                                    color = "text-green-600";
+                                }
+
+                                // Constants (orange)
+                                if (chunk.trim().startsWith("E_")) {
+                                    color = "text-orange-600 font-semibold";
+                                }
 
                                 return <span key={i} className={color}>{chunk}</span>;
                             })}
@@ -109,7 +160,7 @@ export default function InteractiveCodeVisualizer() {
                 {/* Status Bar */}
                 <div className="px-4 py-2 border-t border-gray-100 bg-white flex items-center justify-between text-xs font-mono text-gray-400">
                     <div className="flex gap-4">
-                        <span>Ln 20, Col 1</span>
+                        <span>Ln 49, Col 1</span>
                         <span>UTF-8</span>
                     </div>
                     <AnimatePresence>
