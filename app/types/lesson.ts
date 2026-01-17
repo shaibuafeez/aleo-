@@ -17,6 +17,9 @@ export interface InteractiveElement {
     // For animation
     animationType?: 'flow' | 'transform' | 'sequence';
     animationData?: Record<string, unknown>;
+
+    // General explanation for AI context
+    explanation?: string;
   };
 }
 

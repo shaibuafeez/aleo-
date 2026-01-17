@@ -1,4 +1,4 @@
-import { createClient } from '@/app/lib/supabase/server';
+import { prisma } from '@/app/lib/prisma';
 import Link from 'next/link';
 import { format } from 'date-fns';
 
@@ -8,26 +8,30 @@ export const metadata = {
 };
 
 export default async function ClassesPage() {
-  const supabase = await createClient();
-
-  // Fetch all upcoming and live classes
-  const { data: rawClasses, error } = await supabase
-    .from('classes')
-    .select(`
-      *,
-      instructor:users!instructor_id (
-        username,
-        avatar_url
-      )
-    `)
-    .in('status', ['scheduled', 'live'])
-    .order('scheduled_at', { ascending: true });
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const classes = rawClasses as any[] | null;
-
-  if (error) {
+  // Fetch all upcoming and live classes using Prisma
+  let classes;
+  try {
+    classes = await prisma.class.findMany({
+      where: {
+        status: {
+          in: ['scheduled', 'live']
+        }
+      },
+      include: {
+        instructor: {
+          select: {
+            username: true,
+            avatarUrl: true,
+          }
+        }
+      },
+      orderBy: {
+        scheduledAt: 'asc'
+      }
+    });
+  } catch (error) {
     console.error('Error fetching classes:', error);
+    classes = [];
   }
 
   const liveClasses = classes?.filter((c) => c.status === 'live') || [];
@@ -81,14 +85,14 @@ export default async function ClassesPage() {
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-sui-ocean flex items-center justify-center text-white font-semibold">
-                          {(classItem.instructor as { username: string } | null)?.username?.[0]?.toUpperCase() || 'I'}
+                          {classItem.instructor?.username?.[0]?.toUpperCase() || 'I'}
                         </div>
                         <span className="text-sui-gray-700">
-                          {(classItem.instructor as { username: string } | null)?.username || 'Instructor'}
+                          {classItem.instructor?.username || 'Instructor'}
                         </span>
                       </div>
                       <span className="text-sui-gray-500">
-                        {classItem.participant_count} watching
+                        {classItem.participantCount} watching
                       </span>
                     </div>
                   </div>
@@ -134,26 +138,26 @@ export default async function ClassesPage() {
                       <div className="flex items-center gap-2 text-sm text-sui-gray-700">
                         <span>📅</span>
                         <span>
-                          {format(new Date(classItem.scheduled_at), 'MMM d, yyyy')}
+                          {format(new Date(classItem.scheduledAt), 'MMM d, yyyy')}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-sui-gray-700">
                         <span>⏰</span>
                         <span>
-                          {format(new Date(classItem.scheduled_at), 'h:mm a')}
+                          {format(new Date(classItem.scheduledAt), 'h:mm a')}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-sui-gray-700">
                         <span>⏱️</span>
-                        <span>{classItem.duration_minutes} minutes</span>
+                        <span>{classItem.durationMinutes} minutes</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-8 h-8 rounded-full bg-sui-ocean flex items-center justify-center text-white font-semibold">
-                        {(classItem.instructor as { username: string } | null)?.username?.[0]?.toUpperCase() || 'I'}
+                        {classItem.instructor?.username?.[0]?.toUpperCase() || 'I'}
                       </div>
                       <span className="text-sui-gray-700 text-sm">
-                        {(classItem.instructor as { username: string } | null)?.username || 'Instructor'}
+                        {classItem.instructor?.username || 'Instructor'}
                       </span>
                     </div>
                     <button className="w-full px-4 py-2 bg-sui-ocean hover:bg-sui-ocean-dark text-white rounded-lg font-semibold transition-all hover:shadow-lg hover:shadow-sui-ocean/30">

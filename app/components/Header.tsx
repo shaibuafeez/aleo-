@@ -15,6 +15,7 @@ export default function Header() {
         { name: 'Lessons', href: '/lessons' },
         { name: 'Exercises', href: '/exercises' },
         { name: 'Daily', href: '/daily-challenge' },
+        { name: 'Live Classes', href: '/classes' },
         { name: 'Dashboard', href: '/dashboard' },
     ];
 
@@ -92,11 +93,9 @@ export default function Header() {
                 </button>
 
                 {/* CTA */}
-                <Link href="/connect" className="hidden md:block">
-                    <button className="bg-black text-white px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider hover:bg-zinc-800 transition-all duration-300 hover:shadow-lg">
-                        Connect Wallet
-                    </button>
-                </Link>
+                <div className="hidden md:block">
+                    <ConnectButton />
+                </div>
             </motion.nav>
 
             {/* Mobile Menu Dropdown & Backdrop */}
@@ -135,11 +134,9 @@ export default function Header() {
                                 );
                             })}
                             <div className="h-[1px] bg-zinc-100 my-1 mx-2" />
-                            <Link href="/connect" onClick={() => setIsMobileMenuOpen(false)}>
-                                <button className="w-full bg-black text-white px-4 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider hover:bg-zinc-800 transition-colors shadow-lg shadow-black/20">
-                                    Connect Wallet
-                                </button>
-                            </Link>
+                            <div className="flex justify-center pt-2">
+                                <ConnectButton />
+                            </div>
                         </motion.div>
                     </>
                 )}

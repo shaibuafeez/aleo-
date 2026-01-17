@@ -6,14 +6,16 @@ import { TeachingSlide as TeachingSlideType } from '@/app/types/lesson';
 import DragDropInteractive from './interactive/DragDropInteractive';
 import ClickRevealInteractive from './interactive/ClickRevealInteractive';
 import CodeHighlightInteractive from './interactive/CodeHighlightInteractive';
+import SlideAIAssistant from './SlideAIAssistant';
 
 interface TeachingSlideProps {
   slides: TeachingSlideType[];
   onComplete: () => void;
   transitionMessage: string;
+  lessonTitle?: string;
 }
 
-export default function TeachingSlide({ slides, onComplete, transitionMessage }: TeachingSlideProps) {
+export default function TeachingSlide({ slides, onComplete, transitionMessage, lessonTitle = 'Current Lesson' }: TeachingSlideProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -88,6 +90,30 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage }:
 
           {/* LEFT: Narrative Panel */}
           <div className="w-full lg:w-[45%] p-6 md:p-8 lg:p-16 overflow-y-auto flex flex-col justify-center relative z-10 order-1 lg:order-none">
+            {/* Desktop Navigation / Tools - Fixed Top Right */}
+            <div className="absolute top-6 right-6 z-20 flex items-center gap-3">
+              {/* Live Help Button (New) */}
+              <motion.button
+                className="group relative flex items-center gap-2.5 px-4 py-2.5 bg-white/80 backdrop-blur-md border border-zinc-200/50 rounded-full shadow-sm hover:shadow-xl hover:border-zinc-300 transition-all"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => alert("Connecting to live instructor queue...")}
+              >
+                <div className="relative">
+                  <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                  <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-20" />
+                </div>
+                <span className="text-sm font-semibold text-zinc-700 group-hover:text-zinc-900">Live Help</span>
+              </motion.button>
+
+              <SlideAIAssistant
+                slide={currentSlide}
+                lessonTitle={lessonTitle}
+                slideIndex={currentSlideIndex}
+                totalSlides={slides.length}
+              />
+            </div>
+
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlideIndex}

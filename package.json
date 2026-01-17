@@ -9,11 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/genai": "^1.37.0",
+    "@google/generative-ai": "^0.24.1",
     "@livekit/components-react": "^2.9.17",
     "@livekit/components-styles": "^1.2.0",
     "@monaco-editor/react": "^4.7.0",
     "@mysten/dapp-kit": "^0.19.0",
     "@mysten/sui": "^1.39.0",
+    "@neondatabase/serverless": "^1.0.2",
+    "@prisma/adapter-neon": "^7.2.0",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.89.0",
     "@tanstack/react-query": "^5.90.2",
@@ -26,10 +32,12 @@
     "livekit-client": "^2.16.1",
     "livekit-server-sdk": "^2.15.0",
     "next": "^16.1.1",
+    "pg": "^8.17.1",
     "react": "19.1.0",
     "react-calendar-heatmap": "^1.10.0",
     "react-dom": "19.1.0",
     "recharts": "^3.6.0",
+    "ws": "^8.19.0",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
@@ -41,7 +49,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^16.1.1",
+    "prisma": "^7.2.0",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

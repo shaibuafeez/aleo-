@@ -18,6 +18,7 @@ import { ValidationResult, ExerciseFeedback } from '@/app/types/exercises';
 import { TiltCard } from '../ui/TiltCard';
 import { SpotlightCard } from '../ui/SpotlightCard';
 import LessonTimeline from './LessonTimeline';
+import AITutorChat from '../ai/AITutorChat';
 
 interface LessonViewProps {
   lesson: LessonContent;
@@ -91,7 +92,7 @@ export default function LessonView({ lesson }: LessonViewProps) {
       setOutput(result.output);
 
       if (result.success) {
-        completeLesson(lesson.id, lesson.xpReward);
+        await completeLesson(lesson.id, lesson.xpReward);
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 3000);
       }
@@ -243,12 +244,14 @@ export default function LessonView({ lesson }: LessonViewProps) {
           <TeachingSlide
             slides={slidesToShow}
             onComplete={handleTeachingComplete}
+            lessonTitle={lesson.title}
             transitionMessage={
               usingSections && sections[currentSectionIndex].exerciseId
                 ? "Great! Now let's practice what you just learned..."
                 : lesson.narrative.quizTransition
             }
           />
+          <AITutorChat context={{ lessonTitle: lesson.title, phase, code }} />
         </motion.div>
       </AnimatePresence>
     );
@@ -283,6 +286,7 @@ export default function LessonView({ lesson }: LessonViewProps) {
               exercise={exercise}
               onComplete={handleExerciseComplete}
             />
+            <AITutorChat context={{ lessonTitle: lesson.title, phase, code }} />
           </div>
         </motion.div>
       </AnimatePresence>
@@ -424,6 +428,7 @@ export default function LessonView({ lesson }: LessonViewProps) {
             </div>
           </div>
         </div>
+        <AITutorChat context={{ lessonTitle: lesson.title, phase, code }} />
       </motion.div>
     </AnimatePresence>
   );
