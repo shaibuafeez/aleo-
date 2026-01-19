@@ -28,6 +28,36 @@ export const lesson1: LessonContent = {
           title: "What is Move?",
           content: "Move is a programming language for blockchains. It's designed for digital assets and safety. Used by Sui blockchain. We'll start with basic syntax, just like learning any programming language!",
           emoji: "🚗",
+          interactiveElement: {
+            type: 'code-highlight',
+            config: {
+              code: `module sui::coin {
+    struct Coin has key {
+        id: UID,
+        balance: u64
+    }
+
+    public fun transfer(coin: Coin, recipient: address) {
+        // Move makes digital assets safe by design
+        transfer::public_transfer(coin, recipient);
+    }
+}`,
+              highlights: [
+                {
+                  line: 1,
+                  explanation: "Move organizes code into modules - like packages"
+                },
+                {
+                  line: 2,
+                  explanation: "Structs define digital assets (like coins, NFTs)"
+                },
+                {
+                  line: 7,
+                  explanation: "Functions define what you can do with assets"
+                }
+              ]
+            }
+          }
         },
         {
           title: "Your First Module",

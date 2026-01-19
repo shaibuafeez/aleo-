@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { createClient } from '@/app/lib/supabase/client';
+import { useAuth } from '@/app/lib/auth/AuthProvider';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import Magnetic from '@/app/components/Magnetic';
 
 export default function ScheduleClassPage() {
   const [title, setTitle] = useState('');
@@ -17,7 +20,7 @@ export default function ScheduleClassPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const supabase = createClient();
+  const { user } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,40 +29,30 @@ export default function ScheduleClassPage() {
     setError(null);
 
     try {
-      // Get authenticated user
-      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('You must be logged in to schedule a class');
 
-      if (!user) {
-        throw new Error('You must be logged in to schedule a class');
-      }
-
-      // Combine date and time
       const scheduledAt = new Date(`${scheduledDate}T${scheduledTime}`).toISOString();
 
-      // Create class in database
-      const { error: insertError } = await supabase
-        .from('classes')
-        // @ts-expect-error Supabase types mismatch
-        .insert({
-          instructor_id: user.id,
+      const response = await fetch('/api/classes/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           title,
           description,
-          scheduled_at: scheduledAt,
-          duration_minutes: duration,
-          max_students: maxStudents,
-          chat_enabled: chatEnabled,
-          qa_enabled: qaEnabled,
-          donations_enabled: donationsEnabled,
-          status: 'scheduled',
-        })
-        .select()
-        .single();
+          scheduledAt,
+          durationMinutes: duration,
+          maxStudents,
+          chatEnabled,
+          qaEnabled,
+          donationsEnabled,
+        }),
+      });
 
-      if (insertError) {
-        throw insertError;
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create class');
       }
 
-      // Redirect to classes page
       router.push('/classes');
     } catch (err: unknown) {
       console.error('Error scheduling class:', err);
@@ -69,186 +62,232 @@ export default function ScheduleClassPage() {
     }
   };
 
+  const features = [
+    {
+      label: 'Enable Chat',
+      desc: 'Real-time student messaging',
+      state: chatEnabled,
+      setState: setChatEnabled,
+      icon: (
+        <svg className="w-8 h-8 text-sui-navy/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+      )
+    },
+    {
+      label: 'Enable Q&A',
+      desc: 'Managed question queue',
+      state: qaEnabled,
+      setState: setQaEnabled,
+      icon: (
+        <svg className="w-8 h-8 text-sui-navy/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      )
+    },
+    {
+      label: 'Token Donations',
+      desc: 'Receive SUI tips',
+      state: donationsEnabled,
+      setState: setDonationsEnabled,
+      icon: (
+        <svg className="w-8 h-8 text-sui-navy/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      )
+    },
+  ];
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-4xl font-bold mb-2">Schedule a Class</h1>
-        <p className="text-gray-400 mb-8">
-          Create a live class and teach others about Move programming
-        </p>
+    <div className="min-h-screen bg-white text-sui-navy relative overflow-hidden pt-32 pb-24">
+      {/* Background Assets */}
+      <div className="absolute inset-0 bg-grid-graph opacity-60 pointer-events-none fixed" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-sui-ocean/5 rounded-full blur-[100px] pointer-events-none fixed" />
 
-        {error && (
-          <div className="bg-red-900/50 border border-red-500 rounded-lg p-4 mb-6">
-            <p className="text-red-200">{error}</p>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Title */}
-          <div>
-            <label htmlFor="title" className="block text-sm font-medium mb-2">
-              Class Title *
-            </label>
-            <input
-              id="title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              placeholder="e.g., Introduction to Move Modules"
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+      <main className="relative z-10 container mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mx-auto"
+        >
+          {/* Header */}
+          <div className="mb-12 text-center md:text-left">
+            <Link href="/classes" className="inline-flex items-center gap-2 text-sui-gray-500 hover:text-sui-ocean transition-colors mb-6 text-sm font-bold tracking-wide uppercase">
+              ← Back to Calendar
+            </Link>
+            <h1 className="text-5xl md:text-6xl font-black tracking-tighter-swiss mb-4">
+              Schedule Session
+            </h1>
+            <p className="text-xl text-sui-gray-500 max-w-xl">
+              Create a new live learning environment. Share your Move knowledge.
+            </p>
           </div>
 
-          {/* Description */}
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium mb-2">
-              Description
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={4}
-              placeholder="Describe what students will learn in this class..."
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
-          </div>
-
-          {/* Date and Time */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="date" className="block text-sm font-medium mb-2">
-                Date *
-              </label>
-              <input
-                id="date"
-                type="date"
-                value={scheduledDate}
-                onChange={(e) => setScheduledDate(e.target.value)}
-                required
-                min={new Date().toISOString().split('T')[0]}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="time" className="block text-sm font-medium mb-2">
-                Time *
-              </label>
-              <input
-                id="time"
-                type="time"
-                value={scheduledTime}
-                onChange={(e) => setScheduledTime(e.target.value)}
-                required
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          {/* Duration and Max Students */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="duration" className="block text-sm font-medium mb-2">
-                Duration (minutes) *
-              </label>
-              <input
-                id="duration"
-                type="number"
-                value={duration}
-                onChange={(e) => setDuration(parseInt(e.target.value))}
-                required
-                min={15}
-                max={180}
-                step={15}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="maxStudents" className="block text-sm font-medium mb-2">
-                Max Students *
-              </label>
-              <input
-                id="maxStudents"
-                type="number"
-                value={maxStudents}
-                onChange={(e) => setMaxStudents(parseInt(e.target.value))}
-                required
-                min={1}
-                max={100}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          {/* Features */}
-          <div>
-            <label className="block text-sm font-medium mb-3">Features</label>
-            <div className="space-y-3">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={chatEnabled}
-                  onChange={(e) => setChatEnabled(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-700 bg-gray-800 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                />
-                <div>
-                  <div className="font-medium">Enable Chat</div>
-                  <div className="text-sm text-gray-400">
-                    Allow students to send messages during the class
-                  </div>
-                </div>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={qaEnabled}
-                  onChange={(e) => setQaEnabled(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-700 bg-gray-800 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                />
-                <div>
-                  <div className="font-medium">Enable Q&A</div>
-                  <div className="text-sm text-gray-400">
-                    Allow students to ask questions that you can answer
-                  </div>
-                </div>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={donationsEnabled}
-                  onChange={(e) => setDonationsEnabled(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-700 bg-gray-800 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                />
-                <div>
-                  <div className="font-medium">Enable Donations</div>
-                  <div className="text-sm text-gray-400">
-                    Allow students to send you SUI tokens during the class
-                  </div>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          {/* Submit */}
-          <div className="flex gap-4">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="flex-1 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors"
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-red-50 border border-red-100 rounded-2xl p-6 mb-8 flex items-start gap-4"
             >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-colors"
-            >
-              {loading ? 'Scheduling...' : 'Schedule Class'}
-            </button>
-          </div>
-        </form>
-      </div>
+              <span className="text-2xl">⚠️</span>
+              <div>
+                <h3 className="font-bold text-red-800">Unable to schedule</h3>
+                <p className="text-red-600">{error}</p>
+              </div>
+            </motion.div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Main Info Card */}
+            <div className="bg-white/50 backdrop-blur-md border border-gray-200 rounded-[2rem] p-8 md:p-10 shadow-sm">
+              <h3 className="text-2xl font-bold mb-8 tracking-tight flex items-center gap-3">
+                <span className="w-8 h-8 rounded-lg bg-sui-navy/5 text-sui-navy flex items-center justify-center text-sm">1</span>
+                Class Details
+              </h3>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-bold text-sui-navy uppercase tracking-wider mb-2 ml-1">Title</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                    placeholder="Ex: Advanced Move Patterns"
+                    className="w-full px-6 py-4 bg-sui-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-sui-navy focus:ring-4 focus:ring-sui-navy/5 transition-all text-lg font-medium placeholder:text-gray-400"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-sui-navy uppercase tracking-wider mb-2 ml-1">Description</label>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={4}
+                    placeholder="What will students learn?"
+                    className="w-full px-6 py-4 bg-sui-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-sui-navy focus:ring-4 focus:ring-sui-navy/5 transition-all text-lg font-medium placeholder:text-gray-400 resize-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Timing Card */}
+            <div className="bg-white/50 backdrop-blur-md border border-gray-200 rounded-[2rem] p-8 md:p-10 shadow-sm">
+              <h3 className="text-2xl font-bold mb-8 tracking-tight flex items-center gap-3">
+                <span className="w-8 h-8 rounded-lg bg-sui-navy/5 text-sui-navy flex items-center justify-center text-sm">2</span>
+                Timing & Capacity
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-sm font-bold text-sui-navy uppercase tracking-wider mb-2 ml-1">Date</label>
+                  <input
+                    type="date"
+                    value={scheduledDate}
+                    onChange={(e) => setScheduledDate(e.target.value)}
+                    required
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full px-6 py-4 bg-sui-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-sui-navy focus:ring-4 focus:ring-sui-navy/5 transition-all font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-sui-navy uppercase tracking-wider mb-2 ml-1">Time</label>
+                  <input
+                    type="time"
+                    value={scheduledTime}
+                    onChange={(e) => setScheduledTime(e.target.value)}
+                    required
+                    className="w-full px-6 py-4 bg-sui-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-sui-navy focus:ring-4 focus:ring-sui-navy/5 transition-all font-medium"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-bold text-sui-navy uppercase tracking-wider mb-2 ml-1">Duration (Min)</label>
+                  <input
+                    type="number"
+                    value={duration}
+                    onChange={(e) => setDuration(parseInt(e.target.value))}
+                    required
+                    min={15} step={15}
+                    className="w-full px-6 py-4 bg-sui-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-sui-navy focus:ring-4 focus:ring-sui-navy/5 transition-all font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-sui-navy uppercase tracking-wider mb-2 ml-1">Max Students</label>
+                  <input
+                    type="number"
+                    value={maxStudents}
+                    onChange={(e) => setMaxStudents(parseInt(e.target.value))}
+                    required
+                    min={1} max={500}
+                    className="w-full px-6 py-4 bg-sui-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:border-sui-navy focus:ring-4 focus:ring-sui-navy/5 transition-all font-medium"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Features Selection */}
+            <div className="bg-white/50 backdrop-blur-md border border-gray-200 rounded-[2rem] p-8 md:p-10 shadow-sm">
+              <h3 className="text-2xl font-bold mb-8 tracking-tight flex items-center gap-3">
+                <span className="w-8 h-8 rounded-lg bg-sui-navy/5 text-sui-navy flex items-center justify-center text-sm">3</span>
+                Room Configuration
+              </h3>
+
+              <div className="grid md:grid-cols-3 gap-4">
+                {features.map((f) => (
+                  <div
+                    key={f.label}
+                    onClick={() => f.setState(!f.state)}
+                    className={`cursor-pointer border-2 rounded-2xl p-6 transition-all duration-200 hover:scale-[1.02] ${f.state ? 'border-sui-navy bg-sui-navy/5' : 'border-gray-100 bg-white hover:border-gray-200'
+                      }`}
+                  >
+                    <div className="text-2xl mb-3">{f.icon}</div>
+                    <div className="font-bold text-sui-navy mb-1">{f.label}</div>
+                    <div className="text-xs text-sui-gray-500 font-medium">{f.desc}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-6 pt-6">
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="px-8 py-4 font-bold text-sui-gray-500 hover:text-sui-navy transition-colors"
+              >
+                Cancel
+              </button>
+
+              <Magnetic>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="group relative px-10 py-5 bg-sui-navy text-white rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-sui-navy/20 hover:scale-105 transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    {loading ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Publishing...
+                      </>
+                    ) : (
+                      <>
+                        Create Session
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                      </>
+                    )}
+                  </span>
+                  <div className="absolute inset-0 bg-sui-ocean translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-[0.23, 1, 0.32, 1]" />
+                </button>
+              </Magnetic>
+            </div>
+          </form>
+        </motion.div>
+      </main>
     </div>
   );
 }

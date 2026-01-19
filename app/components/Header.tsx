@@ -4,17 +4,20 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ConnectButton } from '@mysten/dapp-kit';
+import ConnectWallet from './ConnectWallet';
+import UserMenu from './auth/UserMenu';
+import AuthModal from './auth/AuthModal';
+import { useAuth } from '@/app/lib/auth/AuthProvider';
 
 export default function Header() {
     const pathname = usePathname();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [showAuthModal, setShowAuthModal] = useState(false);
+    const { user } = useAuth();
 
     const navItems = [
         { name: 'Home', href: '/' },
         { name: 'Lessons', href: '/lessons' },
-        { name: 'Exercises', href: '/exercises' },
-        { name: 'Daily', href: '/daily-challenge' },
         { name: 'Live Classes', href: '/classes' },
         { name: 'Dashboard', href: '/dashboard' },
     ];
@@ -92,9 +95,21 @@ export default function Header() {
                     </div>
                 </button>
 
-                {/* CTA */}
-                <div className="hidden md:block">
-                    <ConnectButton />
+                {/* CTA - Auth & Wallet */}
+                <div className="hidden md:flex items-center gap-3">
+                    {user ? (
+                        <UserMenu />
+                    ) : (
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => setShowAuthModal(true)}
+                            className="px-5 py-2 bg-black/5 text-black rounded-full text-sm font-semibold hover:bg-black/10 transition-all"
+                        >
+                            Sign In
+                        </motion.button>
+                    )}
+                    <ConnectWallet />
                 </div>
             </motion.nav>
 
@@ -134,13 +149,34 @@ export default function Header() {
                                 );
                             })}
                             <div className="h-[1px] bg-zinc-100 my-1 mx-2" />
-                            <div className="flex justify-center pt-2">
-                                <ConnectButton />
+                            <div className="flex flex-col gap-2 p-2">
+                                {user ? (
+                                    <div className="px-4 py-2 text-sm text-zinc-600 text-center">
+                                        Signed in as <span className="font-semibold text-black">{user.email}</span>
+                                    </div>
+                                ) : (
+                                    <button
+                                        onClick={() => {
+                                            setShowAuthModal(true);
+                                            setIsMobileMenuOpen(false);
+                                        }}
+                                        className="w-full px-6 py-3 bg-black text-white rounded-xl font-semibold text-sm"
+                                    >
+                                        Sign In
+                                    </button>
+                                )}
+                                <ConnectWallet />
                             </div>
                         </motion.div>
                     </>
                 )}
             </AnimatePresence>
+
+            {/* Auth Modal */}
+            <AuthModal
+                isOpen={showAuthModal}
+                onClose={() => setShowAuthModal(false)}
+            />
         </header>
     );
 }

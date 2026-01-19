@@ -77,12 +77,12 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login' }: Au
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 pointer-events-none">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 relative"
+              className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 relative pointer-events-auto"
             >
               {/* Close Button */}
               <button
