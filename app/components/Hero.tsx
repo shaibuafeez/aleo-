@@ -76,7 +76,7 @@ export default function Hero() {
                         className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 font-mono"
                     >
                         <Link href="/lessons">
-                            <Button className="bg-aleo-green text-black hover:bg-aleo-green-neon border-none font-bold tracking-tight rounded-full px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl transition-all hover:scale-105">
+                            <Button className="bg-aleo-green text-black hover:bg-aleo-green-neon border-none font-bold tracking-tight rounded-full px-8 py-6 sm:px-10 sm:py-7 text-lg sm:text-xl transition-all hover:scale-105">
                                 Start Learning <span className="ml-2">→</span>
                             </Button>
                         </Link>
