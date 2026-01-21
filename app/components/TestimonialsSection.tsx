@@ -10,7 +10,7 @@ const testimonials = [
         role: "Zero-Knowledge Engineer",
         text: "The instant feedback loop in the browser IDE is a game changer. I went from zero to deploying my first private dApp in an afternoon.",
         reputation: 98,
-        img: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kaito&backgroundColor=E0E0E0",
+        img: "/assets/avatars/avatar-kaito.png",
         large: true
     },
     {
@@ -19,7 +19,7 @@ const testimonials = [
         role: "DeFi Architect",
         text: "Finally, a learning platform that treats ZK like a first-class citizen. The modules on private state transition are world-class.",
         reputation: 95,
-        img: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zoya&backgroundColor=E0E0E0",
+        img: "/assets/avatars/avatar-zoya.png",
         large: false
     },
     {
@@ -28,7 +28,7 @@ const testimonials = [
         role: "Smart Contract Auditor",
         text: "I recommend this to every junior auditor I train. It's the fastest way to understand the Leo language constraints.",
         reputation: 99,
-        img: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jaxon&backgroundColor=E0E0E0",
+        img: "/assets/avatars/avatar-jaxon.png",
         large: false
     }
 ];

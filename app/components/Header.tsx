@@ -117,7 +117,7 @@ export default function Header() {
                 {/* CTA - Auth & Wallet */}
                 <div className="hidden md:flex items-center gap-3">
                     {user ? (
-                        <UserMenu />
+                        <UserMenu isHome={isHome} />
                     ) : (
                         <motion.button
                             whileHover={{ scale: 1.02 }}

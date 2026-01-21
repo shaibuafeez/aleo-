@@ -10,13 +10,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useAuth } from '@/app/lib/auth/AuthProvider';
 
-export default function UserMenu() {
+interface UserMenuProps {
+  isHome?: boolean;
+}
+
+export default function UserMenu({ isHome = false }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { user, signOut, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="w-10 h-10 rounded-full bg-gray-100 animate-pulse border border-gray-200"></div>
+      <div className="w-9 h-9 rounded-full bg-gray-100 animate-pulse border border-gray-200"></div>
     );
   }
 
@@ -32,13 +36,24 @@ export default function UserMenu() {
 
   return (
     <div className="relative">
-      {/* Avatar Button */}
-      <button
+      {/* Minimalistic Pill Button */}
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-10 h-10 rounded-full bg-black text-white border border-white/10 font-bold flex items-center justify-center hover:bg-zinc-800 transition-colors shadow-sm"
+        className={`flex items-center gap-2 pl-2 pr-4 py-1.5 border rounded-full text-sm font-semibold transition-all shadow-sm
+          ${isHome
+            ? 'bg-white/5 text-white border-white/10 hover:bg-white/10 hover:border-aleo-green/50'
+            : 'bg-black text-white border-black hover:bg-zinc-800'
+          }`}
       >
-        {initial}
-      </button>
+        {/* Avatar Circle */}
+        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold
+          ${isHome ? 'bg-aleo-green text-black' : 'bg-white text-black'}`}>
+          {initial}
+        </div>
+        <span className="text-xs font-medium opacity-90">Account</span>
+      </motion.button>
 
       {/* Dropdown Menu */}
       <AnimatePresence>
