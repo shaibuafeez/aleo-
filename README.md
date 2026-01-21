@@ -1,8 +1,8 @@
- # Move By Practice 🌊
+# Leo By Practice 🦁
 
-> Learn Sui Move by building real projects - completely in your browser!
+> Learn Aleo's Leo language by building real projects - completely in your browser!
 
-![Move By Practice](https://img.shields.io/badge/Sui-Move-4DA2FF?style=for-the-badge)
+![Leo By Practice](https://img.shields.io/badge/Aleo-Leo-0E1525?style=for-the-badge)
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
 
@@ -10,22 +10,19 @@
 
 - ✨ **Zero Installation** - Everything runs in your browser
 - 🎮 **Gamified Learning** - XP, levels, achievements, and streaks
-- 💻 **Monaco Editor** - Full Move syntax highlighting and auto-completion
+- 💻 **Monaco Editor** - Full Leo syntax highlighting and auto-completion
 - 🎨 **Beautiful UI** - Glassmorphism design with smooth animations
 - 📱 **Responsive** - Works on desktop, tablet, and mobile
-- 🔗 **Sui Integration** - Deploy contracts directly to testnet
-
+- 🔗 **Aleo Integration** - Deploy contracts directly to testnet (Coming Soon)
 
 ### Editor & Compiler
 - **Monaco Editor** - VS Code-like editing experience
-- **Custom Move Language** - Full syntax highlighting
-- **WASM Compiler** - Browser-based compilation (coming soon)
+- **Custom Leo Language** - Full syntax highlighting
+- **Leo Compiler** - Browser-based compilation (simulated)
 
 ### State & Blockchain
 - **Zustand** - Lightweight state management
-- **@mysten/dapp-kit** - Sui wallet integration
 - **IndexedDB** - Persistent local storage
-
 
 ## 🚦 Getting Started
 
@@ -48,11 +45,11 @@ Visit [http://localhost:3000](http://localhost:3000) to see the app!
 ## 📚 Project Structure
 
 ```
-move-by-practice/
+leo-by-practice/
 ├── app/
 │   ├── components/
 │   │   ├── editor/
-│   │   │   └── MoveEditor.tsx          # Monaco editor with Move syntax
+│   │   │   └── LeoEditor.tsx           # Monaco editor with Leo syntax
 │   │   ├── lessons/
 │   │   │   └── LessonView.tsx          # Split-screen lesson UI
 │   │   ├── gamification/
@@ -62,11 +59,8 @@ move-by-practice/
 │   ├── lib/
 │   │   ├── store/
 │   │   │   └── gameStore.ts            # Zustand game state
-│   │   ├── sui/
-│   │   │   └── SuiProvider.tsx         # Sui wallet provider
 │   │   ├── lessons/
-│   │   │   └── lesson1.ts              # Lesson content
-│   │   └── compiler/                    # (Coming soon)
+│   │   │   └── leo-lesson1.ts          # Lesson content
 │   ├── types/
 │   │   └── lesson.ts                    # TypeScript types
 │   ├── lessons/[id]/
@@ -88,27 +82,26 @@ Each lesson includes:
 - **Validation** - Instant feedback on solutions
 - **XP Rewards** - Gamification incentives
 
-### Lesson 1: Your First Sui Object
-Learn to create a simple NFT with:
-- Object fundamentals
-- UID and ownership
-- Abilities (key, store)
-- Entry functions
+### Lesson 1: Hello Leo!
+Learn the fundamentals of Leo programming:
+- Programs in Leo
+- Types & Variables
+- Transitions & Functions
 
 ## 🎨 Design System
 
 ### Colors
 ```css
---sui-cyan: #4DA2FF
---sui-blue: #1F4788
+--aleo-green: #00FFB3
+--aleo-navy: #0E1525
 --success: #00D4AA
 --xp-gold: #FFD700
---bg-dark: #0F1419
+--bg-white: #FFFFFF
 ```
 
 ### Typography
-- **Sans**: Geist Sans
-- **Mono**: Geist Mono
+- **Sans**: Inter
+- **Mono**: Fira Code
 
 ## 🔧 Development
 
@@ -120,23 +113,6 @@ npm run build    # Build for production
 npm run start    # Start production server
 npm run lint     # Run ESLint
 ```
-
-### Adding New Lessons
-
-1. Create lesson file in `app/lib/lessons/`:
-```typescript
-import { LessonContent } from '@/app/types/lesson';
-
-export const lesson2: LessonContent = {
-  id: 'lesson-2',
-  title: 'Ownership & Transfer',
-  // ... rest of content
-};
-```
-
-2. Add to lesson map in `app/lessons/[id]/page.tsx`
-
-
 
 ## 🤝 Contributing
 
@@ -154,13 +130,12 @@ MIT License
 
 ## 🙏 Acknowledgments
 
-- [Sui Foundation](https://sui.io) - For the amazing blockchain
-- [CryptoZombies](https://cryptozombies.io) - Gamification inspiration
+- [Aleo](https://aleo.org) - For the privacy-first blockchain
+- [Leo Language](https://leo-lang.org) - The programming language of ZK
 - [Monaco Editor](https://microsoft.github.io/monaco-editor/) - Code editor
-- [Pontem Network](https://pontem.network) - Move WASM compiler reference
 
 ---
 
-**Built with ❤️ for the Sui community**
+**Built with ❤️ for the Aleo community**
 
-🌊 Start learning Move today - no installation required!
+🦁 Start learning Leo today - no installation required!

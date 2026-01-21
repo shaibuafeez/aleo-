@@ -72,6 +72,11 @@ export function useMultimodalLive({ onMessage, context, apiKey }: UseMultimodalL
                     systemInstruction: {
                         parts: [{ text: context || "You are a helpful programming tutor." }]
                     }
+                },
+                callbacks: {
+                    onopen: () => { },
+                    onmessage: () => { },
+                    onclose: () => { }
                 }
             });
 

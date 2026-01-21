@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { getSupabase } from '../supabase/client';
 
 export interface Achievement {
   id: string;
@@ -35,14 +34,14 @@ interface GameState {
 
   // Actions
   addXP: (points: number) => void;
-  completeLesson: (lessonId: string, xpReward: number) => void;
-  unlockAchievement: (achievement: Achievement) => void;
-  updateStreak: () => void;
+  completeLesson: (lessonId: string, xpReward: number, timeSpentMinutes?: number, codeSubmitted?: string) => Promise<void>;
+  unlockAchievement: (achievement: Achievement) => Promise<void>;
+  updateStreak: () => Promise<void>;
   setCurrentLesson: (lessonId: string) => void;
 
-  // Supabase sync actions
+  // Database sync actions
+  loadFromDatabase: () => Promise<void>;
   syncWithSupabase: (userId: string) => Promise<void>;
-  loadFromSupabase: (userId: string) => Promise<void>;
   resetStore: () => void;
 }
 
@@ -62,7 +61,7 @@ export const useGameStore = create<GameState>()(
       isSyncing: false,
       lastSyncedAt: null,
 
-      // Add XP and check for level up
+      // Add XP and check for level up (local only, server updates via completeLesson)
       addXP: (points: number) => {
         set((state) => {
           const newXP = state.xp + points;
@@ -73,127 +72,146 @@ export const useGameStore = create<GameState>()(
             level: newLevel,
           };
         });
-
-        // Sync to Supabase asynchronously
-        const state = get();
-        if (typeof window !== 'undefined') {
-          const supabase = getSupabase();
-          supabase.auth.getUser().then(({ data: { user } }) => {
-            if (user) {
-              const newXP = state.xp + points;
-              const newLevel = Math.floor(newXP / XP_PER_LEVEL) + 1;
-
-              supabase
-                .from('user_stats')
-                // @ts-expect-error Supabase types mismatch
-                .update({
-                  total_xp: newXP,
-                  level: newLevel,
-                  updated_at: new Date().toISOString()
-                })
-                .eq('user_id', user.id)
-                .then();
-            }
-          });
-        }
       },
 
       // Complete a lesson
-      completeLesson: (lessonId: string, xpReward: number) => {
-        const { completedLessons, addXP } = get();
+      completeLesson: async (lessonId: string, xpReward: number, timeSpentMinutes?: number, codeSubmitted?: string) => {
+        const { completedLessons } = get();
 
-        if (!completedLessons.includes(lessonId)) {
+        if (completedLessons.includes(lessonId)) {
+          return; // Already completed
+        }
+
+        try {
+          // Call Prisma API route
+          const response = await fetch('/api/user/complete-lesson', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              lessonId,
+              xpReward,
+              timeSpentMinutes,
+              codeSubmitted,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to complete lesson');
+          }
+
+          const data = await response.json();
+
+          // Update local state with server response
+          set({
+            completedLessons: [...completedLessons, lessonId],
+            xp: data.stats.xp,
+            level: data.stats.level,
+            lastSyncedAt: new Date().toISOString(),
+          });
+
+          // Show level up notification if needed
+          if (data.leveledUp) {
+            console.log(`🎉 Level up! Now level ${data.stats.level}`);
+          }
+        } catch (error) {
+          console.error('Error completing lesson:', error);
+          // Fallback: update local state only
           set({
             completedLessons: [...completedLessons, lessonId],
           });
-          addXP(xpReward);
-
-          // Sync to Supabase asynchronously
-          if (typeof window !== 'undefined') {
-            const supabase = getSupabase();
-            supabase.auth.getUser().then(({ data: { user } }) => {
-              if (user) {
-                supabase
-                  .from('user_progress')
-                  // @ts-expect-error Supabase types mismatch
-                  .upsert({
-                    user_id: user.id,
-                    lesson_id: lessonId,
-                    completed: true,
-                    completed_at: new Date().toISOString(),
-                    xp_earned: xpReward,
-                  })
-                  .then();
-              }
-            });
-          }
+          get().addXP(xpReward);
         }
       },
 
       // Unlock achievement
-      unlockAchievement: (achievement: Achievement) => {
-        set((state) => ({
-          achievements: [
-            ...state.achievements,
-            { ...achievement, unlockedAt: new Date() },
-          ],
-        }));
+      unlockAchievement: async (achievement: Achievement) => {
+        const { achievements } = get();
 
-        // Sync to Supabase asynchronously
-        if (typeof window !== 'undefined') {
-          const supabase = getSupabase();
-          supabase.auth.getUser().then(({ data: { user } }) => {
-            if (user) {
-              supabase
-                .from('achievements')
-                // @ts-expect-error Supabase types mismatch
-                .insert({
-                  user_id: user.id,
-                  achievement_id: achievement.id,
-                  achievement_name: achievement.name,
-                  achievement_description: achievement.description,
-                  icon: achievement.icon,
-                })
-                .then();
-            }
+        // Check if already unlocked
+        if (achievements.some(a => a.id === achievement.id)) {
+          return;
+        }
+
+        try {
+          // Call Prisma API route
+          const response = await fetch('/api/user/unlock-achievement', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              achievementId: achievement.id,
+              achievementName: achievement.name,
+              achievementDescription: achievement.description,
+              icon: achievement.icon,
+            }),
           });
+
+          if (!response.ok) {
+            throw new Error('Failed to unlock achievement');
+          }
+
+          const data = await response.json();
+
+          // Update local state with server response
+          set((state) => ({
+            achievements: [
+              ...state.achievements,
+              {
+                ...achievement,
+                unlockedAt: new Date(data.achievement.unlockedAt),
+              },
+            ],
+            lastSyncedAt: new Date().toISOString(),
+          }));
+        } catch (error) {
+          console.error('Error unlocking achievement:', error);
+          // Fallback: update local state only
+          set((state) => ({
+            achievements: [
+              ...state.achievements,
+              { ...achievement, unlockedAt: new Date() },
+            ],
+          }));
         }
       },
 
       // Update streak
-      updateStreak: () => {
+      updateStreak: async () => {
         const { lastActiveDate } = get();
         const today = new Date().toDateString();
 
         if (lastActiveDate === today) return;
 
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayStr = yesterday.toDateString();
+        try {
+          // Call Prisma API route
+          const response = await fetch('/api/user/update-streak', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+          });
 
-        const newStreak = lastActiveDate === yesterdayStr ? get().streak + 1 : 1;
+          if (!response.ok) {
+            throw new Error('Failed to update streak');
+          }
 
-        set({
-          lastActiveDate: today,
-          streak: newStreak,
-        });
+          const data = await response.json();
 
-        // Sync to Supabase asynchronously
-        if (typeof window !== 'undefined') {
-          const supabase = getSupabase();
-          supabase.auth.getUser().then(({ data: { user } }) => {
-            if (user) {
-              supabase
-                .from('user_stats')
-                // @ts-expect-error Supabase types mismatch
-                .update({
-                  current_streak: newStreak,
-                  longest_streak: newStreak, // Will be handled by trigger
-                  last_active_at: new Date().toISOString(),
-                })
-                .eq('user_id', user.id)
-                .then();
-            }
+          // Update local state with server response
+          set({
+            lastActiveDate: today,
+            streak: data.stats.streak,
+            lastSyncedAt: new Date().toISOString(),
+          });
+        } catch (error) {
+          console.error('Error updating streak:', error);
+          // Fallback: update local state only
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayStr = yesterday.toDateString();
+
+          const newStreak = lastActiveDate === yesterdayStr ? get().streak + 1 : 1;
+
+          set({
+            lastActiveDate: today,
+            streak: newStreak,
           });
         }
       },
@@ -203,129 +221,95 @@ export const useGameStore = create<GameState>()(
         set({ currentLesson: lessonId });
       },
 
-      // Load data from Supabase (called on login)
-      loadFromSupabase: async (userId: string) => {
+      // Load data from database via Prisma API (called on login)
+      loadFromDatabase: async () => {
         try {
           set({ isSyncing: true });
-          const supabase = getSupabase();
 
-          // Load user stats
-          const { data: rawStats } = await supabase
-            .from('user_stats')
-            .select('*')
-            .eq('user_id', userId)
-            .single();
+          // Call Prisma API route
+          const response = await fetch('/api/user/profile');
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const stats = rawStats as any;
-
-          // Load user progress
-          const { data: rawProgress } = await supabase
-            .from('user_progress')
-            .select('*')
-            .eq('user_id', userId);
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const progress = rawProgress as any[] | null;
-
-          // Load achievements
-          const { data: rawAchievements } = await supabase
-            .from('achievements')
-            .select('*')
-            .eq('user_id', userId);
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const achievements = rawAchievements as any[] | null;
-
-          if (stats) {
-            const completedLessons = progress
-              ?.filter(p => p.completed)
-              .map(p => p.lesson_id) || [];
-
-            const loadedAchievements: Achievement[] = achievements?.map(a => ({
-              id: a.achievement_id,
-              name: a.achievement_name,
-              description: a.achievement_description,
-              icon: a.icon || '🏆',
-              unlockedAt: new Date(a.unlocked_at),
-            })) || [];
-
-            set({
-              xp: stats.total_xp,
-              level: stats.level,
-              streak: stats.current_streak,
-              lastActiveDate: stats.last_active_at
-                ? new Date(stats.last_active_at).toDateString()
-                : null,
-              completedLessons,
-              achievements: loadedAchievements,
-              lastSyncedAt: new Date().toISOString(),
-            });
+          if (!response.ok) {
+            throw new Error('Failed to load user profile');
           }
+
+          const data = await response.json();
+
+          // Extract completed lesson IDs
+          const completedLessons = data.completedLessons || [];
+
+          // Format achievements
+          const loadedAchievements: Achievement[] = (data.achievements || []).map((a: {
+            achievementId: string;
+            achievementName: string;
+            achievementDescription: string;
+            icon: string;
+            unlockedAt: string;
+          }) => ({
+            id: a.achievementId,
+            name: a.achievementName,
+            description: a.achievementDescription,
+            icon: a.icon || '🏆',
+            unlockedAt: new Date(a.unlockedAt),
+          }));
+
+          // Update local state with server data
+          set({
+            xp: data.stats?.xp || 0,
+            level: data.stats?.level || 1,
+            streak: data.stats?.streak || 0,
+            lastActiveDate: data.stats?.lastActiveDate
+              ? new Date(data.stats.lastActiveDate).toDateString()
+              : null,
+            completedLessons,
+            achievements: loadedAchievements,
+            lastSyncedAt: new Date().toISOString(),
+          });
         } catch (error) {
-          console.error('Error loading from Supabase:', error);
+          console.error('Error loading from database:', error);
         } finally {
           set({ isSyncing: false });
         }
       },
 
-      // Sync local state to Supabase (manual sync or migration)
+      // Sync local data to Supabase (Database Migration)
       syncWithSupabase: async (userId: string) => {
+        const { xp, level, streak, completedLessons, achievements } = get();
+
         try {
           set({ isSyncing: true });
-          const state = get();
-          const supabase = getSupabase();
 
-          // Sync user stats
-          await supabase
-            .from('user_stats')
-            // @ts-expect-error Supabase types mismatch
-            .upsert({
-              user_id: userId,
-              total_xp: state.xp,
-              level: state.level,
-              current_streak: state.streak,
-              last_active_at: state.lastActiveDate
-                ? new Date(state.lastActiveDate).toISOString()
-                : null,
-            });
+          // Call Sync API
+          const response = await fetch('/api/user/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              xp,
+              level,
+              streak,
+              completedLessons,
+              achievements,
+            }),
+          });
 
-          // Sync completed lessons
-          if (state.completedLessons.length > 0) {
-            const progressRecords = state.completedLessons.map(lessonId => ({
-              user_id: userId,
-              lesson_id: lessonId,
-              completed: true,
-              completed_at: new Date().toISOString(),
-              xp_earned: 100, // Default, will be overwritten by actual data
-            }));
-
-            await supabase
-              .from('user_progress')
-              // @ts-expect-error Supabase types mismatch
-              .upsert(progressRecords);
+          if (!response.ok) {
+            // If the sync endpoint doesn't exist yet, we just log it and don't throw to avoid crashing
+            console.warn('Sync API endpoint not found or failed. Skipping migration.');
+            return;
           }
 
-          // Sync achievements
-          if (state.achievements.length > 0) {
-            const achievementRecords = state.achievements.map(achievement => ({
-              user_id: userId,
-              achievement_id: achievement.id,
-              achievement_name: achievement.name,
-              achievement_description: achievement.description,
-              icon: achievement.icon,
-              unlocked_at: achievement.unlockedAt?.toISOString() || new Date().toISOString(),
-            }));
+          const data = await response.json();
 
-            await supabase
-              .from('achievements')
-              // @ts-expect-error Supabase types mismatch
-              .upsert(achievementRecords);
-          }
+          set({
+            lastSyncedAt: new Date().toISOString(),
+            // Optionally update with merged data if the server sends it back
+            xp: data.stats?.xp ?? xp,
+            level: data.stats?.level ?? level,
+          });
 
-          set({ lastSyncedAt: new Date().toISOString() });
         } catch (error) {
-          console.error('Error syncing to Supabase:', error);
+          console.error('Error syncing with Supabase:', error);
           throw error;
         } finally {
           set({ isSyncing: false });

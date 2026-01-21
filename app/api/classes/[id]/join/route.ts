@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { LiveKitController } from '@/app/lib/livekit/controller';
-import { createClient } from '@/app/lib/supabase/server';
+import { getServerUser } from '@/app/lib/auth/server';
+import { prisma } from '@/app/lib/prisma';
 
 export async function POST(
   req: NextRequest,
@@ -8,28 +9,27 @@ export async function POST(
 ) {
   try {
     const { id: class_id } = await params;
-    const supabase = await createClient();
+    console.log('Join API called for class:', class_id);
 
-    // Get authenticated user
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // Authenticate user via Supabase Auth
+    const { user, error: authError } = await getServerUser();
 
-    if (!user) {
+    if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get class from database
-    const { data, error: classError } = await supabase
-      .from('classes')
-      .select('*')
-      .eq('id', class_id)
-      .eq('id', class_id)
-      .single();
+    // Get class from database using Prisma
+    const classData = await prisma.class.findUnique({
+      where: { id: class_id },
+      select: {
+        id: true,
+        instructorId: true,
+        status: true,
+        livekitRoomName: true,
+      },
+    });
 
-    const classData = data as unknown as { status: string; livekit_room_name: string | null } | null;
-
-    if (classError || !classData) {
+    if (!classData) {
       return NextResponse.json({ error: 'Class not found' }, { status: 404 });
     }
 
@@ -41,58 +41,90 @@ export async function POST(
       );
     }
 
-    if (!classData.livekit_room_name) {
+    if (!classData.livekitRoomName) {
       return NextResponse.json(
         { error: 'Class room not created' },
         { status: 400 }
       );
     }
 
-    // Get user profile
-    const { data: userData } = await supabase
-      .from('users')
-      .select('username, avatar_url')
-      .eq('id', user.id)
-      .single();
+    // Get user profile using Prisma
+    const userProfile = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: {
+        username: true,
+        avatarUrl: true,
+      },
+    });
 
-    const userProfile = userData as unknown as { username?: string; avatar_url?: string } | null;
+    // Check if user is the instructor
+    const isInstructor = classData.instructorId === user.id;
+    console.log('🔍 Instructor check:', {
+      classInstructorId: classData.instructorId,
+      currentUserId: user.id,
+      isInstructor,
+    });
 
-    // Join LiveKit room
+    // Join LiveKit room with appropriate permissions
     const controller = new LiveKitController();
-    const response = await controller.joinClass({
-      room_name: classData.livekit_room_name,
-      user_id: user.id,
-      username: userProfile?.username || user.email || 'Anonymous',
-      avatar_url: userProfile?.avatar_url,
-    });
+    let response;
 
-    // Create or update booking
-    const { error: bookingError } = await supabase
-      .from('class_bookings')
-      // @ts-expect-error Supabase types mismatch
-      .upsert({
+    if (isInstructor) {
+      // Instructor gets full publishing permissions
+      response = await controller.joinClassAsInstructor({
+        room_name: classData.livekitRoomName,
         user_id: user.id,
-        class_id: class_id,
-        status: 'attended',
+        username: userProfile?.username || user.email || 'Instructor',
+        avatar_url: userProfile?.avatarUrl || undefined,
       });
-
-    if (bookingError) {
-      console.error('Error creating booking:', bookingError);
+    } else {
+      // Regular student with limited permissions
+      response = await controller.joinClass({
+        room_name: classData.livekitRoomName,
+        user_id: user.id,
+        username: userProfile?.username || user.email || 'Anonymous',
+        avatar_url: userProfile?.avatarUrl || undefined,
+      });
     }
 
-    // Increment participant count
-    // @ts-expect-error Supabase types mismatch
-    const { error: countError } = await supabase.rpc('increment', {
-      row_id: class_id,
-      table_name: 'classes',
-      column_name: 'participant_count',
+    // Create or update booking using Prisma
+    await prisma.classBooking.upsert({
+      where: {
+        userId_classId: {
+          userId: user.id,
+          classId: class_id,
+        },
+      },
+      update: {
+        status: 'attended',
+      },
+      create: {
+        userId: user.id,
+        classId: class_id,
+        status: 'attended',
+      },
     });
 
-    if (countError) {
-      console.error('Error updating participant count:', countError);
-    }
+    // Increment participant count using Prisma
+    await prisma.class.update({
+      where: { id: class_id },
+      data: {
+        participantCount: {
+          increment: 1,
+        },
+      },
+    });
 
-    return NextResponse.json(response);
+    const responseData = {
+      ...response,
+      metadata: {
+        is_instructor: isInstructor,
+        user_id: user.id,
+      },
+    };
+
+    console.log('Join API response data:', JSON.stringify(responseData, null, 2));
+    return NextResponse.json(responseData);
   } catch (error: unknown) {
     console.error('Error joining class:', error);
     return NextResponse.json(

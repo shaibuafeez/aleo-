@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const supabase = getSupabase();
 
-  const { loadFromSupabase, resetStore } = useGameStore();
+  const { loadFromDatabase, resetStore } = useGameStore();
 
   useEffect(() => {
     // Get initial session
@@ -38,9 +38,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
 
-      // Load user data from Supabase if logged in
+      // Load user data from database if logged in
       if (session?.user) {
-        await loadFromSupabase(session.user.id);
+        await loadFromDatabase();
       }
 
       setLoading(false);
@@ -53,9 +53,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
 
-      // Handle login - load data from Supabase
+      // Handle login - load data from database
       if (event === 'SIGNED_IN' && session?.user) {
-        await loadFromSupabase(session.user.id);
+        await loadFromDatabase();
       }
 
       // Handle logout - reset local store
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase.auth, loadFromSupabase, resetStore]);
+  }, [supabase.auth, loadFromDatabase, resetStore]);
 
   // Create user profile in public.users table
   const createUserProfile = async (userId: string, email: string, username?: string) => {

@@ -16,13 +16,10 @@ export default function WatchClassPage({
 }) {
   const { id: classId } = use(params);
   const [token, setToken] = useState('');
+  const [isInstructor, setIsInstructor] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'chat' | 'qa' | 'participants'>('chat');
-
-  useEffect(() => {
-    joinClass();
-  }, [classId]);
 
   const joinClass = useCallback(async () => {
     try {
@@ -40,7 +37,18 @@ export default function WatchClassPage({
       }
 
       const data = await response.json();
+      console.log('Join API response:', data); // Debug log
+
+      if (!data || !data.connection_details || !data.connection_details.token) {
+        throw new Error('Invalid response from server');
+      }
+
       setToken(data.connection_details.token);
+
+      // Check if user is instructor by decoding token metadata
+      if (data.metadata && data.metadata.is_instructor !== undefined) {
+        setIsInstructor(data.metadata.is_instructor);
+      }
     } catch (err: unknown) {
       console.error('Error joining class:', err);
       setError(err instanceof Error ? err.message : 'Failed to join class');
@@ -48,6 +56,32 @@ export default function WatchClassPage({
       setLoading(false);
     }
   }, [classId]);
+
+  useEffect(() => {
+    joinClass();
+  }, [joinClass]);
+
+  const endClass = async () => {
+    if (!confirm('Are you sure you want to end this class?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/classes/${classId}/end`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to end class');
+      }
+
+      // Redirect to classes page
+      window.location.href = '/classes';
+    } catch (err) {
+      console.error('Error ending class:', err);
+      alert('Failed to end class');
+    }
+  };
 
   const raiseHand = async () => {
     try {
@@ -70,7 +104,7 @@ export default function WatchClassPage({
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-950">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-16 h-16 border-4 border-aleo-green border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-white text-lg">Joining class...</p>
         </div>
       </div>
@@ -86,7 +120,7 @@ export default function WatchClassPage({
           <p className="text-gray-400 mb-6">{error}</p>
           <button
             onClick={joinClass}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
+            className="px-6 py-3 bg-aleo-green hover:bg-aleo-green-dim text-zinc-900 rounded-lg font-semibold transition-colors"
           >
             Try Again
           </button>
@@ -111,7 +145,7 @@ export default function WatchClassPage({
           <div className="flex-1 flex gap-4 p-4 overflow-hidden">
             {/* Video player */}
             <div className="flex-1 min-w-0">
-              <ClassPlayer isInstructor={false} />
+              <ClassPlayer isInstructor={isInstructor} onEndClass={endClass} />
             </div>
 
             {/* Right sidebar */}
@@ -151,22 +185,33 @@ export default function WatchClassPage({
               <div className="flex-1 min-h-0">
                 {activeTab === 'chat' && <ClassChat />}
                 {activeTab === 'qa' && (
-                  <QuestionsPanel classId={classId} isInstructor={false} />
+                  <QuestionsPanel classId={classId} isInstructor={isInstructor} />
                 )}
                 {activeTab === 'participants' && (
-                  <ParticipantsList isInstructor={false} />
+                  <ParticipantsList isInstructor={isInstructor} />
                 )}
               </div>
 
               {/* Actions */}
-              <div className="flex gap-2">
-                <button
-                  onClick={raiseHand}
-                  className="flex-1 px-4 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg font-semibold transition-colors"
-                >
-                  ✋ Raise Hand
-                </button>
-              </div>
+              {isInstructor ? (
+                <div className="bg-aleo-green/10 border border-aleo-green/20 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-aleo-green text-sm font-bold">👨‍🏫 Instructor Mode</span>
+                  </div>
+                  <p className="text-gray-400 text-xs">
+                    You have full control of this class. Students can see your video and audio.
+                  </p>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <button
+                    onClick={raiseHand}
+                    className="flex-1 px-4 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg font-semibold transition-colors"
+                  >
+                    ✋ Raise Hand
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

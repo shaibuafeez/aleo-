@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { LiveKitController, getSessionFromReq } from '@/app/lib/livekit/controller';
-import { createClient } from '@/app/lib/supabase/server';
+import { LiveKitController } from '@/app/lib/livekit/controller';
+import { getServerUser } from '@/app/lib/auth/server';
+import { prisma } from '@/app/lib/prisma';
 
 export async function POST(
   req: NextRequest,
@@ -8,34 +9,37 @@ export async function POST(
 ) {
   try {
     const { id: class_id } = await params;
-    const supabase = await createClient();
 
-    // Get session from auth token
-    const session = getSessionFromReq(req);
+    // Authenticate user via Supabase Auth
+    const { user, error: authError } = await getServerUser();
 
-    // Get class from database
-    const { data, error: classError } = await supabase
-      .from('classes')
-      .select('*')
-      .eq('id', class_id)
-      .eq('id', class_id)
-      .single();
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-    const classData = data as unknown as { instructor_id: string; livekit_room_name: string | null } | null;
+    // Get class from database using Prisma
+    const classData = await prisma.class.findUnique({
+      where: { id: class_id },
+      select: {
+        id: true,
+        instructorId: true,
+        livekitRoomName: true,
+      },
+    });
 
-    if (classError || !classData) {
+    if (!classData) {
       return NextResponse.json({ error: 'Class not found' }, { status: 404 });
     }
 
     // Verify user is the instructor
-    if (classData.instructor_id !== session.user_id) {
+    if (classData.instructorId !== user.id) {
       return NextResponse.json(
         { error: 'Only the instructor can end the class' },
         { status: 403 }
       );
     }
 
-    if (!classData.livekit_room_name) {
+    if (!classData.livekitRoomName) {
       return NextResponse.json(
         { error: 'Class room not created' },
         { status: 400 }
@@ -45,28 +49,19 @@ export async function POST(
     // End LiveKit room
     const controller = new LiveKitController();
     await controller.endClass({
-      user_id: session.user_id,
-      class_id: session.class_id,
-      room_name: classData.livekit_room_name,
+      user_id: user.id,
+      class_id: class_id,
+      room_name: classData.livekitRoomName,
     });
 
-    // Update class in database
-    const { error: updateError } = await supabase
-      .from('classes')
-      // @ts-expect-error Supabase types mismatch
-      .update({
+    // Update class in database using Prisma
+    await prisma.class.update({
+      where: { id: class_id },
+      data: {
         status: 'completed',
-        ended_at: new Date().toISOString(),
-      })
-      .eq('id', class_id);
-
-    if (updateError) {
-      console.error('Error updating class:', updateError);
-      return NextResponse.json(
-        { error: 'Failed to update class' },
-        { status: 500 }
-      );
-    }
+        endedAt: new Date(),
+      },
+    });
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {

@@ -27,6 +27,8 @@ export interface TeachingSlide {
   title: string;
   content: string;
   emoji: string;
+  image?: string;
+  illustration?: string;
   interactiveElement?: InteractiveElement;
 }
 

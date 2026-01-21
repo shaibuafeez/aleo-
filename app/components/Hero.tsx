@@ -1,30 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
-import Link from 'next/link';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import InteractiveCodeVisualizer from './InteractiveCodeVisualizer';
-import Magnetic from './Magnetic';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-
-gsap.registerPlugin(ScrollTrigger);
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { Button } from "./ui/Button";
+import AnimatedCodePreview from "./AnimatedCodePreview";
 
 export default function Hero() {
-    const containerRef = useRef(null);
-
-    // 3D Tilt Logic
+    const containerRef = useRef<HTMLDivElement>(null);
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
-    const mouseX = useSpring(x, { stiffness: 150, damping: 15 });
-    const mouseY = useSpring(y, { stiffness: 150, damping: 15 });
-
-    const rotateX = useTransform(mouseY, [-0.5, 0.5], ["5deg", "-5deg"]);
-    const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-5deg", "5deg"]);
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        const rect = e.currentTarget.getBoundingClientRect();
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = containerRef.current?.getBoundingClientRect();
+        if (!rect) return;
         const width = rect.width;
         const height = rect.height;
         const mouseXVal = e.clientX - rect.left;
@@ -43,90 +32,82 @@ export default function Hero() {
     return (
         <section
             ref={containerRef}
-            className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white text-black pt-32 md:pt-40"
+            className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#020202] text-white pt-24 md:pt-28"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
         >
 
-            {/* Swiss Graph Grid */}
-            <div className="absolute inset-0 z-0 bg-grid-graph pointer-events-none opacity-60"></div>
+            {/* Cyber Graph Grid */}
+            <div className="absolute inset-0 z-0 opacity-40 pointer-events-none bg-cover bg-center bg-no-repeat"
+                style={{
+                    backgroundImage: `url('/assets/3d/hero-bg.png')`,
+                }}
+            ></div>
 
-            <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Ambient Glows - Significantly Reduced for "Black" feel */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-aleo-green/5 rounded-full blur-[150px] pointer-events-none opacity-50" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-aleo-green-dim/10 rounded-full blur-[150px] pointer-events-none opacity-30" />
+
+            <div className="container max-w-[1600px] mx-auto px-6 lg:px-12 relative z-10 grid lg:grid-cols-5 gap-12 lg:gap-20 items-center">
 
                 {/* Left Content */}
-                <div className="text-center lg:text-left space-y-6 lg:space-y-8 lg:pl-12">
+                <div className="text-center lg:text-left space-y-8 lg:pl-4 lg:col-span-2">
 
-                    {/* Live Badge */}
-
-
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter-swiss leading-none text-black">
-                        MASTER MOVE.
-                        <br />
-                        <span className="text-gray-400">BUILD THE FUTURE.</span>
-                    </h1>
-
-                    <p className="text-lg text-gray-500 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed tracking-tight">
-                        The interactive platform to master Sui Move. Write code, deploy contracts, and earn on-chain credentials.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center lg:items-start pt-4">
-                        <Magnetic>
-                            <motion.div
-                                initial="rest"
-                                whileHover="hover"
-                                animate="rest"
-                            >
-                                <Link
-                                    href="/lessons"
-                                    className="group relative px-8 py-4 md:px-10 md:py-5 bg-black text-white rounded-full font-bold text-lg tracking-wide hover:scale-105 transition-all duration-300 shadow-2xl shadow-blue-900/20 overflow-hidden inline-flex items-center gap-3 border border-white/10"
-                                >
-                                    {/* Standard Text (Slides Up) */}
-                                    <motion.div
-                                        variants={{
-                                            rest: { y: 0 },
-                                            hover: { y: "-100%" }
-                                        }}
-                                        transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
-                                        className="flex items-center gap-3 relative z-10"
-                                    >
-                                        <span className="tracking-wide">Start learning</span>
-                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                        </svg>
-                                    </motion.div>
-
-                                    {/* Reveal Text (Slides In from Bottom) */}
-                                    <motion.div
-                                        variants={{
-                                            rest: { y: "100%" },
-                                            hover: { y: 0 }
-                                        }}
-                                        transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
-                                        className="absolute inset-0 flex items-center justify-center gap-3 bg-zinc-800 text-white z-10"
-                                    >
-                                        <span className="tracking-wide">Let's build</span>
-                                        <svg className="w-5 h-5 rotate-[-45deg]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                        </svg>
-                                    </motion.div>
-                                </Link>
-                            </motion.div>
-                        </Magnetic>
-                    </div>
-                </div>
-
-                {/* Right Content - 3D Visualizer */}
-                <div className="relative perspective-1000">
                     <motion.div
-                        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                        className="relative z-10 scale-90 md:scale-110 mt-8 md:mt-0 md:-translate-y-12"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
                     >
-                        <InteractiveCodeVisualizer />
+
+                        <h1 className="text-6xl md:text-8xl font-sans font-bold tracking-tight leading-[0.9] text-white mb-6">
+                            MASTER <br />
+                            <span className="text-aleo-green">LEO.</span> <br />
+                            BUILD <br />
+                            <span className="text-gray-500">PRIVATE.</span>
+                        </h1>
+
+
                     </motion.div>
 
-                    {/* Decorative Elements behind */}
-                    <div className="absolute top-10 -right-10 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] -z-10"></div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 font-mono"
+                    >
+                        <Link href="/lessons">
+                            <Button className="bg-aleo-green text-black hover:bg-aleo-green-neon border-none font-bold tracking-tight rounded-full px-10 py-5 text-xl transition-all hover:scale-105">
+                                Start Learning <span className="ml-2">→</span>
+                            </Button>
+                        </Link>
+                        <Link href="/docs">
+                            <Button variant="ghost" className="text-gray-400 hover:text-white hover:bg-white/5 rounded-full px-8 py-5 text-lg">
+                                Documentation
+                            </Button>
+                        </Link>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 1, delay: 0.5 }}
+                        className="flex items-center justify-center lg:justify-start gap-8 pt-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500"
+                    >
+                        {/* Trust Badges / Logos could go here if needed */}
+                        <div className="text-sm font-mono text-gray-500">POWERED BY ALEO</div>
+                    </motion.div>
                 </div>
+
+                {/* Right Content - 3D Code Preview */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1, delay: 0.3 }}
+                    className="relative hidden lg:block perspective-1000 lg:col-span-3"
+                >
+                    <AnimatedCodePreview />
+                </motion.div>
+
             </div>
         </section>
     );

@@ -9,7 +9,7 @@ import { useGameStore } from '@/app/lib/store/gameStore';
 type Difficulty = 'Beginner' | 'Intermediate' | 'Advanced';
 
 interface Lesson {
-  id: number;
+  id: number | string;
   title: string;
   description: string;
   duration: string;
@@ -23,75 +23,75 @@ interface Lesson {
 // Data
 const allLessons: Lesson[] = [
   {
-    id: 1,
-    title: 'Hello Move!',
-    description: 'Your first steps into the Sui ecosystem. Learn modules, variables, and basic functions.',
-    duration: '25 min',
+    id: 'leo-1',
+    title: 'Hello Leo!',
+    description: 'Your first zero-knowledge program on Aleo. Learn programs, transitions, types, and variables.',
+    duration: '30 min',
     xp: 100,
     difficulty: 'Beginner',
-    topics: ['Modules', 'Variables', 'Functions'],
+    topics: ['Programs', 'Transitions', 'Types'],
     isLocked: false,
     colSpan: 2, // Hero card
   },
   {
-    id: 2,
-    title: 'Mastering Move Types',
-    description: 'Deep dive into primitives and type casting.',
-    duration: '30 min',
+    id: 'leo-2',
+    title: 'Control Flow & Operators',
+    description: 'Master conditional logic, loops, and operators in Leo for building dynamic zero-knowledge programs.',
+    duration: '35 min',
     xp: 150,
     difficulty: 'Beginner',
-    topics: ['Primitives', 'Casting'],
+    topics: ['Operators', 'If/Else', 'Loops'],
     isLocked: false,
   },
   {
-    id: 3,
-    title: 'Control Flow',
-    description: 'Master logical flows with if/else and loops.',
-    duration: '30 min',
-    xp: 150,
-    difficulty: 'Beginner',
-    topics: ['Logic', 'Loops'],
-    isLocked: false,
-  },
-  {
-    id: 4,
-    title: 'Structs & Objects',
-    description: 'The core of Sui: Everything is an object. Learn how to build them.',
-    duration: '45 min',
-    xp: 300,
+    id: 'leo-3',
+    title: 'Structs & Records',
+    description: 'Build custom data types with structs and create private state with records in Leo.',
+    duration: '40 min',
+    xp: 200,
     difficulty: 'Intermediate',
-    topics: ['Structs', 'Abilities', 'Objects'],
+    topics: ['Structs', 'Records', 'Privacy'],
+    isLocked: false,
+  },
+  {
+    id: 'leo-4',
+    title: 'Mappings & State Management',
+    description: 'Learn how to manage public on-chain state using mappings in Leo programs.',
+    duration: '45 min',
+    xp: 250,
+    difficulty: 'Intermediate',
+    topics: ['Mappings', 'State', 'Finalize'],
     isLocked: false,
     colSpan: 2, // Feature card
   },
   {
-    id: 5,
-    title: 'Collections',
-    description: 'Managing dynamic data with Vectors and Tables.',
-    duration: '35 min',
-    xp: 200,
-    difficulty: 'Intermediate',
-    topics: ['Vectors', 'Tables'],
-    isLocked: false,
-  },
-  {
-    id: 6,
-    title: 'Ownership & Borrowing',
-    description: 'Understanding the borrow checker.',
-    duration: '40 min',
-    xp: 250,
-    difficulty: 'Intermediate',
-    topics: ['Ownership', 'References'],
-    isLocked: false,
-  },
-  {
-    id: 7,
-    title: 'Advanced Generics',
-    description: 'Writing reusable, Type-agnostic code.',
+    id: 'leo-5',
+    title: 'Finalize Blocks & Async',
+    description: 'Master asynchronous operations and finalize blocks for advanced Leo programming.',
     duration: '50 min',
-    xp: 400,
+    xp: 300,
     difficulty: 'Advanced',
-    topics: ['Generics', 'Phantoms'],
+    topics: ['Async', 'Finalize', 'Futures'],
+    isLocked: false,
+  },
+  {
+    id: 'leo-6',
+    title: 'Advanced Leo Patterns',
+    description: 'Master security best practices, optimization techniques, and advanced programming patterns.',
+    duration: '55 min',
+    xp: 350,
+    difficulty: 'Advanced',
+    topics: ['Security', 'Optimization', 'Patterns'],
+    isLocked: false,
+  },
+  {
+    id: 'leo-7',
+    title: 'Building a Complete DApp',
+    description: 'Build a full-featured decentralized voting system from scratch with private voting.',
+    duration: '60 min',
+    xp: 500,
+    difficulty: 'Advanced',
+    topics: ['DApp', 'Voting', 'Full-Stack'],
     isLocked: false,
     colSpan: 2,
   },
@@ -217,7 +217,7 @@ export default function LessonsPage() {
               transition={{ delay: 0.1 }}
               className="text-xl text-zinc-500 max-w-lg"
             >
-              A masterclass in Move. From zero to mainnet in 7 modules.
+              A masterclass in Leo. From zero to zero-knowledge expert in 7 modules.
             </motion.p>
           </div>
 
@@ -230,7 +230,7 @@ export default function LessonsPage() {
           >
             <div className="flex flex-col items-end">
               <span className="text-xs uppercase tracking-wider font-bold text-zinc-400">Total XP</span>
-              <span className="text-2xl font-black text-blue-600 font-mono">{xp}</span>
+              <span className="text-2xl font-black text-aleo-green-dark font-mono">{xp}</span>
             </div>
             <div className="h-10 w-px bg-zinc-100" />
             <div className="flex flex-col items-start">
@@ -287,9 +287,9 @@ export default function LessonsPage() {
                         <div className="flex gap-2">
                           <div className="flex items-center gap-2">
                             <div className={`w-2 h-2 rounded-full
-                              ${lesson.difficulty === 'Beginner' ? 'bg-green-500' :
-                                lesson.difficulty === 'Intermediate' ? 'bg-blue-500' :
-                                  'bg-purple-500'
+                              ${lesson.difficulty === 'Beginner' ? 'bg-aleo-green' :
+                                lesson.difficulty === 'Intermediate' ? 'bg-aleo-green-dark' :
+                                  'bg-black'
                               }
                             `} />
                             <span className="text-xs font-bold uppercase tracking-widest text-zinc-500">
@@ -305,7 +305,9 @@ export default function LessonsPage() {
                             </span>
                           )}
                         </div>
-                        <span className="font-mono text-zinc-400 text-sm">#{String(lesson.id).padStart(2, '0')}</span>
+                        <span className="font-mono text-zinc-400 text-sm">
+                          #{typeof lesson.id === 'number' ? String(lesson.id).padStart(2, '0') : lesson.id}
+                        </span>
                       </div>
 
                       {/* Content */}
@@ -327,7 +329,7 @@ export default function LessonsPage() {
                             </svg>
                             {lesson.duration}
                           </span>
-                          <span className="flex items-center gap-1.5 text-blue-500">
+                          <span className="flex items-center gap-1.5 text-aleo-green-dark">
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
@@ -337,7 +339,7 @@ export default function LessonsPage() {
 
                         {/* Play Button Icon */}
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
-                                            ${isLocked ? 'bg-zinc-200' : 'bg-zinc-100 group-hover:bg-[#8596A5] group-hover:text-white'}
+                                            ${isLocked ? 'bg-zinc-200' : 'bg-zinc-100 group-hover:bg-aleo-green group-hover:text-black'}
                                         `}>
                           {isLocked ? (
                             <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

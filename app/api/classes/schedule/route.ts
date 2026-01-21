@@ -46,8 +46,8 @@ export async function POST(req: NextRequest) {
         chatEnabled,
         qaEnabled,
         donationsEnabled,
-        status: 'scheduled',
-      },
+        status: 'scheduled'
+      }
     });
 
     return NextResponse.json({ success: true, class: newClass });

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { SuiProvider } from "./lib/sui/SuiProvider";
+import { AleoProvider } from "./lib/aleo/AleoProvider";
 import { AuthProvider } from "./lib/auth/AuthProvider";
 import SmoothScroll from "./components/SmoothScroll";
 import Cursor from "./components/Cursor";
@@ -11,8 +11,8 @@ import DataMigrationNotice from "./components/auth/DataMigrationNotice";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Glide | Master Sui Move",
-  description: "Interactive, gamified platform to learn Sui Move and build real projects.",
+  title: "Leo by Practice | Master Zero-Knowledge Programming",
+  description: "Interactive, gamified platform to learn Aleo's Leo language and build zero-knowledge applications.",
 };
 
 export default function RootLayout({
@@ -22,9 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased selection:bg-blue-500 selection:text-white`}>
+      <body className={`${inter.className} antialiased selection:bg-aleo-green selection:text-aleo-navy`}>
         <AuthProvider>
-          <SuiProvider>
+          <AleoProvider>
             <SmoothScroll />
             <Cursor />
             <Header />
@@ -36,7 +36,7 @@ export default function RootLayout({
 
             <div className="bg-noise absolute inset-0 pointer-events-none z-50 mix-blend-overlay opacity-10" />
             <DataMigrationNotice />
-          </SuiProvider>
+          </AleoProvider>
         </AuthProvider>
       </body>
     </html>

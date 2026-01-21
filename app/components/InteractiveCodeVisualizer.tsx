@@ -3,49 +3,74 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const codeSnippet = `module move_by_practice::hero_contract {
-    use sui::object::{Self, UID, ID};
-    use sui::transfer;
-    use sui::tx_context::{Self, TxContext};
-    use sui::event;
+const codeSnippet = `program token.aleo {
+    // Private token with zero-knowledge transfers
 
-    // Error codes
-    const E_NOT_ENOUGH_XP: u64 = 0;
-
-    // Hero NFT with trainable stats
-    struct Hero has key, store {
-        id: UID,
-        power: u64,
-        xp: u64,
-    }
-
-    // Events
-    struct HeroCreated has copy, drop {
-        hero_id: ID,
+    record Token {
         owner: address,
+        amount: u64,
     }
 
-    public entry fun create_hero(ctx: &mut TxContext) {
-        let hero = Hero {
-            id: object::new(ctx),
-            power: 100,
-            xp: 0,
+    mapping balances: address => u64;
+
+    // Mint new tokens privately
+    transition mint_private(
+        receiver: address,
+        amount: u64
+    ) -> Token {
+        return Token {
+            owner: receiver,
+            amount: amount,
+        };
+    }
+
+    // Transfer tokens privately
+    transition transfer_private(
+        sender: Token,
+        receiver: address,
+        amount: u64
+    ) -> (Token, Token) {
+        let difference: u64 = sender.amount - amount;
+
+        let remaining: Token = Token {
+            owner: sender.owner,
+            amount: difference,
         };
 
-        event::emit(HeroCreated {
-            hero_id: object::uid_to_inner(&hero.id),
-            owner: tx_context::sender(ctx),
-        });
+        let transferred: Token = Token {
+            owner: receiver,
+            amount: amount,
+        };
 
-        transfer::transfer(hero, tx_context::sender(ctx));
+        return (remaining, transferred);
     }
 
-    public entry fun train_hero(hero: &mut Hero) {
-        hero.xp = hero.xp + 10;
-        if (hero.xp >= 100) {
-            hero.power = hero.power + 10;
-            hero.xp = 0;
-        }
+    // Transfer tokens publicly
+    transition transfer_public(
+        public receiver: address,
+        public amount: u64
+    ) {
+        return then finalize(self.caller, receiver, amount);
+    }
+
+    finalize transfer_public(
+        sender: address,
+        receiver: address,
+        amount: u64
+    ) {
+        let sender_balance: u64 = Mapping::get_or_use(
+            balances,
+            sender,
+            0u64
+        );
+        Mapping::set(balances, sender, sender_balance - amount);
+
+        let receiver_balance: u64 = Mapping::get_or_use(
+            balances,
+            receiver,
+            0u64
+        );
+        Mapping::set(balances, receiver, receiver_balance + amount);
     }
 }`;
 
@@ -104,8 +129,8 @@ export default function InteractiveCodeVisualizer() {
                         <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]"></div>
                     </div>
                     <div className="text-[10px] font-mono font-medium text-gray-500 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-500/20"></span>
-                        hero_contract.move
+                        <span className="w-2 h-2 rounded-full bg-aleo-green/20"></span>
+                        token.aleo
                     </div>
                     <div className="w-12"></div> {/* Spacer for center alignment */}
                 </div>
@@ -113,38 +138,38 @@ export default function InteractiveCodeVisualizer() {
                 {/* Code Area */}
                 <div ref={scrollRef} className="p-6 h-[400px] overflow-y-auto font-mono text-sm leading-relaxed no-scrollbar scroll-smooth bg-white text-gray-800">
                     <pre className="whitespace-pre-wrap">
-                        <code className="language-move">
+                        <code className="language-leo">
                             {displayedCode.split(/(\s+)/).map((chunk, i) => {
-                                // Light Mode Syntax Highlighting
+                                // Light Mode Leo Syntax Highlighting
                                 let color = "text-gray-800";
 
-                                // Keywords (red)
-                                if (["module", "use", "struct", "public", "fun", "entry", "const", "if", "mut"].includes(chunk.trim())) {
+                                // Keywords (red/pink)
+                                if (["program", "record", "struct", "mapping", "transition", "finalize", "return", "let", "if", "else", "for", "public", "private", "const", "function", "inline", "then"].includes(chunk.trim())) {
                                     color = "text-red-500 font-bold";
                                 }
 
-                                // Types & Structs (blue)
-                                if (["Hero", "HeroCreated", "UID", "ID", "TxContext", "u64", "address"].includes(chunk.trim())) {
+                                // Types (blue)
+                                if (["u8", "u16", "u32", "u64", "u128", "i8", "i16", "i32", "i64", "i128", "field", "group", "scalar", "address", "bool", "Token"].includes(chunk.trim())) {
                                     color = "text-blue-600 font-bold";
                                 }
 
-                                // Modules & special functions (blue)
-                                if (["object", "transfer", "event", "tx_context"].includes(chunk.trim())) {
+                                // Built-in functions (blue)
+                                if (["Mapping::get", "Mapping::set", "Mapping::get_or_use", "self.caller", "self.signer"].includes(chunk.trim())) {
                                     color = "text-blue-600 font-bold";
                                 }
 
-                                // Abilities & keywords (purple)
-                                if (["has", "key", "store", "drop", "copy", "let"].includes(chunk.trim())) {
+                                // Special keywords (purple)
+                                if (["owner", "amount", "sender", "receiver", "balances"].includes(chunk.trim())) {
                                     color = "text-purple-600";
                                 }
 
                                 // Numbers (green)
-                                if (/^\d+$/.test(chunk.trim()) || chunk.trim().startsWith("0x")) {
+                                if (/^\d+u(8|16|32|64|128)$/.test(chunk.trim()) || /^\d+$/.test(chunk.trim())) {
                                     color = "text-green-600";
                                 }
 
-                                // Constants (orange)
-                                if (chunk.trim().startsWith("E_")) {
+                                // Program name (orange)
+                                if (chunk.trim().includes(".aleo")) {
                                     color = "text-orange-600 font-semibold";
                                 }
 

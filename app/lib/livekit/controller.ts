@@ -218,6 +218,66 @@ export class LiveKitController {
   }
 
   /**
+   * Generate access token for an instructor joining their own class
+   */
+  async joinClassAsInstructor({
+    user_id,
+    username,
+    room_name,
+    avatar_url,
+  }: JoinClassParams): Promise<JoinClassResponse> {
+    // Check if room exists
+    try {
+      await this.roomService.listRooms([room_name]);
+    } catch (error) {
+      throw new Error('Class room does not exist');
+    }
+
+    // Create instructor access token with full permissions
+    const at = new AccessToken(
+      process.env.LIVEKIT_API_KEY!,
+      process.env.LIVEKIT_API_SECRET!,
+      {
+        identity: user_id,
+        metadata: JSON.stringify({
+          user_id,
+          username,
+          avatar_url,
+          is_instructor: true,
+          hand_raised: false,
+        } as ParticipantMetadata),
+      }
+    );
+
+    at.addGrant({
+      room: room_name,
+      roomJoin: true,
+      canPublish: true, // Instructors can publish
+      canSubscribe: true,
+      canPublishData: true,
+      canUpdateOwnMetadata: true,
+    });
+
+    const rooms = await this.roomService.listRooms([room_name]);
+    const room = rooms[0];
+    const classMetadata = JSON.parse(room.metadata) as ClassMetadata;
+
+    const authToken = this.createAuthToken(
+      room_name,
+      user_id,
+      classMetadata.class_id
+    );
+
+    return {
+      auth_token: authToken,
+      connection_details: {
+        ws_url: process.env.LIVEKIT_URL!,
+        token: await at.toJwt(),
+      },
+    };
+  }
+
+  /**
    * End a class and delete the LiveKit room
    */
   async endClass(session: Session) {

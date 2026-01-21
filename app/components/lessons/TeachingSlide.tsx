@@ -106,12 +106,7 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage, l
                 <span className="text-sm font-semibold text-zinc-700 group-hover:text-zinc-900">Live Help</span>
               </motion.button>
 
-              <SlideAIAssistant
-                slide={currentSlide}
-                lessonTitle={lessonTitle}
-                slideIndex={currentSlideIndex}
-                totalSlides={slides.length}
-              />
+
             </div>
 
             <AnimatePresence mode="wait">
@@ -124,14 +119,33 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage, l
                 className="flex flex-col h-full justify-center"
               >
                 {/* Badge / Emoji */}
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.1 }}
-                  className="w-16 h-16 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-center text-3xl mb-8 shadow-sm"
-                >
-                  {currentSlide.emoji}
-                </motion.div>
+                {/* Badge / Emoji / Illustration */}
+                {currentSlide.illustration ? (
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="mb-8"
+                  >
+                    <div className="relative w-32 h-32 md:w-40 md:h-40">
+                      <div className="absolute inset-0 bg-aleo-green/20 blur-[40px] rounded-full opacity-50" />
+                      <img
+                        src={currentSlide.illustration}
+                        alt="Icon"
+                        className="relative w-full h-full object-contain drop-shadow-2xl"
+                      />
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="w-16 h-16 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-center text-3xl mb-8 shadow-sm"
+                  >
+                    {currentSlide.emoji}
+                  </motion.div>
+                )}
 
                 {/* Title */}
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter-swiss mb-6 text-zinc-900 leading-[0.9]">
@@ -197,6 +211,27 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage, l
                         {renderInteractiveElement()}
                       </div>
                     </div>
+                  ) : currentSlide.image ? (
+                    <div className="relative group perspective-1000">
+                      <motion.div
+                        initial={{ rotateX: 5, rotateY: 5, scale: 0.95 }}
+                        whileHover={{ rotateX: 0, rotateY: 0, scale: 1 }}
+                        transition={{ duration: 0.5, type: "spring" }}
+                        className="glass-panel-subtle rounded-2xl md:rounded-3xl shadow-2xl shadow-zinc-200/50 border border-zinc-200/60 overflow-hidden relative z-10"
+                      >
+                        <div className="aspect-video relative bg-white flex items-center justify-center p-8">
+                          <img
+                            src={currentSlide.image}
+                            alt={currentSlide.title}
+                            className="w-full h-full object-contain filter drop-shadow-xl"
+                          />
+                          {/* Reflection/Sheen */}
+                          <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                        </div>
+                      </motion.div>
+                      {/* Ambient Glow */}
+                      <div className="absolute -inset-4 bg-aleo-green/20 rounded-[3rem] blur-3xl -z-10 opacity-40 group-hover:opacity-60 transition-opacity duration-500" />
+                    </div>
                   ) : (
                     <div className="glass-panel-subtle rounded-2xl md:rounded-3xl p-8 md:p-16 text-center border-2 border-dashed border-zinc-200">
                       <span className="text-zinc-300 font-bold tracking-widest uppercase text-sm">Concept Illustration</span>
@@ -233,6 +268,13 @@ export default function TeachingSlide({ slides, onComplete, transitionMessage, l
           </button>
         </div>
       </div>
+
+      <SlideAIAssistant
+        slide={currentSlide}
+        lessonTitle={lessonTitle}
+        slideIndex={currentSlideIndex}
+        totalSlides={slides.length}
+      />
     </div>
   );
 }

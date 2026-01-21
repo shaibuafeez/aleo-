@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { LiveKitController, getSessionFromReq } from '@/app/lib/livekit/controller';
-import { createClient } from '@/app/lib/supabase/server';
+import { LiveKitController } from '@/app/lib/livekit/controller';
+import { getServerUser } from '@/app/lib/auth/server';
+import { prisma } from '@/app/lib/prisma';
 
 export async function POST(
   req: NextRequest,
@@ -8,26 +9,27 @@ export async function POST(
 ) {
   try {
     const { id: class_id } = await params;
-    const supabase = await createClient();
 
-    // Get session from auth token
-    const session = getSessionFromReq(req);
+    // Authenticate user via Supabase Auth
+    const { user, error: authError } = await getServerUser();
 
-    // Get class from database
-    const { data, error: classError } = await supabase
-      .from('classes')
-      .select('livekit_room_name')
-      .eq('id', class_id)
-      .eq('id', class_id)
-      .single();
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-    const classData = data as unknown as { livekit_room_name: string | null } | null;
+    // Get class from database using Prisma
+    const classData = await prisma.class.findUnique({
+      where: { id: class_id },
+      select: {
+        livekitRoomName: true,
+      },
+    });
 
-    if (classError || !classData) {
+    if (!classData) {
       return NextResponse.json({ error: 'Class not found' }, { status: 404 });
     }
 
-    if (!classData.livekit_room_name) {
+    if (!classData.livekitRoomName) {
       return NextResponse.json(
         { error: 'Class room not created' },
         { status: 400 }
@@ -37,9 +39,9 @@ export async function POST(
     // Lower hand
     const controller = new LiveKitController();
     await controller.lowerHand({
-      user_id: session.user_id,
-      class_id: session.class_id,
-      room_name: classData.livekit_room_name,
+      user_id: user.id,
+      class_id: class_id,
+      room_name: classData.livekitRoomName,
     });
 
     return NextResponse.json({ success: true });

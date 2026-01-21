@@ -16,7 +16,7 @@ export function ParticipantsList({
   const { localParticipant } = useLocalParticipant();
 
   return (
-    <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden">
+    <div className="flex flex-col h-full bg-zinc-900 rounded-lg overflow-hidden">
       {/* Header */}
       <div className="p-4 border-b border-gray-700">
         <h3 className="text-lg font-semibold text-white">
@@ -35,11 +35,11 @@ export function ParticipantsList({
           return (
             <div
               key={participant.identity}
-              className="flex items-center justify-between p-3 bg-gray-800 rounded-lg"
+              className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg"
             >
               <div className="flex items-center gap-3">
                 {/* Avatar */}
-                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+                <div className="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center text-aleo-green font-bold border border-aleo-green/20">
                   {metadata?.username?.[0]?.toUpperCase() || participant.identity[0]?.toUpperCase() || '?'}
                 </div>
 
@@ -51,12 +51,12 @@ export function ParticipantsList({
                   </span>
                   <div className="flex items-center gap-2 text-xs text-gray-400">
                     {metadata?.is_instructor && (
-                      <span className="px-2 py-0.5 bg-purple-600 text-white rounded">
+                      <span className="px-2 py-0.5 bg-aleo-green text-zinc-900 font-bold rounded">
                         Instructor
                       </span>
                     )}
                     {canPublish && !metadata?.is_instructor && (
-                      <span className="px-2 py-0.5 bg-green-600 text-white rounded">
+                      <span className="px-2 py-0.5 bg-aleo-green/20 text-aleo-green border border-aleo-green/30 rounded">
                         Speaking
                       </span>
                     )}
@@ -75,7 +75,7 @@ export function ParticipantsList({
                   {metadata?.hand_raised && !canPublish && onInviteToSpeak && (
                     <button
                       onClick={() => onInviteToSpeak(participant.identity)}
-                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition-colors"
+                      className="px-3 py-1 bg-aleo-green hover:bg-aleo-green-dim text-zinc-900 font-bold text-sm rounded transition-colors"
                     >
                       Invite to Speak
                     </button>

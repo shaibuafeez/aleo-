@@ -1,0 +1,248 @@
+// This is your Prisma schema file for Move By Practice
+// Mirrors the Supabase database schema from COMPLETE_MIGRATION.sql
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================================
+// USERS & AUTHENTICATION
+// ============================================================================
+
+model User {
+  id            String   @id @db.Uuid
+  email         String?
+  walletAddress String?  @unique @map("wallet_address")
+  username      String?  @unique
+  avatarUrl     String?  @map("avatar_url")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  stats             UserStats?
+  progress          UserProgress[]
+  achievements      Achievement[]
+  analyticsEvents   AnalyticsEvent[]
+  instructedClasses Class[]          @relation("InstructorClasses")
+  classBookings     ClassBooking[]
+  classMessages     ClassMessage[]
+  classDonations    ClassDonation[]
+
+  @@map("users")
+}
+
+model UserStats {
+  id                     String   @id @default(uuid()) @db.Uuid
+  userId                 String   @unique @map("user_id") @db.Uuid
+  xp                     Int      @default(0)
+  level                  Int      @default(1)
+  streak                 Int      @default(0)
+  lastActiveDate         DateTime? @map("last_active_date") @db.Date
+  totalLessonsCompleted  Int      @default(0) @map("total_lessons_completed")
+  totalTimeSpentMinutes  Int      @default(0) @map("total_time_spent_minutes")
+  createdAt              DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_stats")
+}
+
+model UserProgress {
+  id               String    @id @default(uuid()) @db.Uuid
+  userId           String    @map("user_id") @db.Uuid
+  lessonId         String    @map("lesson_id")
+  completed        Boolean   @default(false)
+  timeSpentMinutes Int       @default(0) @map("time_spent_minutes")
+  attempts         Int       @default(0)
+  codeSubmitted    String?   @map("code_submitted")
+  completedAt      DateTime? @map("completed_at") @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+  @@map("user_progress")
+}
+
+model Achievement {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  achievementId String   @map("achievement_id")
+  unlockedAt    DateTime @default(now()) @map("unlocked_at") @db.Timestamptz(6)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@map("achievements")
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  eventType String   @map("event_type")
+  metadata  Json?
+  timestamp DateTime @default(now()) @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([eventType])
+  @@index([timestamp])
+  @@map("analytics_events")
+}
+
+// ============================================================================
+// CLASSES & LIVE STREAMING (PHASE 3)
+// ============================================================================
+
+model Class {
+  id                String    @id @default(uuid()) @db.Uuid
+  instructorId      String    @map("instructor_id") @db.Uuid
+  title             String
+  description       String?
+  scheduledAt       DateTime  @map("scheduled_at") @db.Timestamptz(6)
+  durationMinutes   Int       @default(60) @map("duration_minutes")
+  maxStudents       Int       @default(50) @map("max_students")
+  price             Decimal   @default(0.00) @db.Decimal(10, 2)
+  status            ClassStatus @default(scheduled)
+  roomUrl           String?   @map("room_url")
+  recordingUrl      String?   @map("recording_url")
+
+  // LiveKit fields
+  livekitRoomName   String?   @unique @map("livekit_room_name")
+  livekitMetadata   Json?     @map("livekit_metadata")
+  chatEnabled       Boolean   @default(true) @map("chat_enabled")
+  qaEnabled         Boolean   @default(true) @map("qa_enabled")
+  donationsEnabled  Boolean   @default(true) @map("donations_enabled")
+  participantCount  Int       @default(0) @map("participant_count")
+  startedAt         DateTime? @map("started_at") @db.Timestamptz(6)
+  endedAt           DateTime? @map("ended_at") @db.Timestamptz(6)
+
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  instructor     User            @relation("InstructorClasses", fields: [instructorId], references: [id], onDelete: Cascade)
+  bookings       ClassBooking[]
+  messages       ClassMessage[]
+  donations      ClassDonation[]
+
+  @@index([instructorId])
+  @@index([scheduledAt])
+  @@index([livekitRoomName])
+  @@index([status])
+  @@map("classes")
+}
+
+model ClassBooking {
+  id        String        @id @default(uuid()) @db.Uuid
+  userId    String        @map("user_id") @db.Uuid
+  classId   String        @map("class_id") @db.Uuid
+  status    BookingStatus @default(booked)
+  bookedAt  DateTime      @default(now()) @map("booked_at") @db.Timestamptz(6)
+  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, classId])
+  @@index([userId])
+  @@index([classId])
+  @@map("class_bookings")
+}
+
+model ClassMessage {
+  id                 String      @id @default(uuid()) @db.Uuid
+  classId            String      @map("class_id") @db.Uuid
+  userId             String      @map("user_id") @db.Uuid
+  messageType        MessageType @map("message_type")
+  content            String
+  parentId           String?     @map("parent_id") @db.Uuid
+  isInstructorReply  Boolean     @default(false) @map("is_instructor_reply")
+  upvotes            Int         @default(0)
+  metadata           Json?
+  createdAt          DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  class   Class          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent  ClassMessage?  @relation("MessageReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies ClassMessage[] @relation("MessageReplies")
+
+  @@index([classId])
+  @@index([userId])
+  @@index([parentId])
+  @@index([messageType])
+  @@map("class_messages")
+}
+
+model ClassDonation {
+  id                     String          @id @default(uuid()) @db.Uuid
+  classId                String          @map("class_id") @db.Uuid
+  donorId                String?         @map("donor_id") @db.Uuid
+  donorWalletAddress     String          @map("donor_wallet_address")
+  recipientWalletAddress String          @map("recipient_wallet_address")
+  amountSui              Decimal         @map("amount_sui") @db.Decimal(20, 9)
+  transactionDigest      String          @unique @map("transaction_digest")
+  message                String?
+  status                 DonationStatus  @default(pending)
+  createdAt              DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  confirmedAt            DateTime?       @map("confirmed_at") @db.Timestamptz(6)
+
+  // Relations
+  class Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  donor User? @relation(fields: [donorId], references: [id], onDelete: SetNull)
+
+  @@index([classId])
+  @@index([donorId])
+  @@index([transactionDigest])
+  @@map("class_donations")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum ClassStatus {
+  scheduled
+  live
+  completed
+  cancelled
+}
+
+enum BookingStatus {
+  booked
+  attended
+  cancelled
+}
+
+enum MessageType {
+  chat
+  question
+  answer
+}
+
+enum DonationStatus {
+  pending
+  confirmed
+  failed
+}

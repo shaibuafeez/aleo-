@@ -2070,8 +2070,924 @@ public fun vector_ops(): u64 {
     answerFormat: 'multiple_choice',
     multipleChoiceOptions: ['7', '3', '10', '73'],
     showLineNumbers: true
+  },
+];
+
+// ===== LEO CODE COMPLETION EXERCISES =====
+const leoCodeCompletionExercises: CodeCompletionExercise[] = [
+  {
+    id: 'cc-leo-002',
+    type: 'code_completion',
+    difficulty: 'beginner',
+    topic: 'primitives',
+    title: 'Leo Variables and Types',
+    description: 'Fill in the blanks to declare variables with Leo types.',
+    learningObjective: 'Learn how to declare variables with type suffixes in Leo.',
+    estimatedTime: 4,
+    baseXP: 45,
+    perfectScoreXP: 20,
+    hints: [
+      'Leo requires type suffixes like u32, u64, field.',
+      'Use "let" to declare variables.',
+      'Integer literals need the type suffix (e.g., 100u32).'
+    ],
+    explanation: 'In Leo, all integer literals require type suffixes. This ensures type safety and prevents ambiguity. Common types include u8, u16, u32, u64, u128 for unsigned integers, and i8-i128 for signed integers.',
+    codeTemplate: `program variables.aleo {
+    transition example() -> u32 {
+        {blank:keyword} age: {blank:type1} = 25{blank:suffix1};
+        let balance: u64 = 1000{blank:suffix2};
+        return age;
+    }
+}`,
+    blanks: [
+      {
+        id: 'keyword',
+        placeholder: '___',
+        correctAnswer: 'let',
+        hint: 'Use this keyword to declare variables in Leo.'
+      },
+      {
+        id: 'type1',
+        placeholder: '___',
+        correctAnswer: 'u32',
+        acceptableAnswers: ['u8', 'u16'],
+        hint: 'What unsigned integer type can hold 25?'
+      },
+      {
+        id: 'suffix1',
+        placeholder: '___',
+        correctAnswer: 'u32',
+        acceptableAnswers: ['u8', 'u16'],
+        hint: 'Add the type suffix to match the variable type.'
+      },
+      {
+        id: 'suffix2',
+        placeholder: '___',
+        correctAnswer: 'u64',
+        hint: 'The suffix must match the declared type (u64).'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: false,
+    language: 'leo' as any
+  },
+  {
+    id: 'cc-leo-006',
+    type: 'code_completion',
+    difficulty: 'beginner',
+    topic: 'functions',
+    title: 'Transitions in Leo',
+    description: 'Complete a Leo transition with proper syntax.',
+    learningObjective: 'Learn transition syntax and visibility modifiers.',
+    estimatedTime: 4,
+    baseXP: 50,
+    perfectScoreXP: 20,
+    hints: [
+      'Transitions use the "transition" keyword.',
+      'Parameters need visibility (public/private).',
+      'Return type comes after ->.'
+    ],
+    explanation: 'Transitions are Leo\'s public entry points. They require visibility modifiers (public/private) for parameters and use -> for return types.',
+    codeTemplate: `program calculator.aleo {
+    {blank:keyword1} add({blank:visibility1} a: u32, public b: u32) {blank:arrow} {blank:return_type} {
+        return a + b;
+    }
+}`,
+    blanks: [
+      {
+        id: 'keyword1',
+        placeholder: '___',
+        correctAnswer: 'transition',
+        hint: 'What keyword defines a transition in Leo?'
+      },
+      {
+        id: 'visibility1',
+        placeholder: '___',
+        correctAnswer: 'public',
+        acceptableAnswers: ['private'],
+        hint: 'Specify the visibility modifier for parameter a.'
+      },
+      {
+        id: 'arrow',
+        placeholder: '___',
+        correctAnswer: '->',
+        hint: 'Use this symbol before the return type.'
+      },
+      {
+        id: 'return_type',
+        placeholder: '___',
+        correctAnswer: 'u32',
+        hint: 'What type does adding two u32 values return?'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: true,
+    language: 'leo' as any
+  },
+  {
+    id: 'cc-leo-010',
+    type: 'code_completion',
+    difficulty: 'intermediate',
+    topic: 'functions',
+    title: 'Functions vs Transitions',
+    description: 'Complete both a transition and helper function.',
+    learningObjective: 'Understand the difference between transitions and functions in Leo.',
+    estimatedTime: 5,
+    baseXP: 60,
+    perfectScoreXP: 25,
+    hints: [
+      'Functions use "function" keyword and have no visibility.',
+      'Transitions can call functions.',
+      'Functions cannot be called externally.'
+    ],
+    explanation: 'In Leo, "transition" creates entry points callable from outside, while "function" creates internal helpers. Only transitions generate zero-knowledge proofs.',
+    codeTemplate: `program math.aleo {
+    {blank:keyword1} double(x: u32) -> u32 {
+        return x * 2u32;
+    }
+
+    {blank:keyword2} process({blank:visibility} value: u32) -> u32 {
+        return double(value);
+    }
+}`,
+    blanks: [
+      {
+        id: 'keyword1',
+        placeholder: '___',
+        correctAnswer: 'function',
+        hint: 'Internal helpers use this keyword.'
+      },
+      {
+        id: 'keyword2',
+        placeholder: '___',
+        correctAnswer: 'transition',
+        hint: 'External entry points use this keyword.'
+      },
+      {
+        id: 'visibility',
+        placeholder: '___',
+        correctAnswer: 'public',
+        acceptableAnswers: ['private'],
+        hint: 'Transition parameters need visibility modifiers.'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: false,
+    language: 'leo' as any
+  },
+  {
+    id: 'cc-leo-014',
+    type: 'code_completion',
+    difficulty: 'intermediate',
+    topic: 'primitives',
+    title: 'Leo Cryptographic Types',
+    description: 'Work with field and address types in Leo.',
+    learningObjective: 'Learn about Leo\'s special cryptographic types.',
+    estimatedTime: 5,
+    baseXP: 55,
+    perfectScoreXP: 20,
+    hints: [
+      'field type is for cryptographic operations.',
+      'address type represents Aleo wallet addresses.',
+      'field literals end with "field" suffix.'
+    ],
+    explanation: 'Leo has special types for blockchain operations: "field" for cryptographic math (optimized for zero-knowledge proofs) and "address" for wallet identifiers.',
+    codeTemplate: `program crypto.aleo {
+    transition store_hash(public hash: {blank:type1}) -> field {
+        return hash;
+    }
+
+    transition check_owner(public owner: {blank:type2}) -> bool {
+        let admin: address = aleo1qnr4dkkvkgfqph0vzc3y6z2eu975wnpz2925ntjccd5cfqxtyu8s7pyjh9;
+        return owner == admin;
+    }
+}`,
+    blanks: [
+      {
+        id: 'type1',
+        placeholder: '___',
+        correctAnswer: 'field',
+        hint: 'What type is used for cryptographic hash values?'
+      },
+      {
+        id: 'type2',
+        placeholder: '___',
+        correctAnswer: 'address',
+        hint: 'What type represents an Aleo wallet address?'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: false,
+    language: 'leo' as any
+  },
+  {
+    id: 'cc-leo-018',
+    type: 'code_completion',
+    difficulty: 'beginner',
+    topic: 'control_flow',
+    title: 'Conditional Returns in Leo',
+    description: 'Complete an if-else expression that returns a value.',
+    learningObjective: 'Learn how Leo if-else works as an expression.',
+    estimatedTime: 4,
+    baseXP: 45,
+    perfectScoreXP: 18,
+    hints: [
+      'if-else can return values in Leo.',
+      'Both branches must return the same type.',
+      'Use return or let the last expression be the value.'
+    ],
+    explanation: 'In Leo, if-else expressions can return values. The ternary operator evaluates the condition and returns one of two values based on the result.',
+    codeTemplate: `program conditions.aleo {
+    transition check_value(public x: u32) -> u32 {
+        let result: u32 = x > 10u32 {blank:operator} 100u32 : 50u32;
+        {blank:keyword} result;
+    }
+}`,
+    blanks: [
+      {
+        id: 'operator',
+        placeholder: '___',
+        correctAnswer: '?',
+        hint: 'Use the ternary operator for conditional expressions.'
+      },
+      {
+        id: 'keyword',
+        placeholder: '___',
+        correctAnswer: 'return',
+        hint: 'What keyword returns a value from a transition?'
+      }
+    ],
+    strictMode: false,
+    caseSensitive: false,
+    language: 'leo' as any
   }
 ];
+
+// ===== LEO BUG FIX EXERCISES =====
+const leoBugFixExercises: BugFixExercise[] = [
+  {
+    id: 'bf-leo-001',
+    type: 'bug_fix',
+    difficulty: 'beginner',
+    topic: 'primitives',
+    title: 'Fix Missing Type Suffix',
+    description: 'This Leo code is missing required type suffixes on literals.',
+    learningObjective: 'Understand that Leo requires type suffixes on all integer literals.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'Integer literals need type suffixes like u32, u64.',
+      'Add the suffix after the number.',
+      'The suffix must match the variable type.'
+    ],
+    explanation: 'Leo requires explicit type suffixes on all integer literals to prevent ambiguity. This is different from many languages where types can be inferred.',
+    buggyCode: `program calculator.aleo {
+    transition add(public a: u32, public b: u32) -> u32 {
+        let sum: u32 = a + b + 10;
+        return sum;
+    }
+}`,
+    correctCode: `program calculator.aleo {
+    transition add(public a: u32, public b: u32) -> u32 {
+        let sum: u32 = a + b + 10u32;
+        return sum;
+    }
+}`,
+    bugs: [
+      {
+        lineNumber: 3,
+        bugType: 'syntax',
+        description: 'Integer literal 10 is missing type suffix.',
+        hint: 'Add u32 suffix to the literal: 10u32'
+      }
+    ],
+    allowPartialCredit: false,
+    mustFixAll: true,
+    language: 'leo' as any
+  },
+  {
+    id: 'bf-leo-005',
+    type: 'bug_fix',
+    difficulty: 'intermediate',
+    topic: 'functions',
+    title: 'Fix Transition Visibility',
+    description: 'Parameters are missing required visibility modifiers.',
+    learningObjective: 'Learn that transition parameters require public or private visibility.',
+    estimatedTime: 4,
+    baseXP: 50,
+    perfectScoreXP: 20,
+    hints: [
+      'Transition parameters need "public" or "private" modifiers.',
+      'Function parameters do not need visibility.',
+      'Add the visibility before the parameter name.'
+    ],
+    explanation: 'In Leo transitions (but not functions), all parameters must have explicit visibility modifiers (public or private). This determines whether data is visible on-chain or hidden via zero-knowledge proofs.',
+    buggyCode: `program wallet.aleo {
+    transition transfer(sender: address, amount: u64) -> bool {
+        return true;
+    }
+}`,
+    correctCode: `program wallet.aleo {
+    transition transfer(public sender: address, public amount: u64) -> bool {
+        return true;
+    }
+}`,
+    bugs: [
+      {
+        lineNumber: 2,
+        bugType: 'syntax',
+        description: 'Parameters missing visibility modifiers (public/private).',
+        hint: 'Add "public" or "private" before each parameter.'
+      }
+    ],
+    allowPartialCredit: false,
+    mustFixAll: true,
+    language: 'leo' as any
+  },
+  {
+    id: 'bf-leo-009',
+    type: 'bug_fix',
+    difficulty: 'beginner',
+    topic: 'modules',
+    title: 'Fix Program Name',
+    description: 'The program name doesn\'t follow Leo naming conventions.',
+    learningObjective: 'Understand Leo program naming rules (.aleo extension required).',
+    estimatedTime: 3,
+    baseXP: 35,
+    perfectScoreXP: 15,
+    hints: [
+      'Program names must end with .aleo',
+      'Use underscores, not hyphens.',
+      'Names cannot start with numbers.'
+    ],
+    explanation: 'Leo program names must end with .aleo and follow identifier rules: alphanumeric plus underscores, cannot start with a number.',
+    buggyCode: `program my-token {
+    transition mint(public amount: u64) -> u64 {
+        return amount;
+    }
+}`,
+    correctCode: `program my_token.aleo {
+    transition mint(public amount: u64) -> u64 {
+        return amount;
+    }
+}`,
+    bugs: [
+      {
+        lineNumber: 1,
+        bugType: 'syntax',
+        description: 'Program name missing .aleo extension and uses hyphens.',
+        hint: 'Change to "my_token.aleo" (underscores and .aleo extension)'
+      }
+    ],
+    allowPartialCredit: false,
+    mustFixAll: true,
+    language: 'leo' as any
+  }
+];
+
+// ===== LEO MULTIPLE CHOICE EXERCISES =====
+const leoMultipleChoiceExercises: MultipleChoiceExercise[] = [
+  {
+    id: 'mc-leo-001',
+    type: 'multiple_choice',
+    difficulty: 'beginner',
+    topic: 'modules',
+    title: 'Leo Program Structure',
+    description: 'Understanding Leo program declarations.',
+    learningObjective: 'Learn how to declare a Leo program correctly.',
+    estimatedTime: 3,
+    baseXP: 35,
+    perfectScoreXP: 15,
+    hints: [
+      'Leo programs start with the "program" keyword.',
+      'Program names must end with .aleo',
+      'Everything goes inside curly braces { }'
+    ],
+    explanation: 'Every Leo program begins with "program name.aleo { }", where name follows identifier rules and .aleo is required. All transitions and functions must be inside these braces.',
+    question: 'What is required at the end of every Leo program name?',
+    options: [
+      {
+        id: 'opt1',
+        text: '.aleo',
+        isCorrect: true,
+        explanation: 'Correct! All Leo program names must end with .aleo (e.g., calculator.aleo).'
+      },
+      {
+        id: 'opt2',
+        text: '.leo',
+        isCorrect: false,
+        explanation: 'Incorrect. .leo is the file extension, but program names use .aleo'
+      },
+      {
+        id: 'opt3',
+        text: '_program',
+        isCorrect: false,
+        explanation: 'Incorrect. No special suffix like _program is required.'
+      },
+      {
+        id: 'opt4',
+        text: 'No extension needed',
+        isCorrect: false,
+        explanation: 'Incorrect. The .aleo extension is mandatory in the program declaration.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
+    id: 'mc-leo-004',
+    type: 'multiple_choice',
+    difficulty: 'beginner',
+    topic: 'functions',
+    title: 'Transition vs Function',
+    description: 'Understanding the difference between transitions and functions.',
+    learningObjective: 'Learn when to use transition vs function in Leo.',
+    estimatedTime: 4,
+    baseXP: 40,
+    perfectScoreXP: 18,
+    hints: [
+      'Transitions can be called from outside the program.',
+      'Functions are internal helpers.',
+      'Only transitions generate proofs.'
+    ],
+    explanation: 'Transitions are public entry points that generate zero-knowledge proofs and can be called externally. Functions are internal helpers that cannot be called from outside.',
+    question: 'What is the main difference between a transition and a function in Leo?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'Transitions can be called externally, functions are internal only',
+        isCorrect: true,
+        explanation: 'Correct! Transitions are the public API of your program, while functions are private helpers.'
+      },
+      {
+        id: 'opt2',
+        text: 'Functions are faster than transitions',
+        isCorrect: false,
+        explanation: 'Incorrect. The difference is about visibility, not performance.'
+      },
+      {
+        id: 'opt3',
+        text: 'Transitions cannot return values',
+        isCorrect: false,
+        explanation: 'Incorrect. Both transitions and functions can return values.'
+      },
+      {
+        id: 'opt4',
+        text: 'There is no difference',
+        isCorrect: false,
+        explanation: 'Incorrect. They have different visibility and proof generation behavior.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
+    id: 'mc-leo-008',
+    type: 'multiple_choice',
+    difficulty: 'beginner',
+    topic: 'primitives',
+    title: 'Type Suffixes in Leo',
+    description: 'Understanding Leo\'s type suffix requirement.',
+    learningObjective: 'Learn why and how to use type suffixes on literals.',
+    estimatedTime: 3,
+    baseXP: 35,
+    perfectScoreXP: 15,
+    hints: [
+      'Integer literals need type suffixes.',
+      'The suffix comes after the number.',
+      'Common suffixes: u8, u32, u64, field'
+    ],
+    explanation: 'Leo requires explicit type suffixes on all numeric literals to prevent ambiguity. This ensures type safety and makes code more explicit about data types.',
+    question: 'Why does Leo require type suffixes on integer literals (like 100u32)?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'To prevent type ambiguity and ensure type safety',
+        isCorrect: true,
+        explanation: 'Correct! Explicit suffixes make it clear what type you intend, preventing errors.'
+      },
+      {
+        id: 'opt2',
+        text: 'To make code longer',
+        isCorrect: false,
+        explanation: 'Incorrect. It\'s about safety and clarity, not length.'
+      },
+      {
+        id: 'opt3',
+        text: 'Because Leo doesn\'t support type inference',
+        isCorrect: false,
+        explanation: 'Incorrect. Leo does have type inference in some contexts, but requires explicit suffixes for literals.'
+      },
+      {
+        id: 'opt4',
+        text: 'Only for very large numbers',
+        isCorrect: false,
+        explanation: 'Incorrect. ALL integer literals require suffixes, regardless of size.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
+    id: 'mc-leo-012',
+    type: 'multiple_choice',
+    difficulty: 'intermediate',
+    topic: 'primitives',
+    title: 'Public vs Private Data',
+    description: 'Understanding visibility in Leo.',
+    learningObjective: 'Learn the difference between public and private data in Leo.',
+    estimatedTime: 4,
+    baseXP: 50,
+    perfectScoreXP: 20,
+    hints: [
+      'Public data is visible on the blockchain.',
+      'Private data is hidden using zero-knowledge proofs.',
+      'Privacy has a computational cost.'
+    ],
+    explanation: 'In Leo, "public" parameters are visible to everyone on-chain, while "private" parameters are hidden using zero-knowledge cryptography. Private data is more expensive to compute but preserves privacy.',
+    question: 'What happens when you mark a transition parameter as "private" in Leo?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'The value is hidden from the blockchain using zero-knowledge proofs',
+        isCorrect: true,
+        explanation: 'Correct! Private parameters are encrypted and only known to the user, provable via ZK.'
+      },
+      {
+        id: 'opt2',
+        text: 'The parameter cannot be used in computations',
+        isCorrect: false,
+        explanation: 'Incorrect. Private parameters work normally in computations.'
+      },
+      {
+        id: 'opt3',
+        text: 'It makes the transition faster',
+        isCorrect: false,
+        explanation: 'Incorrect. Private data actually requires more computation for ZK proofs.'
+      },
+      {
+        id: 'opt4',
+        text: 'Other functions cannot access it',
+        isCorrect: false,
+        explanation: 'Incorrect. Privacy is about blockchain visibility, not code access.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
+    id: 'mc-leo-016',
+    type: 'multiple_choice',
+    difficulty: 'intermediate',
+    topic: 'primitives',
+    title: 'Field vs Integer Types',
+    description: 'Understanding when to use field type.',
+    learningObjective: 'Learn the difference between field and regular integers.',
+    estimatedTime: 4,
+    baseXP: 55,
+    perfectScoreXP: 20,
+    hints: [
+      'field is a cryptographic type.',
+      'field is optimized for zero-knowledge math.',
+      'Use field for hashes, commitments, ZK operations.'
+    ],
+    explanation: 'The "field" type in Leo is the native type for zero-knowledge cryptography. It represents elements in a finite field and is optimized for ZK operations like hashing and commitments.',
+    question: 'When should you use the "field" type instead of regular integers in Leo?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'For cryptographic operations like hashing and zero-knowledge proofs',
+        isCorrect: true,
+        explanation: 'Correct! field is optimized for ZK math - use it for cryptographic operations.'
+      },
+      {
+        id: 'opt2',
+        text: 'When you need very large numbers',
+        isCorrect: false,
+        explanation: 'Incorrect. Use u128 for large integers. field is for crypto, not size.'
+      },
+      {
+        id: 'opt3',
+        text: 'For storing balances',
+        isCorrect: false,
+        explanation: 'Incorrect. Regular u64 or u128 is better for balances.'
+      },
+      {
+        id: 'opt4',
+        text: 'field and integers are the same',
+        isCorrect: false,
+        explanation: 'Incorrect. They are different types with different purposes.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  },
+  {
+    id: 'mc-leo-020',
+    type: 'multiple_choice',
+    difficulty: 'beginner',
+    topic: 'control_flow',
+    title: 'Ternary Operator in Leo',
+    description: 'Understanding conditional expressions.',
+    learningObjective: 'Learn how to use the ternary operator for conditional values.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'Ternary: condition ? true_value : false_value',
+      'Evaluates condition and returns one of two values.',
+      'Both values must be the same type.'
+    ],
+    explanation: 'Leo\'s ternary operator (? :) is a concise way to choose between two values based on a condition. The syntax is: condition ? value_if_true : value_if_false.',
+    question: 'What does the ternary operator (? :) do in Leo?',
+    options: [
+      {
+        id: 'opt1',
+        text: 'Returns one of two values based on a condition',
+        isCorrect: true,
+        explanation: 'Correct! It evaluates a condition and returns the first value if true, second if false.'
+      },
+      {
+        id: 'opt2',
+        text: 'Declares optional types',
+        isCorrect: false,
+        explanation: 'Incorrect. The ternary operator is for conditional expressions, not type declarations.'
+      },
+      {
+        id: 'opt3',
+        text: 'Performs division',
+        isCorrect: false,
+        explanation: 'Incorrect. Division uses the / operator.'
+      },
+      {
+        id: 'opt4',
+        text: 'Creates tuples',
+        isCorrect: false,
+        explanation: 'Incorrect. Tuples use () parentheses, not the ternary operator.'
+      }
+    ],
+    allowMultipleAnswers: false,
+    shuffleOptions: true,
+    showExplanationOnWrong: true
+  }
+];
+
+// ===== LEO OUTPUT PREDICTION EXERCISES =====
+const leoOutputPredictionExercises: OutputPredictionExercise[] = [
+  {
+    id: 'op-leo-003',
+    type: 'output_prediction',
+    difficulty: 'beginner',
+    topic: 'functions',
+    title: 'Transition Return Value',
+    description: 'Predict what this Leo transition returns.',
+    learningObjective: 'Understand how transitions return values in Leo.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'The transition adds two numbers.',
+      'Look at the parameter values.',
+      '10 + 20 = ?'
+    ],
+    explanation: 'Leo transitions return values using the "return" keyword. The last expression before the return is evaluated and returned.',
+    code: `program calculator.aleo {
+    transition add(public a: u32, public b: u32) -> u32 {
+        return a + b;
+    }
+}
+
+// Called with: add(10u32, 20u32)`,
+    language: 'leo' as any,
+    correctOutput: '30',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['10', '20', '30', '1020'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Call add with a=10u32, b=20u32',
+        variables: { a: 10, b: 20 }
+      },
+      {
+        step: 2,
+        description: 'Add: 10 + 20 = 30',
+        variables: { result: 30 }
+      }
+    ]
+  },
+  {
+    id: 'op-leo-007',
+    type: 'output_prediction',
+    difficulty: 'beginner',
+    topic: 'functions',
+    title: 'Helper Function Call',
+    description: 'Predict the output when a transition calls a function.',
+    learningObjective: 'Understand how transitions can call internal functions.',
+    estimatedTime: 3,
+    baseXP: 45,
+    perfectScoreXP: 18,
+    hints: [
+      'The function doubles the input.',
+      'The transition then adds 5.',
+      'Calculate step by step: double 10, then add 5.'
+    ],
+    explanation: 'In Leo, transitions can call internal functions. The function executes first, returns its value, which is then used in the transition.',
+    code: `program math.aleo {
+    function double(x: u32) -> u32 {
+        return x * 2u32;
+    }
+
+    transition process(public value: u32) -> u32 {
+        let doubled: u32 = double(value);
+        return doubled + 5u32;
+    }
+}
+
+// Called with: process(10u32)`,
+    language: 'leo' as any,
+    correctOutput: '25',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['10', '15', '20', '25'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Call process with value=10u32',
+        variables: { value: 10 }
+      },
+      {
+        step: 2,
+        description: 'Call double(10) → returns 20',
+        variables: { doubled: 20 }
+      },
+      {
+        step: 3,
+        description: 'Add 5: 20 + 5 = 25',
+        variables: { result: 25 }
+      }
+    ]
+  },
+  {
+    id: 'op-leo-011',
+    type: 'output_prediction',
+    difficulty: 'intermediate',
+    topic: 'control_flow',
+    title: 'Ternary Operator Result',
+    description: 'Predict the output of a ternary expression.',
+    learningObjective: 'Learn how the ternary operator evaluates in Leo.',
+    estimatedTime: 3,
+    baseXP: 50,
+    perfectScoreXP: 20,
+    hints: [
+      'Ternary: condition ? true_value : false_value',
+      'Check if 15 > 10',
+      'Which value is returned if true?'
+    ],
+    explanation: 'Leo\'s ternary operator evaluates the condition. If true, returns the first value; if false, returns the second value.',
+    code: `program conditions.aleo {
+    transition check(public x: u32) -> u32 {
+        let result: u32 = x > 10u32 ? 100u32 : 50u32;
+        return result;
+    }
+}
+
+// Called with: check(15u32)`,
+    language: 'leo' as any,
+    correctOutput: '100',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['15', '10', '50', '100'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Call check with x=15u32',
+        variables: { x: 15 }
+      },
+      {
+        step: 2,
+        description: 'Evaluate: 15 > 10? true',
+        variables: { 'x > 10u32': true }
+      },
+      {
+        step: 3,
+        description: 'Condition is true → return 100u32',
+        variables: { result: 100 }
+      }
+    ]
+  },
+  {
+    id: 'op-leo-015',
+    type: 'output_prediction',
+    difficulty: 'beginner',
+    topic: 'primitives',
+    title: 'Type Casting in Leo',
+    description: 'Predict the result of casting between types.',
+    learningObjective: 'Understand how type casting works in Leo.',
+    estimatedTime: 3,
+    baseXP: 40,
+    perfectScoreXP: 15,
+    hints: [
+      'Cast u8 to u64 using "as".',
+      'Then add to another u64.',
+      '50 + 1000 = ?'
+    ],
+    explanation: 'Leo uses the "as" keyword for explicit type casting. When casting from smaller to larger types, the value is preserved.',
+    code: `program casting.aleo {
+    transition convert(public small: u8) -> u64 {
+        let big: u64 = small as u64;
+        return big + 1000u64;
+    }
+}
+
+// Called with: convert(50u8)`,
+    language: 'leo' as any,
+    correctOutput: '1050',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['50', '1000', '1050', '501000'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Cast 50u8 to u64',
+        variables: { big: 50 }
+      },
+      {
+        step: 2,
+        description: 'Add: 50 + 1000 = 1050',
+        variables: { result: 1050 }
+      }
+    ]
+  },
+  {
+    id: 'op-leo-019',
+    type: 'output_prediction',
+    difficulty: 'intermediate',
+    topic: 'functions',
+    title: 'Multiple Function Calls',
+    description: 'Predict the final value after multiple operations.',
+    learningObjective: 'Trace execution through multiple function calls.',
+    estimatedTime: 4,
+    baseXP: 55,
+    perfectScoreXP: 20,
+    hints: [
+      'square: x * x',
+      'add_ten: x + 10',
+      'Calculate square(5) first, then add_ten(result)'
+    ],
+    explanation: 'When functions call each other, execution flows from inner to outer. First square(5) = 25, then add_ten(25) = 35.',
+    code: `program complex.aleo {
+    function square(x: u32) -> u32 {
+        return x * x;
+    }
+
+    function add_ten(x: u32) -> u32 {
+        return x + 10u32;
+    }
+
+    transition calculate(public value: u32) -> u32 {
+        let squared: u32 = square(value);
+        return add_ten(squared);
+    }
+}
+
+// Called with: calculate(5u32)`,
+    language: 'leo' as any,
+    correctOutput: '35',
+    outputType: 'value',
+    answerFormat: 'multiple_choice',
+    multipleChoiceOptions: ['15', '25', '35', '50'],
+    showLineNumbers: true,
+    executionSteps: [
+      {
+        step: 1,
+        description: 'Call square(5) → 5 * 5 = 25',
+        variables: { squared: 25 }
+      },
+      {
+        step: 2,
+        description: 'Call add_ten(25) → 25 + 10 = 35',
+        variables: { result: 35 }
+      }
+    ]
+  }
+];
+
+// Add Leo exercises to main arrays
+codeCompletionExercises.push(...leoCodeCompletionExercises);
+bugFixExercises.push(...leoBugFixExercises);
+multipleChoiceExercises.push(...leoMultipleChoiceExercises);
+outputPredictionExercises.push(...leoOutputPredictionExercises);
 
 // ============================================================================
 // EXPORT ALL EXERCISES

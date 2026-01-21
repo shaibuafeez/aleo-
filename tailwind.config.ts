@@ -31,10 +31,29 @@ const config: Config = {
             900: 'var(--sui-gray-900)',
           },
         },
+        aleo: {
+          black: 'var(--aleo-black)',
+          'dark-gray': 'var(--aleo-dark-gray)',
+          green: 'var(--aleo-green)',
+          'green-neon': 'var(--aleo-green-neon)',
+          'green-dim': 'var(--aleo-green-dim)',
+          'green-dark': 'var(--aleo-green-dark)',
+          'green-light': 'var(--aleo-green-light)',
+          navy: 'var(--aleo-navy)',
+          midnight: 'var(--aleo-midnight)',
+          slate: 'var(--aleo-slate)',
+        },
+      },
+      fontFamily: {
+        sans: ['Aleo Sans', 'sans-serif'],
+        mono: ['Azeret Mono', 'monospace'],
+        aleo: ['Aleo', 'sans-serif'], // Keep existing if needed
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };
 
 export default config;

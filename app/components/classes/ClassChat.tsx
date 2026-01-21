@@ -16,7 +16,7 @@ function ChatMessage({ message }: { message: ReceivedChatMessage }) {
   return (
     <div className={`flex gap-2 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'}`}>
       <div className="flex-shrink-0">
-        <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-semibold">
+        <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center text-aleo-green text-sm font-bold border border-aleo-green/20">
           {message.from?.identity[0]?.toUpperCase() || '?'}
         </div>
       </div>
@@ -25,11 +25,10 @@ function ChatMessage({ message }: { message: ReceivedChatMessage }) {
           {message.from?.identity || 'Unknown'}
         </span>
         <div
-          className={`px-3 py-2 rounded-lg ${
-            isOwnMessage
-              ? 'bg-blue-600 text-white rounded-br-none'
-              : 'bg-gray-700 text-white rounded-bl-none'
-          }`}
+          className={`px-3 py-2 rounded-lg ${isOwnMessage
+              ? 'bg-aleo-green text-zinc-900 font-medium rounded-br-none'
+              : 'bg-zinc-800 text-white rounded-bl-none'
+            }`}
         >
           <p className="text-sm break-words">{message.message}</p>
         </div>
@@ -96,14 +95,14 @@ export function ClassChat() {
               onChange={(e) => setDraft(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
-              className="flex-1 bg-gray-800 text-white rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 bg-zinc-800 text-white rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-aleo-green/50 placeholder:text-zinc-500"
               rows={1}
               disabled={!chat_enabled}
             />
             <button
               onClick={onSend}
               disabled={!draft.trim().length}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-colors"
+              className="px-4 py-2 bg-aleo-green hover:bg-aleo-green-dim disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed text-zinc-900 rounded-lg font-bold transition-colors"
             >
               Send
             </button>

@@ -28,64 +28,91 @@ export default function ClickRevealInteractive({ config }: ClickRevealInteractiv
   };
 
   return (
-    <div className="space-y-4">
-      <p className="text-center text-sui-gray-600 font-medium mb-6">
-        Click each box to reveal what it does! 🔍
-      </p>
+    <div className="space-y-8 py-8 perspective-1000">
+      <div className="text-center space-y-2">
+        <h3 className="text-2xl font-bold tracking-tight text-zinc-900">Discover Features</h3>
+        <p className="text-zinc-500 font-medium">Click each card to reveal details</p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {reveals.map((reveal, index) => {
           const isRevealed = revealedIndices.has(index);
-          return (
-            <motion.button
-              key={index}
-              onClick={() => toggleReveal(index)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative overflow-hidden rounded-2xl border-2 border-sui-ocean bg-white shadow-md hover:shadow-lg transition-shadow"
-            >
-              {/* Front (Label) */}
-              <div className={`p-6 transition-opacity ${isRevealed ? 'opacity-0' : 'opacity-100'}`}>
-                <div className="text-2xl font-black text-sui-navy">{reveal.label}</div>
-                <div className="mt-2 text-sm text-sui-gray-500">Click to reveal</div>
-              </div>
 
-              {/* Back (Content) */}
-              <AnimatePresence>
-                {isRevealed && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-gradient-to-br from-sui-ocean to-sui-ocean-dark p-6 flex items-center justify-center"
+          return (
+            <div key={index} className="relative h-64 group cursor-pointer" onClick={() => toggleReveal(index)}>
+              <div className="absolute inset-0 transition-all duration-500 preserve-3d" style={{ perspective: "1000px" }}>
+                <motion.div
+                  initial={false}
+                  animate={{ rotateY: isRevealed ? 180 : 0 }}
+                  transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+                  className="w-full h-full relative preserve-3d"
+                >
+                  {/* FRONT FACE */}
+                  <div className="absolute inset-0 backface-hidden">
+                    <div className="h-full w-full bg-white/60 backdrop-blur-xl border border-white/20 rounded-3xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 flex flex-col items-center justify-center p-8 group-hover:border-aleo-green/30">
+                      {/* Gradient Blob for subtle background */}
+                      <div className="absolute inset-0 rounded-3xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-aleo-green/20 blur-2xl rounded-full" />
+                        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
+                      </div>
+
+                      <div className="relative z-10 flex flex-col items-center text-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-zinc-50 border border-zinc-100 flex items-center justify-center text-zinc-400 font-mono text-sm group-hover:bg-aleo-green/10 group-hover:text-aleo-green-dark group-hover:border-aleo-green/20 transition-colors">
+                          0{index + 1}
+                        </div>
+                        <h4 className="text-xl md:text-2xl font-black tracking-tight text-zinc-900">
+                          {reveal.label}
+                        </h4>
+                        <span className="text-xs font-bold uppercase tracking-widest text-zinc-400 group-hover:text-aleo-green-dark/70 transition-colors">
+                          Reveal
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BACK FACE */}
+                  <div
+                    className="absolute inset-0 backface-hidden"
+                    style={{ transform: "rotateY(180deg)" }}
                   >
-                    <p className="text-white font-semibold text-center leading-relaxed">
-                      {reveal.content}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
+                    <div className="h-full w-full bg-zinc-900 rounded-3xl shadow-2xl border border-zinc-800 p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                      {/* Glowing Ring */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-aleo-green/20 via-transparent to-transparent opacity-50" />
+
+                      <div className="relative z-10">
+                        <div className="mb-4 text-aleo-green">
+                          <svg className="w-8 h-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <h5 className="text-lg font-bold text-white mb-2">{reveal.label}</h5>
+                        <p className="text-zinc-400 text-sm leading-relaxed font-medium">
+                          {reveal.content}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
           );
         })}
       </div>
 
-      {/* Progress indicator */}
-      {revealedIndices.size > 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center text-sm text-sui-gray-600 mt-4"
-        >
-          {revealedIndices.size === reveals.length ? (
-            <span className="text-sui-ocean font-bold">🎉 You&apos;ve discovered them all!</span>
-          ) : (
-            <span>
-              Discovered: {revealedIndices.size}/{reveals.length}
-            </span>
-          )}
-        </motion.div>
-      )}
+      {/* Progress Footer */}
+      <AnimatePresence>
+        {revealedIndices.size > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-center"
+          >
+            <div className="px-4 py-2 bg-zinc-100 rounded-full text-xs font-bold text-zinc-500 tracking-wide uppercase">
+              {revealedIndices.size} of {reveals.length} cards revealed
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

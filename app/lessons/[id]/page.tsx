@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import LessonView from '@/app/components/lessons/LessonView';
-import { lesson1 } from '@/app/lib/lessons/lesson1';
-import { lesson2 } from '@/app/lib/lessons/lesson2';
-import { lesson3 } from '@/app/lib/lessons/lesson3';
-import { lesson4 } from '@/app/lib/lessons/lesson4';
-import { lesson5 } from '@/app/lib/lessons/lesson5';
-import { lesson6 } from '@/app/lib/lessons/lesson6';
-import { lesson7 } from '@/app/lib/lessons/lesson7';
+import { leoLesson1 } from '@/app/lib/lessons/leo-lesson1';
+import { leoLesson2 } from '@/app/lib/lessons/leo-lesson2';
+import { leoLesson3 } from '@/app/lib/lessons/leo-lesson3';
+import { leoLesson4 } from '@/app/lib/lessons/leo-lesson4';
+import { leoLesson5 } from '@/app/lib/lessons/leo-lesson5';
+import { leoLesson6 } from '@/app/lib/lessons/leo-lesson6';
+import { leoLesson7 } from '@/app/lib/lessons/leo-lesson7';
 
 export default async function LessonPage({
   params,
@@ -15,15 +15,15 @@ export default async function LessonPage({
 }) {
   const { id } = await params;
 
-  // Lesson map - add new lessons here
-  const lessonMap: Record<string, typeof lesson1> = {
-    '1': lesson1,
-    '2': lesson2,
-    '3': lesson3,
-    '4': lesson4,
-    '5': lesson5,
-    '6': lesson6,
-    '7': lesson7,
+  // Lesson map - all Leo lessons
+  const lessonMap: Record<string, typeof leoLesson1> = {
+    'leo-1': leoLesson1,
+    'leo-2': leoLesson2,
+    'leo-3': leoLesson3,
+    'leo-4': leoLesson4,
+    'leo-5': leoLesson5,
+    'leo-6': leoLesson6,
+    'leo-7': leoLesson7,
   };
 
   const lesson = lessonMap[id];
@@ -36,7 +36,7 @@ export default async function LessonPage({
           <p className="text-gray-400 mb-8">This lesson doesn&apos;t exist yet!</p>
           <Link
             href="/"
-            className="px-6 py-3 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors"
+            className="px-6 py-3 bg-aleo-green text-aleo-navy font-bold rounded-lg hover:bg-aleo-green/90 transition-colors"
           >
             Go Home
           </Link>
