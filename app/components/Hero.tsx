@@ -59,7 +59,7 @@ export default function Hero() {
                         transition={{ duration: 0.8 }}
                     >
 
-                        <h1 className="text-6xl md:text-8xl font-sans font-bold tracking-tight leading-[0.9] text-white mb-6">
+                        <h1 className="text-5xl sm:text-6xl md:text-8xl font-sans font-bold tracking-tight leading-[0.9] text-white mb-6">
                             MASTER <br />
                             <span className="text-aleo-green">LEO.</span> <br />
                             BUILD <br />
@@ -76,12 +76,12 @@ export default function Hero() {
                         className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 font-mono"
                     >
                         <Link href="/lessons">
-                            <Button className="bg-aleo-green text-black hover:bg-aleo-green-neon border-none font-bold tracking-tight rounded-full px-10 py-5 text-xl transition-all hover:scale-105">
+                            <Button className="bg-aleo-green text-black hover:bg-aleo-green-neon border-none font-bold tracking-tight rounded-full px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl transition-all hover:scale-105">
                                 Start Learning <span className="ml-2">→</span>
                             </Button>
                         </Link>
                         <Link href="/docs">
-                            <Button variant="ghost" className="text-gray-400 hover:text-white hover:bg-white/5 rounded-full px-8 py-5 text-lg">
+                            <Button variant="ghost" className="text-gray-400 hover:text-white hover:bg-white/5 rounded-full px-6 py-4 sm:px-8 sm:py-5 text-base sm:text-lg">
                                 Documentation
                             </Button>
                         </Link>

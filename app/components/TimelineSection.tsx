@@ -36,7 +36,7 @@ export default function TimelineSection() {
 
             <div className="container max-w-7xl mx-auto px-6 relative z-10">
                 {/* Header */}
-                <div className="mb-24 text-center md:text-left">
+                <div className="mb-12 md:mb-24 text-center md:text-left">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ export default function TimelineSection() {
 
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
                     {/* Left Column: Scrolling Steps */}
-                    <div className="relative space-y-[40vh] py-[10vh]">
+                    <div className="relative space-y-12 md:space-y-24 lg:space-y-[40vh] py-12 lg:py-[10vh]">
                         {/* Vertical Line */}
                         <div className="absolute left-6 top-0 bottom-0 w-px bg-white/10" />
 

@@ -7,6 +7,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/app/lib/prisma'
 import { getServerUser } from '@/app/lib/auth/server'
+import type { Prisma } from '@prisma/client'
 
 const XP_PER_LEVEL = 1000
 
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
     }
 
     // Use transaction to ensure data consistency
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // 1. Upsert lesson progress
       const progress = await tx.userProgress.upsert({
         where: {

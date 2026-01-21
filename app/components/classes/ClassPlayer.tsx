@@ -125,7 +125,7 @@ export function ClassPlayer({ isInstructor = false, onEndClass }: ClassPlayerPro
       ))}
 
       {/* Header with class info */}
-      <div className="absolute top-0 left-0 right-0 p-6 bg-gradient-to-b from-zinc-900/80 to-transparent pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-b from-zinc-900/80 to-transparent pointer-events-none">
         <div className="flex justify-between items-center pointer-events-auto">
           <div className="flex items-center gap-3 bg-black/20 backdrop-blur-xl px-4 py-2 rounded-full border border-white/5">
             {roomState === ConnectionState.Connected ? (

@@ -41,7 +41,7 @@ export default function TestimonialsSection() {
 
             <div className="container max-w-7xl mx-auto px-6 relative z-10">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-12 md:mb-20">
                     <div className="max-w-2xl">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
@@ -52,7 +52,7 @@ export default function TestimonialsSection() {
                             <span className="w-3 h-3 bg-aleo-green-dark rounded-full" />
                             <span className="font-mono text-sm tracking-widest uppercase font-bold text-gray-500">Community</span>
                         </motion.div>
-                        <h2 className="text-5xl md:text-6xl font-black text-black mb-6 tracking-tight leading-[0.9]">
+                        <h2 className="text-4xl md:text-6xl font-black text-black mb-6 tracking-tight leading-[0.9]">
                             Join the <br />
                             <span className="text-aleo-green-dark">Builder Mesh.</span>
                         </h2>

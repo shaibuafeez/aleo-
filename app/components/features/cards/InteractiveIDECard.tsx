@@ -52,7 +52,7 @@ export default function InteractiveIDECard() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-aleo-green/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
             {/* Header */}
-            <div className="p-6 pb-2 relative z-10">
+            <div className="p-4 md:p-6 pb-2 relative z-10">
                 <div className="flex items-center justify-between mb-4">
                     <div className="w-10 h-10 bg-aleo-green/10 rounded-xl flex items-center justify-center text-aleo-green-dark">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>
@@ -68,7 +68,7 @@ export default function InteractiveIDECard() {
             </div>
 
             {/* Editor Surface */}
-            <div className="flex-1 m-6 mt-2 bg-gray-50 rounded-xl border border-gray-100 overflow-hidden relative font-mono text-xs p-4 shadow-inner">
+            <div className="flex-1 m-4 md:m-6 mt-2 bg-gray-50 rounded-xl border border-gray-100 overflow-hidden relative font-mono text-xs p-4 shadow-inner">
                 <div className="absolute top-0 left-0 right-0 h-8 bg-gray-100/50 border-b border-gray-200/50 flex items-center px-3 gap-2">
                     <span className="text-gray-400 text-[10px] font-bold uppercase tracking-wider">main.leo</span>
                 </div>

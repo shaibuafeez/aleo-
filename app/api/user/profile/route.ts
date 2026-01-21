@@ -89,9 +89,9 @@ export async function GET() {
         totalLessonsCompleted: 0,
         totalTimeSpentMinutes: 0,
       },
-      completedLessons: userProfile.progress.map((p) => p.lessonId),
+      completedLessons: userProfile.progress.map((p: { lessonId: string }) => p.lessonId),
       progressDetails: userProfile.progress,
-      achievements: userProfile.achievements.map((a) => ({
+      achievements: userProfile.achievements.map((a: { achievementId: string; unlockedAt: Date }) => ({
         id: a.achievementId,
         unlockedAt: a.unlockedAt,
       })),

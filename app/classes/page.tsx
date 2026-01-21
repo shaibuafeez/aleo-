@@ -102,7 +102,7 @@ export default function ClassesPage() {
               <span className="text-xs font-mono font-bold text-aleo-green-dark uppercase tracking-wider">Live Intelligence</span>
             </motion.div>
 
-            <h1 className="text-6xl md:text-9xl font-black tracking-tighter-swiss leading-[0.9] text-zinc-900 mb-8">
+            <h1 className="text-5xl md:text-9xl font-black tracking-tighter-swiss leading-[0.9] text-zinc-900 mb-8">
               SYNC <br />
               <span className="text-gray-300">REALITY.</span>
             </h1>
@@ -152,7 +152,7 @@ export default function ClassesPage() {
               <div className="relative p-[2px] rounded-[2.5rem] bg-gradient-to-r from-aleo-green via-zinc-500 to-aleo-green overflow-hidden">
                 <div className="absolute inset-0 bg-white/50 backdrop-blur-[2px]" /> {/* Shimmer effect base */}
 
-                <div className="relative bg-white rounded-[2.4rem] p-8 md:p-12 overflow-hidden">
+                <div className="relative bg-white rounded-[2.4rem] p-6 md:p-12 overflow-hidden">
                   {/* Subtle Grid Background inside card */}
                   <div className="absolute inset-0 bg-grid-graph opacity-30 pointer-events-none" />
 
